@@ -7,8 +7,8 @@
        <img src="https://conversations.im/images/en-play-badge.png"
             alt="Google Play">
             </a>
-    <a href="http://www.amazon.com/dp/B00WD35AAC/">
-        <img src="#"
+ <a href="#">
+        <img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png"
              alt="Amazon App Store">
     </a>
 </p>
