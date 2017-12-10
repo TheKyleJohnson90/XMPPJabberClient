@@ -3,7 +3,7 @@
 <p align="center">A free XMPP Jabber Client for Android. Avalible soon on the Play Store and Amazon App store.</p>
 
 <p align="center">
-    <a href="#">
+    <a href="https://play.google.com/store/apps/details?id=com.KDJStudios.XMPPJabberClient">
        <img src="https://conversations.im/images/en-play-badge.png"
             alt="Google Play">
             </a>
