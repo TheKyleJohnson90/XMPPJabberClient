@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="activity_horizontal_margin">32dp</dimen>
+    <dimen name="swipe_handle_size">72dp</dimen>
+</resources>

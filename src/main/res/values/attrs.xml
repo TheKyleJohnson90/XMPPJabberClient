@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="TextSizeInfo" format="dimension" />
+    <attr name="TextSizeBody" format="dimension" />
+    <attr name="TextSizeHeadline" format="dimension" />
+    <attr name="TextSeparation" format="dimension"/>
+
+    <attr name="IconSize" format="dimension"/>
+
+    <attr name="color_text_primary" format="reference|color" />
+    <attr name="color_text_secondary" format="reference|color" />
+
+    <attr name="color_background_secondary" format="reference|color" />
+    <attr name="color_background_primary" format="reference|color" />
+
+    <attr name="infocard_border" format="reference"/>
+    <attr name="ic_send_cancel_offline" format="reference"/>
+    <attr name="ic_send_location_offline" format="reference"/>
+    <attr name="ic_send_photo_offline" format="reference"/>
+    <attr name="ic_send_picture_offline" format="reference"/>
+    <attr name="ic_send_text_offline" format="reference"/>
+    <attr name="ic_send_videocam_offline" format="reference"/>
+    <attr name="ic_send_voice_offline" format="reference"/>
+
+    <attr name="ic_attach_camera" format="reference"/>
+    <attr name="ic_attach_videocam" format="reference"/>
+    <attr name="ic_attach_document" format="reference"/>
+    <attr name="ic_attach_location" format="reference"/>
+    <attr name="ic_attach_photo" format="reference"/>
+    <attr name="ic_attach_record" format="reference"/>
+
+    <attr name="message_bubble_received_monochrome" format="reference"/>
+    <attr name="message_bubble_sent" format="reference"/>
+    <attr name="message_bubble_received_green" format="reference"/>
+
+    <attr name="unread_count" format="reference|color" />
+
+    <attr name="conversations_overview_background" format="reference|color"/>
+
+    <attr name="icon_alpha" format="float"/>
+
+    <attr name="icon_add_group" format="reference"/>
+    <attr name="icon_add_person" format="reference"/>
+    <attr name="icon_cancel" format="reference"/>
+    <attr name="icon_copy" format="reference"/>
+    <attr name="icon_discard" format="reference"/>
+    <attr name="icon_download" format="reference"/>
+    <attr name="icon_edit" format="reference"/>
+    <attr name="icon_edit_body" format="reference"/>
+    <attr name="icon_done" format="reference"/>
+    <attr name="icon_group" format="reference"/>
+    <attr name="icon_new" format="reference"/>
+    <attr name="icon_new_attachment" format="reference"/>
+    <attr name="icon_not_secure" format="reference"/>
+    <attr name="icon_quote" format="reference"/>
+    <attr name="icon_refresh" format="reference"/>
+    <attr name="icon_remove" format="reference"/>
+    <attr name="icon_search" format="reference"/>
+    <attr name="icon_secure" format="reference"/>
+    <attr name="icon_settings" format="reference"/>
+    <attr name="icon_share" format="reference"/>
+    <attr name="icon_import_export" format="reference"/>
+    <attr name="icon_scan_qr_code" format="reference"/>
+
+    <attr name="icon_notifications" format="reference"/>
+    <attr name="icon_notifications_off" format="reference"/>
+    <attr name="icon_notifications_paused" format="reference"/>
+    <attr name="icon_notifications_none" format="reference"/>
+
+    <attr name="dialog_horizontal_padding" format="dimension"/>
+    <attr name="dialog_vertical_padding" format="dimension"/>
+
+    <declare-styleable name="UnreadCountCustomView">
+        <attr name="backgroundColor" format="reference|color"/>
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.KDJStudios.XMPPJabberClient">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        tools:node="remove" />
+
+    <uses-sdk tools:overrideLibrary="net.ypresto.androidtranscoder" />
+
+
+    <application
+        android:networkSecurityConfig="@xml/network_security_configuration"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/ConversationsTheme"
+        tools:replace="android:label">
+
+        <meta-data android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
+        <service android:name="com.KDJStudios.XMPPJabberClient.services.XmppConnectionService" />
+
+        <receiver android:name="com.KDJStudios.XMPPJabberClient.services.EventReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.media.RINGER_MODE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.ConversationActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:minWidth="300dp"
+            android:minHeight="300dp"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.StartConversationActivity"
+            android:label="@string/title_activity_start_conversation"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="imto" />
+                <data android:host="jabber" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="xmpp" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="xmpp" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="conversations.im" />
+                <data android:pathPrefix="/i/" />
+                <data android:pathPrefix="/j/" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.WelcomeActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.MagicCreateActivity"
+            android:label="@string/create_account"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.SetPresenceActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/change_presence"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.ChooseContactActivity"
+            android:label="@string/title_activity_choose_contact" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.BlocklistActivity"
+            android:label="@string/title_activity_block_list" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.ChangePasswordActivity"
+            android:label="@string/change_password_on_server" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.ManageAccountActivity"
+            android:label="@string/title_activity_manage_accounts"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.EditAccountActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.ConferenceDetailsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.ContactDetailsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.PublishProfilePictureActivity"
+            android:label="@string/mgmt_account_publish_avatar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.VerifyOTRActivity"
+            android:label="@string/verify_otr"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.ShareWithActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.chooser.chooser_target_service"
+                android:value=".services.ContactChooserTargetService" />
+        </activity>
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.TrustKeysActivity"
+            android:label="@string/trust_omemo_fingerprints"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="de.duenndns.ssl.MemorizingActivity"
+            android:theme="@style/ConversationsTheme"
+            tools:replace="android:theme" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName="com.KDJStudios.XMPPJabberClient.ui.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.KDJStudios.XMPPJabberClient.ui.SettingsActivity" />
+        </activity>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
+        <service android:name="com.KDJStudios.XMPPJabberClient.services.ExportLogsService" />
+        <service
+            android:name="com.KDJStudios.XMPPJabberClient.services.ContactChooserTargetService"
+            android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.chooser.ChooserTargetService" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <provider
+            android:authorities="${applicationId}.barcodes"
+            android:name="com.KDJStudios.XMPPJabberClient.services.BarcodeProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"/>
+
+
+    </application>
+
+</manifest>

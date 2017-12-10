@@ -1,0 +1,59 @@
+package com.KDJStudios.XMPPJabberClient.utils;
+
+import android.os.Looper;
+import android.util.Log;
+
+import java.util.ArrayDeque;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import com.KDJStudios.XMPPJabberClient.Config;
+
+public class SerialSingleThreadExecutor implements Executor {
+
+	final Executor executor = Executors.newSingleThreadExecutor();
+	protected final ArrayDeque<Runnable> tasks = new ArrayDeque<>();
+	private Runnable active;
+	private final String name;
+
+	public SerialSingleThreadExecutor(String name) {
+		this(name, false);
+	}
+
+	public SerialSingleThreadExecutor(String name, boolean prepareLooper) {
+		if (prepareLooper) {
+			execute(new Runnable() {
+				@Override
+				public void run() {
+					Looper.prepare();
+				}
+			});
+		}
+		this.name = name;
+	}
+
+	public synchronized void execute(final Runnable r) {
+		tasks.offer(new Runnable() {
+			public void run() {
+				try {
+					r.run();
+				} finally {
+					scheduleNext();
+				}
+			}
+		});
+		if (active == null) {
+			scheduleNext();
+		}
+	}
+
+	protected synchronized void scheduleNext() {
+		if ((active =  tasks.poll()) != null) {
+			executor.execute(active);
+			int remaining = tasks.size();
+			if (remaining > 0) {
+				Log.d(Config.LOGTAG,remaining+" remaining tasks on executor '"+name+"'");
+			}
+		}
+	}
+}

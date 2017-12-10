@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.KDJStudios.XMPPJabberClient"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <permission android:name="com.KDJStudios.XMPPJabberClient.permission.C2D_MESSAGE"
+                android:protectionLevel="signature"/>
+    <uses-permission android:name="eu.siacs.conversations.permission.C2D_MESSAGE"/>
+
+    <application>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.example.gcm" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".services.MaintenanceReceiver"
+                  android:exported="true"
+                  android:permission="android.permission.CHANGE_CONFIGURATION">
+            <intent-filter>
+                <action android:name="eu.siacs.conversations.RENEW_INSTANCE_ID"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".services.PushMessageReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".services.InstanceIdService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
