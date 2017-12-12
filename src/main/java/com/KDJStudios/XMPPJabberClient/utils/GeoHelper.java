@@ -50,7 +50,7 @@ public class GeoHelper {
 			label = "";
 		}
 
-		Intent locationPluginIntent = new Intent("eu.siacs.conversations.location.show");
+		Intent locationPluginIntent = new Intent("com.KDJStudios.XMPPJabberClient.location.show");
 		locationPluginIntent.putExtra("latitude",latitude);
 		locationPluginIntent.putExtra("longitude",longitude);
 		if (message.getStatus() != Message.STATUS_RECEIVED) {

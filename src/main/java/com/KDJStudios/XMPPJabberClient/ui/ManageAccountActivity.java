@@ -34,6 +34,8 @@ import com.KDJStudios.XMPPJabberClient.ui.adapter.AccountAdapter;
 import com.KDJStudios.XMPPJabberClient.xmpp.XmppConnection;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 
 import org.openintents.openpgp.util.OpenPgpApi;
 
@@ -101,6 +103,12 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 			}
 		});
 		registerForContextMenu(accountListView);
+
+		//ADMOB
+		MobileAds.initialize(this,"ca-app-pub-9589151137694589~5086560013");
+		mAdView = findViewById(R.id.adViewManageAccounts);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
 	}
 
 	@Override

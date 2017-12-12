@@ -55,7 +55,7 @@ public class NotificationService {
 
 	public static final Object CATCHUP_LOCK = new Object();
 
-	private static final String CONVERSATIONS_GROUP = "eu.siacs.conversations";
+	private static final String CONVERSATIONS_GROUP = "com.KDJStudios.XMPPJabberClient";
 	private final XmppConnectionService mXmppConnectionService;
 
 	private final LinkedHashMap<String, ArrayList<Message>> notifications = new LinkedHashMap<>();

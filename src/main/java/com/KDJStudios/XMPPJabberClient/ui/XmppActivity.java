@@ -989,7 +989,7 @@ public abstract class XmppActivity extends Activity {
 				public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
 					return new NdefMessage(new NdefRecord[]{
 							NdefRecord.createUri(getShareableUri()),
-							NdefRecord.createApplicationRecord("eu.siacs.conversations")
+							NdefRecord.createApplicationRecord("com.KDJStudios.XMPPJabberClient")
 					});
 				}
 			}, this);

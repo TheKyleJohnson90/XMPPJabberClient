@@ -5,7 +5,7 @@
 
     <permission android:name="com.KDJStudios.XMPPJabberClient.permission.C2D_MESSAGE"
                 android:protectionLevel="signature"/>
-    <uses-permission android:name="eu.siacs.conversations.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="com.KDJStudios.XMPPJabberClient.permission.C2D_MESSAGE"/>
 
     <application>
 
@@ -23,7 +23,7 @@
                   android:exported="true"
                   android:permission="android.permission.CHANGE_CONFIGURATION">
             <intent-filter>
-                <action android:name="eu.siacs.conversations.RENEW_INSTANCE_ID"/>
+                <action android:name="com.KDJStudios.XMPPJabberClient.RENEW_INSTANCE_ID"/>
             </intent-filter>
         </receiver>
 

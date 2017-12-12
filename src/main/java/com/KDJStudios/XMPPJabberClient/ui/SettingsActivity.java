@@ -98,7 +98,7 @@ public class SettingsActivity extends XmppActivity implements
 			}
 		}
 
-		boolean removeLocation = new Intent("eu.siacs.conversations.location.request").resolveActivity(getPackageManager()) == null;
+		boolean removeLocation = new Intent("com.KDJStudios.XMPPJabberClient.location.request").resolveActivity(getPackageManager()) == null;
 		boolean removeVoice = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION).resolveActivity(getPackageManager()) == null;
 
 		ListPreference quickAction = (ListPreference) mSettingsFragment.findPreference("quick_action");

@@ -78,9 +78,9 @@ public class ConversationActivity extends XmppActivity
 
 	public static final String RECENTLY_USED_QUICK_ACTION = "recently_used_quick_action";
 
-	public static final String ACTION_VIEW_CONVERSATION = "eu.siacs.conversations.action.VIEW";
+	public static final String ACTION_VIEW_CONVERSATION = "com.KDJStudios.XMPPJabberClient.action.VIEW";
 	public static final String CONVERSATION = "conversationUuid";
-	public static final String EXTRA_DOWNLOAD_UUID = "eu.siacs.conversations.download_uuid";
+	public static final String EXTRA_DOWNLOAD_UUID = "com.KDJStudios.XMPPJabberClient.download_uuid";
 	public static final String TEXT = "text";
 	public static final String NICK = "nick";
 	public static final String PRIVATE_MESSAGE = "pm";
@@ -540,11 +540,11 @@ public class ConversationActivity extends XmppActivity
 						break;
 					case ATTACHMENT_CHOICE_RECORD_VOICE:
 						intent.setAction(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-						fallbackPackageId = "eu.siacs.conversations.voicerecorder";
+						fallbackPackageId = "com.KDJStudios.XMPPJabberClient.voicerecorder";
 						break;
 					case ATTACHMENT_CHOICE_LOCATION:
-						intent.setAction("eu.siacs.conversations.location.request");
-						fallbackPackageId = "eu.siacs.conversations.sharelocation";
+						intent.setAction("com.KDJStudios.XMPPJabberClient.location.request");
+						fallbackPackageId = "com.KDJStudios.XMPPJabberClient.sharelocation";
 						break;
 				}
 				if (intent.resolveActivity(getPackageManager()) != null) {
@@ -824,7 +824,7 @@ public class ConversationActivity extends XmppActivity
 		if (new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION).resolveActivity(getPackageManager()) == null) {
 			attachFilePopup.getMenu().findItem(R.id.attach_record_voice).setVisible(false);
 		}
-		if (new Intent("eu.siacs.conversations.location.request").resolveActivity(getPackageManager()) == null) {
+		if (new Intent("com.KDJStudios.XMPPJabberClient.location.request").resolveActivity(getPackageManager()) == null) {
 			attachFilePopup.getMenu().findItem(R.id.attach_location).setVisible(false);
 		}
 		attachFilePopup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
