@@ -138,9 +138,10 @@ public class ConversationFragment extends Fragment implements EditMessage.Keyboa
 			activity.quickPasswordEdit(password, new OnValueEdited() {
 
 				@Override
-				public void onValueEdited(String value) {
+				public String onValueEdited(String value) {
 					activity.xmppConnectionService.providePasswordForMuc(
 							conversation, value);
+					return null;
 				}
 			});
 		}
@@ -1118,6 +1119,8 @@ public class ConversationFragment extends Fragment implements EditMessage.Keyboa
 				case UNKNOWN:
 					showSnackbar(R.string.conference_unknown_error, R.string.try_again, joinMuc);
 					break;
+				case INVALID_NICK:
+					showSnackbar(R.string.invalid_muc_nick, R.string.edit, clickToMuc);
 				case SHUTDOWN:
 					showSnackbar(R.string.conference_shutdown, R.string.try_again, joinMuc);
 					break;

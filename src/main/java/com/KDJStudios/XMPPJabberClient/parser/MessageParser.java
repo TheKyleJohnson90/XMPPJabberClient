@@ -532,7 +532,7 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 			}
 
 			if (replacementId != null && mXmppConnectionService.allowMessageCorrection()) {
-				Message replacedMessage = conversation.findMessageWithRemoteIdAndCounterpart(replacementId,
+				final Message replacedMessage = conversation.findMessageWithRemoteIdAndCounterpart(replacementId,
 						counterpart,
 						message.getStatus() == Message.STATUS_RECEIVED,
 						message.isCarbon());
@@ -550,6 +550,9 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 							replacedMessage.setBody(message.getBody());
 							replacedMessage.setEdited(replacedMessage.getRemoteMsgId());
 							replacedMessage.setRemoteMsgId(remoteMsgId);
+							if (replacedMessage.getServerMsgId() == null || message.getServerMsgId() != null) {
+								replacedMessage.setServerMsgId(message.getServerMsgId());
+							}
 							replacedMessage.setEncryption(message.getEncryption());
 							if (replacedMessage.getStatus() == Message.STATUS_RECEIVED) {
 								replacedMessage.markUnread();

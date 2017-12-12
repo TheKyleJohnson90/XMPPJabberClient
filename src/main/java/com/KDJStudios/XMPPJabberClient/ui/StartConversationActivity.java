@@ -77,6 +77,7 @@ import com.KDJStudios.XMPPJabberClient.entities.Presence;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService.OnRosterUpdate;
 import com.KDJStudios.XMPPJabberClient.ui.adapter.KnownHostsAdapter;
 import com.KDJStudios.XMPPJabberClient.ui.adapter.ListItemAdapter;
+import com.KDJStudios.XMPPJabberClient.ui.service.EmojiService;
 import com.KDJStudios.XMPPJabberClient.utils.XmppUri;
 import com.KDJStudios.XMPPJabberClient.xmpp.OnUpdateBlocklist;
 import com.KDJStudios.XMPPJabberClient.xmpp.XmppConnection;
@@ -259,8 +260,9 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new EmojiService(this).init();
         setContentView(R.layout.activity_start_conversation);
-        mViewPager = (ViewPager) findViewById(R.id.start_conversation_view_pager);
+        mViewPager = findViewById(R.id.start_conversation_view_pager);
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -277,7 +279,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
 
         mConferenceAdapter = new ListItemAdapter(this, conferences);
         mContactsAdapter = new ListItemAdapter(this, contacts);
-        ((ListItemAdapter) mContactsAdapter).setOnTagClickedListener(this.mOnTagClickedListener);
+        mContactsAdapter.setOnTagClickedListener(this.mOnTagClickedListener);
         this.mHideOfflineContacts = getPreferences().getBoolean("hide_offline", false);
 
         //ADMOB
@@ -323,9 +325,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
     }
 
     protected void openConversationForContact(Contact contact) {
-        Conversation conversation = xmppConnectionService
-                .findOrCreateConversation(contact.getAccount(),
-                        contact.getJid(), false, true);
+        Conversation conversation = xmppConnectionService.findOrCreateConversation(contact.getAccount(), contact.getJid(), false, true);
         switchToConversation(conversation);
     }
 

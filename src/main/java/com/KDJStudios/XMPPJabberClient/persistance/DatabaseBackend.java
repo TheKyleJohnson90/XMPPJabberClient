@@ -28,6 +28,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -743,7 +744,24 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		return getAccounts(db);
 	}
-
+	public Collection<Jid> getAccountJids() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		final List<Jid> jids = new ArrayList<>();
+		final String[] columns = new String[]{Account.USERNAME, Account.SERVER};
+		Cursor cursor = db.query(Account.TABLENAME,columns,null,null,null,null,null);
+		try {
+				while(cursor.moveToNext()) {
+					jids.add(Jid.fromParts(cursor.getString(0),cursor.getString(1),null));
+				}
+			return jids;
+			} catch (Exception e) {
+			return jids;
+			} finally {
+				if (cursor != null) {
+					cursor.close();
+				}
+			}
+		}
 	private List<Account> getAccounts(SQLiteDatabase db) {
 		List<Account> list = new ArrayList<>();
 		Cursor cursor = db.query(Account.TABLENAME, null, null, null, null,
