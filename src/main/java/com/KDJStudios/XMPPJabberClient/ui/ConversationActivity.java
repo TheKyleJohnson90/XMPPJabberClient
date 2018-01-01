@@ -36,9 +36,6 @@ import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-
 import net.java.otr4j.session.SessionStatus;
 
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -72,6 +69,8 @@ import com.KDJStudios.XMPPJabberClient.xmpp.OnUpdateBlocklist;
 import com.KDJStudios.XMPPJabberClient.xmpp.XmppConnection;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 
 public class ConversationActivity extends XmppActivity
 	implements OnAccountUpdate, OnConversationUpdate, OnRosterUpdate, OnUpdateBlocklist, XmppConnectionService.OnShowErrorToast {
@@ -344,10 +343,11 @@ public class ConversationActivity extends XmppActivity
 			});
 		}
 		//ADMOB
-		MobileAds.initialize(this,"ca-app-pub-9589151137694589~5086560013");
+		MobileAds.initialize(this,getString(R.string.admobId));
 		mAdView = findViewById(R.id.adViewConversationOverview);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);
+
 	}
 
 	@Override
@@ -921,7 +921,7 @@ public class ConversationActivity extends XmppActivity
 									conversation.setNextEncryption(Message.ENCRYPTION_PGP);
 									item.setChecked(true);
 								} else {
-									announcePgp(conversation.getAccount(), conversation, onOpenPGPKeyPublished);
+									announcePgp(conversation.getAccount(), conversation,null, onOpenPGPKeyPublished);
 								}
 							} else {
 								showInstallPgpDialog();
@@ -1428,7 +1428,7 @@ public class ConversationActivity extends XmppActivity
 						// associate selected PGP keyId with the account
 						mSelectedConversation.getAccount().setPgpSignId(data.getExtras().getLong(OpenPgpApi.EXTRA_SIGN_KEY_ID));
 						// we need to announce the key as described in XEP-027
-						announcePgp(mSelectedConversation.getAccount(), null, onOpenPGPKeyPublished);
+						announcePgp(mSelectedConversation.getAccount(), null, null, onOpenPGPKeyPublished);
 					} else {
 						choosePgpSignId(mSelectedConversation.getAccount());
 					}
@@ -1438,7 +1438,7 @@ public class ConversationActivity extends XmppActivity
 				}
 			} else if (requestCode == REQUEST_ANNOUNCE_PGP) {
 				if (xmppConnectionServiceBound) {
-					announcePgp(mSelectedConversation.getAccount(), mSelectedConversation, onOpenPGPKeyPublished);
+					announcePgp(mSelectedConversation.getAccount(), mSelectedConversation,data, onOpenPGPKeyPublished);
 					this.mPostponedActivityResult = null;
 				} else {
 					this.mPostponedActivityResult = new Pair<>(requestCode, data);
@@ -1528,14 +1528,19 @@ public class ConversationActivity extends XmppActivity
 		return connection == null ? -1 : connection.getFeatures().getMaxHttpUploadSize();
 	}
 
+	private String getBatteryOptimizationPreferenceKey() {
+		@SuppressLint("HardwareIds") String device = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+		return "show_battery_optimization"+(device == null ? "" : device);
+	}
+
 	private void setNeverAskForBatteryOptimizationsAgain() {
-		getPreferences().edit().putBoolean("show_battery_optimization", false).apply();
+		getPreferences().edit().putBoolean(getBatteryOptimizationPreferenceKey(), false).apply();
 	}
 
 	private void openBatteryOptimizationDialogIfNeeded() {
 		if (hasAccountWithoutPush()
 				&& isOptimizingBattery()
-				&& getPreferences().getBoolean("show_battery_optimization", true)) {
+				&& getPreferences().getBoolean(getBatteryOptimizationPreferenceKey(), true)) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(R.string.battery_optimizations_enabled);
 			builder.setMessage(R.string.battery_optimizations_enabled_dialog);
@@ -1568,7 +1573,7 @@ public class ConversationActivity extends XmppActivity
 
 	private boolean hasAccountWithoutPush() {
 		for(Account account : xmppConnectionService.getAccounts()) {
-			if (account.getStatus() != Account.State.DISABLED && !xmppConnectionService.getPushManagementService().available(account)) {
+			if (account.getStatus() == Account.State.ONLINE && !xmppConnectionService.getPushManagementService().available(account)) {
 				return true;
 			}
 		}

@@ -128,7 +128,7 @@ public class JingleConnection implements Transferable {
 					}
 				}
 			} else {
-				if (ftVersion == Content.Version.FT_5) { //older Conversations will break when receiving a session-info
+				if (ftVersion == Content.Version.FT_5) { //older XMPPJabberClient will break when receiving a session-info
 					sendHash();
 				}
 				if (message.getEncryption() == Message.ENCRYPTION_PGP) {

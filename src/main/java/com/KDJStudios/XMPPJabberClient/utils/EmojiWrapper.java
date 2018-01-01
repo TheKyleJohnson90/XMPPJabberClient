@@ -40,8 +40,8 @@ public class EmojiWrapper {
 			} else {
 				return input;
 			}
-			} catch (IllegalStateException e) {
-				return input;
-			}
+		} catch (IllegalStateException e) {
+			return input;
+		}
 	}
 }

@@ -293,10 +293,9 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 				mXmppConnectionService.updateAccountUi();
 			}
 		} else if (AxolotlService.PEP_DEVICE_LIST.equals(node)) {
-
 			Element item = items.findChild("item");
 			Set<Integer> deviceIds = mXmppConnectionService.getIqParser().deviceIds(item);
-			Log.d(Config.LOGTAG, AxolotlService.getLogprefix(account) + "Received PEP device list (" + deviceIds + ") update from " + from + ", processing...");
+			Log.d(Config.LOGTAG, AxolotlService.getLogprefix(account) + "Received PEP device list " + deviceIds + " update from " + from + ", processing... ");
 			AxolotlService axolotlService = account.getAxolotlService();
 			axolotlService.registerDevices(from, deviceIds);
 			mXmppConnectionService.updateAccountUi();
@@ -675,7 +674,9 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 					if (conversation != null && conversation.getMode() == Conversation.MODE_MULTI) {
 						conversation.setHasMessagesLeftOnServer(conversation.countMessages() > 0);
 						String subject = packet.findChildContent("subject");
-						conversation.getMucOptions().setSubject(subject);
+						if (conversation.getMucOptions().setSubject(subject)) {
+							mXmppConnectionService.updateConversation(conversation);
+						}
 						final Bookmark bookmark = conversation.getBookmark();
 						if (bookmark != null && bookmark.getBookmarkName() == null) {
 							if (bookmark.setBookmarkName(subject)) {
@@ -747,13 +748,14 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 				if (conversation != null && id != null && sender != null) {
 					Message message = conversation.findMessageWithRemoteId(id, sender);
 					if (message != null) {
-						if (conversation.getMucOptions().isSelf(counterpart)) {
+						final Jid fallback = conversation.getMucOptions().getTrueCounterpart(counterpart);
+						final Jid trueJid = getTrueCounterpart((query != null && query.safeToExtractTrueCounterpart()) ? mucUserElement : null, fallback);
+						final boolean trueJidMatchesAccount = account.getJid().toBareJid().equals(trueJid == null ? null : trueJid.toBareJid());
+						if (trueJidMatchesAccount || conversation.getMucOptions().isSelf(counterpart)) {
 							if (!message.isRead() && (query == null || query.isCatchup())) { //checking if message is unread fixes race conditions with reflections
 								mXmppConnectionService.markRead(conversation);
 							}
-						} else {
-							final Jid fallback = conversation.getMucOptions().getTrueCounterpart(counterpart);
-							Jid trueJid = getTrueCounterpart((query != null && query.safeToExtractTrueCounterpart()) ? mucUserElement : null, fallback);
+						} else  if (!counterpart.isBareJid() && trueJid != null){
 							ReadByMarker readByMarker = ReadByMarker.from(counterpart, trueJid);
 							if (message.addReadByMarker(readByMarker)) {
 								Log.d(Config.LOGTAG, account.getJid().toBareJid() + ": added read by (" + readByMarker.getRealJid() + ") to message '" + message.getBody() + "'");

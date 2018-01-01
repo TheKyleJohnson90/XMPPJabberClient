@@ -20,6 +20,7 @@
   <string name="title_activity_sharewith">Distribuie către XMPPJabberClient</string>
   <string name="title_activity_start_conversation">Pornește o conversație</string>
   <string name="title_activity_choose_contact">Alege contact</string>
+  <string name="title_activity_share_via_account">Partajează cu cont</string>
   <string name="title_activity_block_list">Listă contacte blocate</string>
   <string name="just_now">în acest moment</string>
   <string name="minute_ago">acum un minut</string>
@@ -29,6 +30,7 @@
   <string name="message_decrypting">Decriptez mesaj. Te rog așteaptă...</string>
   <string name="pgp_message">Mesaj criptat cu OpenPGP</string>
   <string name="nick_in_use">Numele de utilizator este deja alocat</string>
+  <string name="invalid_muc_nick">Nume invalid</string>
   <string name="admin">Administrator</string>
   <string name="owner">Proprietar</string>
   <string name="moderator">Moderator</string>
@@ -177,8 +179,6 @@
   <string name="account_settings_example_jabber_id">username@example.com</string>
   <string name="account_settings_confirm_password">Confirmă parola</string>
   <string name="password">Parolă</string>
-  <string name="confirm_password">Confirmă parola</string>
-  <string name="passwords_do_not_match">Parolele nu sunt identice</string>
   <string name="invalid_jid">Acesta nu este un ID Jabber valabil</string>
   <string name="error_out_of_memory">Memorie epuizată. Imaginea este prea mare.</string>
   <string name="add_phone_book_text">Vreți să adăugați pe %s în lista de contacte?</string>
@@ -250,7 +250,6 @@
   <string name="contacts_and_n_more_have_read_up_to_this_point">%1$s și încă %2$d au citit până aici</string>
   <string name="publish">Publică</string>
   <string name="touch_to_choose_picture">Atingeți avatarul pentru a selecta o poză din galerie</string>
-  <string name="publish_avatar_explanation">Țineți minte: Toți cei abonați la actualizările dumneavoastră de prezență vor putea să vadă această poză</string>
   <string name="publishing">Se publică...</string>
   <string name="error_publish_avatar_server_reject">Acest server v-a refuzat publicarea</string>
   <string name="error_publish_avatar_converting">Ceva nu a mers bine în timpul conversiei imaginii</string>
@@ -556,7 +555,7 @@ Emitent</string>
   <string name="battery_optimizations_enabled">Optimizare baterie activată</string>
   <string name="battery_optimizations_enabled_explained">Dispozitivul dumneavoastră încearcă să optimizeze agresiv consumul bateriei pentru XMPPJabberClient, asta poate duce la notificări întârziate sau chiar pierderea mesajelor.\nEste recomandat sa dezactivați aceste optimizări.</string>
   <string name="battery_optimizations_enabled_dialog">Dispozitivul dumneavoastră încearcă să optimizeze agresiv consumul 
-bateriei pentru XMPPJabberClient, asta poate duce la notificări întârziate 
+bateriei pentru XMPPJabberClient, asta poate duce la notificări întârziate
 sau chiar pierderea mesajelor.\nÎn continuare veți fi rugați să dezactivați aceste optimizări.</string>
   <string name="disable">Dezactivează</string>
   <string name="selection_too_large">Zona selectată este prea mare</string>

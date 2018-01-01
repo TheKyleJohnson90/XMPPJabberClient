@@ -6,7 +6,7 @@
 * **Server name:** eg conversations.im, jabber.at or self hosted
 * **Server software:** ejabberd 16.04 or prosody 0.10 (if known)
 * **Installed server modules:** eg Stream Managment, CSI, MAM
-* **Conversations source:** eg PlayStore, PlayStore Beta Channel, F-Droid, self build (latest HEAD)
+* **XMPPJabberClient source:** eg PlayStore, PlayStore Beta Channel, F-Droid, self build (latest HEAD)
 
 
 #### Steps to reproduce
@@ -27,7 +27,7 @@ What do you see instead?
 
 #### Debug output
 
-Please post the output of adb logcat. The log should begin with the start of Conversations and include all the
+Please post the output of adb logcat. The log should begin with the start of XMPPJabberClient and include all the
 steps it takes to reproduce the problem.
 
 ````

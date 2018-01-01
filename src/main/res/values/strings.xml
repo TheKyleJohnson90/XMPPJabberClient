@@ -2,6 +2,8 @@
 <resources>
 	<string name="app_name" translatable="false">XMPPJabberClient</string>
 	<string name="action_settings">Settings</string>
+	<string name="gcm_defaultSenderId">xmpp-3755f</string>
+	<string name="admobId">ca-app-pub-9589151137694589~5086560013</string>
 	<string name="action_add">New conversation</string>
 	<string name="action_accounts">Manage accounts</string>
 	<string name="action_end_conversation">End this conversation</string>
@@ -21,6 +23,7 @@
 	<string name="title_activity_sharewith">Share with Conversation</string>
 	<string name="title_activity_start_conversation">Start Conversation</string>
 	<string name="title_activity_choose_contact">Choose Contact</string>
+	<string name="title_activity_share_via_account">Share via account</string>
 	<string name="title_activity_block_list">Block list</string>
 	<string name="just_now">just now</string>
 	<string name="minute_ago">1 min ago</string>
@@ -179,8 +182,6 @@
 	<string name="account_settings_example_jabber_id">username@example.com</string>
 	<string name="account_settings_confirm_password">Confirm password</string>
 	<string name="password">Password</string>
-	<string name="confirm_password">Confirm password</string>
-	<string name="passwords_do_not_match">Passwords do not match</string>
 	<string name="invalid_jid">This is not a valid Jabber ID</string>
 	<string name="error_out_of_memory">Out of memory. Image is too large</string>
 	<string name="add_phone_book_text">Do you want to add %s to your address book?</string>
@@ -252,7 +253,6 @@
 	<string name="contacts_and_n_more_have_read_up_to_this_point">%1$s +%2$d more have read up to this point</string>
 	<string name="publish">Publish</string>
 	<string name="touch_to_choose_picture">Touch avatar to select picture from gallery</string>
-	<string name="publish_avatar_explanation">Please note: Everyone subscribed to your presence updates will be allowed to see this picture.</string>
 	<string name="publishing">Publishing…</string>
 	<string name="error_publish_avatar_server_reject">The server rejected your publication</string>
 	<string name="error_publish_avatar_converting">Something went wrong while converting your picture</string>
@@ -286,8 +286,8 @@
 	<string name="title_activity_about">About XMPPJabberClient</string>
 	<string name="pref_about_conversations_summary">Build and licensing information</string>
 	<string name="pref_about_message" translatable="false">
-			XMPPJabberClient is based off the source provide by Daniel Gultsch
-			\n\nRecomplied and rebranded by Kyle Johnson
+			XMPPJabberClient • Amazing XMPP Jabber Client.
+			\n\nReleased by Kyle Johnson
 			\n\nThis program is free software: you can redistribute it and/or modify
 			it under the terms of the GNU General Public License as published by
 			the Free Software Foundation, either version 3 of the License, or
@@ -298,8 +298,7 @@
 			GNU General Public License for more details.
 			\n\nYou should have received a copy of the GNU General Public License
 			along with this program. If not, see https://www.gnu.org/licenses
-			\n\nDownload the XMPPJabberClient source code at https://github.com/TheKyleJohnson90/XMPPJabberClient
-			\n\nDownload the Daniel Gultsch source code at https://github.com/siacs/Conversations
+			\n\nDownload the full source code at https://github.com/thekylejohnson90/XMPPJabberClient
 			\n\n\nLibraries
 			\n\nhttps://www.bouncycastle.org\n(The MIT License (MIT))
 			\n\nhttps://www.gnu.org/software/libidn\n(Apache License, Version 2.0)
@@ -564,7 +563,7 @@
 	<string name="shared_image_with_x">Shared image with %s</string>
 	<string name="shared_images_with_x">Shared images with %s</string>
 	<string name="shared_text_with_x">Shared text with %s</string>
-	<string name="no_storage_permission">XMPPJabberClient needs access to external storage</string>
+	<string name="no_storage_permission">XMPPJabberClient need access to external storage</string>
 	<string name="sync_with_contacts">Synchronize with contacts</string>
 	<string name="sync_with_contacts_long">XMPPJabberClient wants to match your XMPP roster with your contacts to show their full names and avatars.\n\nXMPPJabberClient will only read your contacts and match them locally without uploading them to your server.\n\nYou will now be asked to grant permission to access your contacts.</string>
 	<string name="certificate_information">Certificate Information</string>

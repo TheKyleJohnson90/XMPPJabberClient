@@ -172,8 +172,6 @@
   <string name="account_settings_example_jabber_id">korisnickoime@primer.com</string>
   <string name="account_settings_confirm_password">Потврди лозинку</string>
   <string name="password">Лозинка</string>
-  <string name="confirm_password">Потврди лозинку</string>
-  <string name="passwords_do_not_match">Лозинке се не поклапају</string>
   <string name="invalid_jid">Ово није исправан Џабер ИД</string>
   <string name="error_out_of_memory">Нестало меморије. Слика је превелика</string>
   <string name="add_phone_book_text">Желите ли да додате %s у ваш именик?</string>
@@ -233,7 +231,6 @@
   <string name="contact_has_read_up_to_this_point">%s је прочитао довде</string>
   <string name="publish">Објави</string>
   <string name="touch_to_choose_picture">Тапните аватар да изаберете слику из галерије</string>
-  <string name="publish_avatar_explanation">Имајте на уму: Свима који су претплаћени на ваше ажурирање присутности биће дозвољено да виде ову слику.</string>
   <string name="publishing">Објављујем…</string>
   <string name="error_publish_avatar_server_reject">Сервер је одбио вашу објаву</string>
   <string name="error_publish_avatar_converting">Дошло је до грешке при прекодирању слике</string>

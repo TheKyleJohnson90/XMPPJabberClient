@@ -57,7 +57,7 @@
   <string name="save">Gorde</string>
   <string name="ok">Ados</string>
   <string name="crash_report_title">XMPPJabberClient gelditu da</string>
-  <string name="crash_report_message">Akats harraskak bidaliz XMPPJabberClienten garapenean laguntzen duzu\n<b>Abisua:</b> Honek zure XMPP kontua erabiliko du garatzaileari akats harraska bidaltzeko.</string>
+  <string name="crash_report_message">Akats harraskak bidaliz Conversationsen garapenean laguntzen duzu\n<b>Abisua:</b> Honek zure XMPP kontua erabiliko du garatzaileari akats harraska bidaltzeko.</string>
   <string name="send_now">Bidali orain</string>
   <string name="send_never">Ez galdetu berriz</string>
   <string name="problem_connecting_to_account">Ezin izan da kontura konektatu</string>
@@ -87,7 +87,7 @@
   <string name="send_unencrypted">Enkriptatu gabe bidali</string>
   <string name="decryption_failed">Desenkriptazioak huts egin du. Agian ez duzu gako pribatu egokia.</string>
   <string name="openkeychain_required">OpenKeychain</string>
-  <string name="openkeychain_required_long">XMPPJabberClientek <b>OpenKeychain</b> izeneko hirugarren app bat erabiltzen du mezuak enkriptatu eta desenkriptatzeko eta zure gako publikoak kudeatzeko.\n\nOpenKeychain GPLv3 lizentziapean dago eta F-Droid eta Google Playn eskura daiteke.\n\n<small>(Mesedez ondoren XMPPJabberClient berrabiarazi)</small></string>
+  <string name="openkeychain_required_long">Conversationsek <b>OpenKeychain</b> izeneko hirugarren app bat erabiltzen du mezuak enkriptatu eta desenkriptatzeko eta zure gako publikoak kudeatzeko.\n\nOpenKeychain GPLv3 lizentziapean dago eta F-Droid eta Google Playn eskura daiteke.\n\n<small>(Mesedez ondoren XMPPJabberClient berrabiarazi)</small></string>
   <string name="restart">Berrabiarazi</string>
   <string name="install">Instalatu</string>
   <string name="openkeychain_not_installed">Mesedez instalatu ezazu OpenKeychain</string>
@@ -115,10 +115,10 @@
   <string name="pref_sound">Dei-tonua</string>
   <string name="pref_sound_summary">Mezu berri bat heltzerakoan dei-tonua jo</string>
   <string name="pref_notification_grace_period">Grazia epea</string>
-  <string name="pref_notification_grace_period_summary">Beste gailu batean aktibitatea ikusi ostean XMPPJabberClientek isilik mantentzen den denbora</string>
+  <string name="pref_notification_grace_period_summary">Beste gailu batean aktibitatea ikusi ostean Conversationsek isilik mantentzen den denbora</string>
   <string name="pref_advanced_options">Aurreratua</string>
   <string name="pref_never_send_crash">Gelditze txostenik ez bidali inoiz</string>
-  <string name="pref_never_send_crash_summary">Akats harraskak bidaliz XMPPJabberClienten garapenean laguntzen duzu</string>
+  <string name="pref_never_send_crash_summary">Akats harraskak bidaliz Conversationsen garapenean laguntzen duzu</string>
   <string name="pref_confirm_messages">Mezuak egiaztatu</string>
   <string name="pref_confirm_messages_summary">Zure kontaktuak haien mezuak noiz jaso eta irakurri dituzun jakin dezaten baimendu</string>
   <string name="pref_ui_options">Erabiltzaile-interfazea</string>
@@ -177,8 +177,6 @@
   <string name="account_settings_example_jabber_id">erabiltzailea@adibidea.com</string>
   <string name="account_settings_confirm_password">Pasahitza berretsi</string>
   <string name="password">Pasahitza</string>
-  <string name="confirm_password">Pasahitza berretsi</string>
-  <string name="passwords_do_not_match">Pasahitzak ez dute bat egiten</string>
   <string name="invalid_jid">Hau ez da Jabber ID baliodun bat</string>
   <string name="error_out_of_memory">Memoriarik gabe. Irudia handiegia da</string>
   <string name="add_phone_book_text">%s zure helbideen liburura gehitu nahi duzu?</string>
@@ -248,7 +246,6 @@
   <string name="contact_has_read_up_to_this_point">%s(e)k puntu honetaraino irakurri du</string>
   <string name="publish">Argitaratu</string>
   <string name="touch_to_choose_picture">Ukitu profileko argazkia irudi bat galeriatik hautatzeko</string>
-  <string name="publish_avatar_explanation">Adi: Zure presentzia eguneraketetara harpidetutako edonork irudi hau ikusi ahal izango du.</string>
   <string name="publishing">Argitaratzen…</string>
   <string name="error_publish_avatar_server_reject">Zerbitzariak zure argitarapena ukatu du</string>
   <string name="error_publish_avatar_converting">Zerbait oker joan da zure irudia bihurtzerakoan</string>
@@ -279,7 +276,7 @@
   <string name="pref_allow_message_correction_summary">Zure kontaktuak haien mezuak atzeraeraginez editatzea baimendu</string>
   <string name="pref_expert_options">Adituentzako ezarpenak</string>
   <string name="pref_expert_options_summary">Mesedez kontuz ibili hauekin</string>
-  <string name="title_activity_about">XMPPJabberClienti buruz</string>
+  <string name="title_activity_about">Conversationsi buruz</string>
   <string name="pref_about_conversations_summary">Eraikitze eta lizentzia informazioa</string>
   <string name="title_pref_quiet_hours">Ordu lasaiak</string>
   <string name="title_pref_quiet_hours_start_time">Hasiera ordua</string>
@@ -528,9 +525,9 @@
   <string name="shared_image_with_x">Irudia %s(r)ekin partekatu da</string>
   <string name="shared_images_with_x">Irudiak %s(r)ekin partekatu dira</string>
   <string name="shared_text_with_x">Testua %s(r)ekin partekatu da</string>
-  <string name="no_storage_permission">XMPPJabberClientek kanpoko biltegirako sarbidea behar du</string>
+  <string name="no_storage_permission">Conversationsek kanpoko biltegirako sarbidea behar du</string>
   <string name="sync_with_contacts">Kontaktuekin sinkronizatu</string>
-  <string name="sync_with_contacts_long">XMPPJabberClientek zure XMPP zerrenda eta zure kontaktuak uztartu nahi ditu haien izenak eta argazkiak erakusteko.\n\nXMPPJabberClientek zure kontaktuak modu lokalean soilik irakurri eta uztartuko ditu, zure zerbitzarira kargatu gabe.\n\nJarraian baimenak eskatuko zaizkizu zure kontaktuetara sartu ahal izateko.</string>
+  <string name="sync_with_contacts_long">Conversationsek zure XMPP zerrenda eta zure kontaktuak uztartu nahi ditu haien izenak eta argazkiak erakusteko.\n\nConversationsek zure kontaktuak modu lokalean soilik irakurri eta uztartuko ditu, zure zerbitzarira kargatu gabe.\n\nJarraian baimenak eskatuko zaizkizu zure kontaktuetara sartu ahal izateko.</string>
   <string name="certificate_information">Ziurtagiriaren informazioa</string>
   <string name="certificate_subject">Subjektua</string>
   <string name="certificate_issuer">Igorlea</string>
@@ -548,8 +545,8 @@
   <string name="always">Beti</string>
   <string name="automatically">Automatikoki</string>
   <string name="battery_optimizations_enabled">Bateriaren optimizazioak gaituta</string>
-  <string name="battery_optimizations_enabled_explained">Zure gailua jakinarazpen atzeratuak edota mezuen galera ekar lezaketen bateriaren optimizazio handiak egiten ari da XMPPJabberClienten.\nHoriek ezgaitzea gomendatzen da.</string>
-  <string name="battery_optimizations_enabled_dialog">Zure gailua jakinarazpen atzeratuak edota mezuen galera ekar lezaketen bateriaren optimizazio handiak egiten ari da XMPPJabberClienten.\nJarraian hauek ezgaitzea eskatuko zaizu.</string>
+  <string name="battery_optimizations_enabled_explained">Zure gailua jakinarazpen atzeratuak edota mezuen galera ekar lezaketen bateriaren optimizazio handiak egiten ari da Conversationsen.\nHoriek ezgaitzea gomendatzen da.</string>
+  <string name="battery_optimizations_enabled_dialog">Zure gailua jakinarazpen atzeratuak edota mezuen galera ekar lezaketen bateriaren optimizazio handiak egiten ari da Conversationsen.\nJarraian hauek ezgaitzea eskatuko zaizu.</string>
   <string name="disable">Ezgaitu</string>
   <string name="selection_too_large">Hautatutako zatia handiegia da</string>
   <string name="no_accounts">(Ez dago kontu aktiborik)</string>
@@ -562,7 +559,7 @@
   <string name="security_error_invalid_file_access">Segurtasun akatsa: fitxategi sarrera baliogabea</string>
   <string name="no_application_to_share_uri">Ez da aplikaziorik aurkitu URIa partekatzeko</string>
   <string name="share_uri_with">URIa honekin partekatu...</string>
-  <string name="welcome_text">XMPP hornitzaleez independiente den protokolo bat da. Bezero hau aukeratzen duzun edozein XMPP zerbitzariarekin erabili dezakezu.\nHala ere zure erosotasunerako conversations.im¹-en, XMPPJabberClientekin bereziki erabiltzeko egokia den hornitzaile batean, kontu bat sortzea erraz egin dugu.</string>
+  <string name="welcome_text">XMPP hornitzaleez independiente den protokolo bat da. Bezero hau aukeratzen duzun edozein XMPP zerbitzariarekin erabili dezakezu.\nHala ere zure erosotasunerako conversations.im¹-en, Conversationsekin bereziki erabiltzeko egokia den hornitzaile batean, kontu bat sortzea erraz egin dugu.</string>
   <string name="magic_create_text">conversations.im-en kontu bat sortzeko prozesuan zehar gidatuko zaitugu.\nconversations.im¹ hornitzaile bezala aukeratzerakoan beste hornitzaileen erabiltzaileekin komunikatzeko gai izango zara haiei zure Jabber ID osoa emanez.</string>
   <string name="your_full_jid_will_be">Zure Jabber ID osoa %s izango da</string>
   <string name="create_account">Kontua sortu</string>
@@ -630,8 +627,8 @@
   <string name="show_error_message">Akatsaren mezua erakutsi</string>
   <string name="error_message">Akatsaren mezua</string>
   <string name="data_saver_enabled">Datuen aurreztailea gaituta</string>
-  <string name="data_saver_enabled_explained">Zure sistema eragileak XMPPJabberClient atzeko planoan dagoenean Internetera konekta dadin mugatzen ari da. Mezu berrien jakinarazpenak jasotzeko XMPPJabberClienti mugagabeko sarrera eman beharko zenioke Datuen aurreztailea piztuta dagoenean.\nXMPPJabberClientek datuak aurrezteko esfortzua egiten jarraituko du ahal duenean.</string>
-  <string name="device_does_not_support_data_saver">Zure gailuak ez du Datuen aurreztailea ezgaitzea baimentzen XMPPJabberClienterako</string>
+  <string name="data_saver_enabled_explained">Zure sistema eragileak XMPPJabberClient atzeko planoan dagoenean Internetera konekta dadin mugatzen ari da. Mezu berrien jakinarazpenak jasotzeko Conversationsi mugagabeko sarrera eman beharko zenioke Datuen aurreztailea piztuta dagoenean.\nConversationsek datuak aurrezteko esfortzua egiten jarraituko du ahal duenean.</string>
+  <string name="device_does_not_support_data_saver">Zure gailuak ez du Datuen aurreztailea ezgaitzea baimentzen Conversationserako</string>
   <string name="error_unable_to_create_temporary_file">Ezin izan da aldi baterako fitxategia sortu</string>
   <string name="this_device_has_been_verified">Gailu hau egiaztatu da</string>
   <string name="copy_fingerprint">Hatz-marka kopiatu</string>

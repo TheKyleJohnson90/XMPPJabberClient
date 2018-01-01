@@ -172,8 +172,6 @@
   <string name="account_settings_example_jabber_id">användarnamn@exempel.se</string>
   <string name="account_settings_confirm_password">Bekräfta lösenord</string>
   <string name="password">Lösenord</string>
-  <string name="confirm_password">Bekräfta lösenord</string>
-  <string name="passwords_do_not_match">Lösenorden är inte lika</string>
   <string name="invalid_jid">Detta är inte ett korrekt Jabber-ID</string>
   <string name="error_out_of_memory">Slut på minne. Bilden är för stor</string>
   <string name="add_phone_book_text">Vill du lägga till %s i din enhets kontakter?</string>
@@ -233,7 +231,6 @@
   <string name="contact_has_read_up_to_this_point">%s har läst hit</string>
   <string name="publish">Publicera</string>
   <string name="touch_to_choose_picture">Tryck på avatarbild för att välja en bild från bildgalleriet</string>
-  <string name="publish_avatar_explanation">Notera: Alla som kan se dina tillgänglighetsuppdateringar kommer se denna bild.</string>
   <string name="publishing">Publicerar…</string>
   <string name="error_publish_avatar_server_reject">Servern kunde inte publicera</string>
   <string name="error_publish_avatar_converting">Något gick fel vid konvertering av din bild</string>

@@ -115,7 +115,6 @@ public class EnterJidDialog {
 				}
 			}
 		};
-
 	}
 
 	public void setOnEnterJidDialogPositiveListener(OnEnterJidDialogPositiveListener listener) {

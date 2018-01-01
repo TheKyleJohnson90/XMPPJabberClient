@@ -29,6 +29,7 @@
   <string name="message_decrypting">Descifrando mensaje. Por favor, espera...</string>
   <string name="pgp_message">Mensaje cifrado con OpenPGP</string>
   <string name="nick_in_use">El apodo ya está en uso</string>
+  <string name="invalid_muc_nick">Apodo inválido</string>
   <string name="admin">Administrador</string>
   <string name="owner">Propietario</string>
   <string name="moderator">Moderador</string>
@@ -177,8 +178,6 @@
   <string name="account_settings_example_jabber_id">usuario@ejemplo.com</string>
   <string name="account_settings_confirm_password">Confirmar contraseña</string>
   <string name="password">Contraseña</string>
-  <string name="confirm_password">Confirmar contraseña</string>
-  <string name="passwords_do_not_match">Las contraseñas no coinciden</string>
   <string name="invalid_jid">El identificador no es un identificador Jabber válido</string>
   <string name="error_out_of_memory">Sin memoria. La imagen es demasiado grande</string>
   <string name="add_phone_book_text">¿Quieres añadir a %s a tus contactos?</string>
@@ -246,9 +245,10 @@
   <string name="contact_added_you">El contacto te ha añadido a su lista de contactos</string>
   <string name="add_back">Añadir contacto</string>
   <string name="contact_has_read_up_to_this_point">%s ha leído hasta aquí</string>
+  <string name="contacts_have_read_up_to_this_point">%sha leído hasta aquí</string>
+  <string name="contacts_and_n_more_have_read_up_to_this_point">%1$s +%2$dhan leído hasta aquí</string>
   <string name="publish">Publicar</string>
   <string name="touch_to_choose_picture">Pulsa para seleccionar una imagen de la galería</string>
-  <string name="publish_avatar_explanation">Nota: Todos tus contactos podrán ver esta imagen.</string>
   <string name="publishing">Publicando…</string>
   <string name="error_publish_avatar_server_reject">El servidor rechazó la publicación</string>
   <string name="error_publish_avatar_converting">Se ha producido un error mientras se convertía la imagen</string>

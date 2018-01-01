@@ -167,8 +167,6 @@
   <string name="account_settings_example_jabber_id">username@example.com</string>
   <string name="account_settings_confirm_password">تأكيد كلمة السر</string>
   <string name="password">كلمة السر</string>
-  <string name="confirm_password">تأكيد كلمة السر</string>
-  <string name="passwords_do_not_match">كلمتي المرور غير متطابقتان</string>
   <string name="invalid_jid">حساب جابر غير صالح</string>
   <string name="error_out_of_memory">خارج الذاكرة. الصورة كبيرة جدا</string>
   <string name="add_phone_book_text">هل تود إضافة %s إلى سجل عناوينك ؟</string>
@@ -235,7 +233,6 @@
   <string name="add_back">أضف من جهتك أيضا</string>
   <string name="publish">أنشر</string>
   <string name="touch_to_choose_picture">إضغط على الصورة الرمزية لانتقاء صورة من الأستوديو</string>
-  <string name="publish_avatar_explanation">ملاحظة : سيتم السماح لجميع من شارك في تحديثات حضورك رؤية هذه الصورة.</string>
   <string name="publishing">نشر ...</string>
   <string name="error_publish_avatar_server_reject">لقد رفض السيرفر منشورك</string>
   <string name="error_publish_avatar_converting">لقد حدث خلل أثناء تحويل الصورة</string>
@@ -479,7 +476,7 @@
   <string name="select_image_and_crop">إختر صورة ثم قم بقصها</string>
   <string name="this_account_is_disabled">لقد قمت بتعطيل هذا الحساب</string>
   <string name="share_uri_with">شارك الرابط مع ...</string>
-  <string name="welcome_text">XMPP هو مزود بروتوكول مستقل. يمكنك استخدام هذا العميل مع أي خادم إكس أم بي بي اخترته. و لراحتك جعلنا من السهل إنشاء حساب على conversations.im¹؛ مزود خدمة يتناسب خصيصا للاستخدام مع تطبيق المحادثات Conversations.</string>
+  <string name="welcome_text">XMPP هو مزود بروتوكول مستقل. يمكنك استخدام هذا العميل مع أي خادم إكس أم بي بي اخترته. و لراحتك جعلنا من السهل إنشاء حساب على conversations.im¹؛ مزود خدمة يتناسب خصيصا للاستخدام مع تطبيق المحادثات XMPPJabberClient.</string>
   <string name="your_full_jid_will_be">سوف تكون هويتك الكاملة على جابر كالتالي : %s</string>
   <string name="create_account">إنشاء حساب</string>
   <string name="use_own_provider">إستخدم مزودي الخاص</string>

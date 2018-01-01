@@ -20,6 +20,7 @@ import java.net.ConnectException;
 import java.net.IDN;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -52,6 +53,7 @@ import de.duenndns.ssl.DomainHostnameVerifier;
 import de.duenndns.ssl.MemorizingTrustManager;
 import com.KDJStudios.XMPPJabberClient.Config;
 import com.KDJStudios.XMPPJabberClient.crypto.XmppDomainVerifier;
+import com.KDJStudios.XMPPJabberClient.crypto.axolotl.AxolotlService;
 import com.KDJStudios.XMPPJabberClient.crypto.sasl.Anonymous;
 import com.KDJStudios.XMPPJabberClient.crypto.sasl.DigestMd5;
 import com.KDJStudios.XMPPJabberClient.crypto.sasl.External;
@@ -141,7 +143,7 @@ public class XmppConnection implements Runnable {
 	private final XmppConnectionService mXmppConnectionService;
 
 	private SaslMechanism saslMechanism;
-	private String webRegistrationUrl = null;
+	private URL redirectionUrl = null;
 	private String verifiedHostname = null;
 
 	private class MyKeyManager implements X509KeyManager {
@@ -192,8 +194,7 @@ public class XmppConnection implements Runnable {
 		public void onIqPacketReceived(Account account, IqPacket packet) {
 			if (packet.getType() == IqPacket.TYPE.RESULT) {
 				account.setOption(Account.OPTION_REGISTER, false);
-				forceCloseSocket();
-				changeStatus(Account.State.REGISTRATION_SUCCESSFUL);
+				throw new StateChangingError(Account.State.REGISTRATION_SUCCESSFUL);
 			} else {
 				final List<String> PASSWORD_TOO_WEAK_MSGS = Arrays.asList(
 						"The password is too weak",
@@ -211,8 +212,7 @@ public class XmppConnection implements Runnable {
 						state = Account.State.REGISTRATION_PASSWORD_TOO_WEAK;
 					}
 				}
-				changeStatus(state);
-				forceCloseSocket();
+				throw new StateChangingError(state);
 			}
 		}
 	};
@@ -544,15 +544,21 @@ public class XmppConnection implements Runnable {
 				final Element failure = tagReader.readElement(nextTag);
 				if (Namespace.SASL.equals(failure.getNamespace())) {
 					final String text = failure.findChildContent("text");
-					if (failure.hasChild("account-disabled")
-							&& text != null
-							&& text.contains("renew")
-							&& Config.MAGIC_CREATE_DOMAIN != null
-							&& text.contains(Config.MAGIC_CREATE_DOMAIN)) {
-						throw new StateChangingException(Account.State.PAYMENT_REQUIRED);
-					} else {
-						throw new StateChangingException(Account.State.UNAUTHORIZED);
+					if (failure.hasChild("account-disabled") && text != null) {
+						Matcher matcher = Patterns.AUTOLINK_WEB_URL.matcher(text);
+						if (matcher.find()) {
+							try {
+								URL url = new URL(text.substring(matcher.start(), matcher.end()));
+								if (url.getProtocol().equals("https")) {
+									this.redirectionUrl = url;
+									throw new StateChangingException(Account.State.PAYMENT_REQUIRED);
+								}
+							} catch (MalformedURLException e) {
+								throw new StateChangingException(Account.State.UNAUTHORIZED);
+							}
+						}
 					}
+					throw new StateChangingException(Account.State.UNAUTHORIZED);
 				} else if (Namespace.TLS.equals(failure.getNamespace())) {
 					throw new StateChangingException(Account.State.TLS_ERROR);
 				} else {
@@ -940,10 +946,14 @@ public class XmppConnection implements Runnable {
 
 			@Override
 			public void onIqPacketReceived(final Account account, final IqPacket packet) {
-				boolean failed = false;
-				if (packet.getType() == IqPacket.TYPE.RESULT
-						&& packet.query().hasChild("username")
-						&& (packet.query().hasChild("password"))) {
+				if (packet.getType() == IqPacket.TYPE.TIMEOUT) {
+					return;
+				}
+				if (packet.getType() == IqPacket.TYPE.ERROR) {
+					throw new StateChangingError(Account.State.REGISTRATION_FAILED);
+				}
+				final Element query = packet.query("jabber:iq:register");
+				if (query.hasChild("username") && (query.hasChild("password"))) {
 					final IqPacket register = new IqPacket(IqPacket.TYPE.SET);
 					final Element username = new Element("username").setContent(account.getUsername());
 					final Element password = new Element("password").setContent(account.getPassword());
@@ -951,73 +961,74 @@ public class XmppConnection implements Runnable {
 					register.query().addChild(password);
 					register.setFrom(account.getJid().toBareJid());
 					sendUnmodifiedIqPacket(register, registrationResponseListener);
-				} else if (packet.getType() == IqPacket.TYPE.RESULT
-						&& (packet.query().hasChild("x", "jabber:x:data"))) {
-					final Data data = Data.parse(packet.query().findChild("x", "jabber:x:data"));
-					final Element blob = packet.query().findChild("data", "urn:xmpp:bob");
+				} else if (query.hasChild("x", "jabber:x:data")) {
+					final Data data = Data.parse(query.findChild("x", "jabber:x:data"));
+					final Element blob = query.findChild("data", "urn:xmpp:bob");
 					final String id = packet.getId();
-
-					Bitmap captcha = null;
+					InputStream is;
 					if (blob != null) {
 						try {
 							final String base64Blob = blob.getContent();
 							final byte[] strBlob = Base64.decode(base64Blob, Base64.DEFAULT);
-							InputStream stream = new ByteArrayInputStream(strBlob);
-							captcha = BitmapFactory.decodeStream(stream);
+							is = new ByteArrayInputStream(strBlob);
 						} catch (Exception e) {
-							//ignored
+							is = null;
 						}
 					} else {
 						try {
-							Field url = data.getFieldByName("url");
-							String urlString = url.findChildContent("value");
-							URL uri = new URL(urlString);
-							captcha = BitmapFactory.decodeStream(uri.openConnection().getInputStream());
+							Field field = data.getFieldByName("url");
+							URL url = field != null && field.getValue() != null ? new URL(field.getValue()) : null;
+							is = url != null ? url.openStream() : null;
 						} catch (IOException e) {
-							Log.e(Config.LOGTAG, e.toString());
+							is = null;
 						}
 					}
 
-					if (captcha != null) {
-						failed = !mXmppConnectionService.displayCaptchaRequest(account, id, data, captcha);
+					if (is != null) {
+						Bitmap captcha = BitmapFactory.decodeStream(is);
+						try {
+							if (mXmppConnectionService.displayCaptchaRequest(account, id, data, captcha)) {
+								return;
+							}
+						} catch (Exception e) {
+							throw new StateChangingError(Account.State.REGISTRATION_FAILED);
+						}
 					}
-				} else {
-					failed = true;
-				}
-
-				if (failed) {
-					final Element query = packet.query();
+					throw new StateChangingError(Account.State.REGISTRATION_FAILED);
+				} else if (query.hasChild("instructions") || query.hasChild("x",Namespace.OOB)) {
 					final String instructions = query.findChildContent("instructions");
 					final Element oob = query.findChild("x", Namespace.OOB);
 					final String url = oob == null ? null : oob.findChildContent("url");
-					if (url == null && instructions != null) {
+					if (url != null) {
+						setAccountCreationFailed(url);
+					} else if (instructions != null) {
 						Matcher matcher = Patterns.AUTOLINK_WEB_URL.matcher(instructions);
 						if (matcher.find()) {
 							setAccountCreationFailed(instructions.substring(matcher.start(), matcher.end()));
-						} else {
-							setAccountCreationFailed(null);
 						}
-					} else {
-						setAccountCreationFailed(url);
 					}
+					throw new StateChangingError(Account.State.REGISTRATION_FAILED);
 				}
 			}
 		});
 	}
 
 	private void setAccountCreationFailed(String url) {
-		if (url != null && (url.toLowerCase().startsWith("http://") || url.toLowerCase().startsWith("https://"))) {
-			changeStatus(Account.State.REGISTRATION_WEB);
-			this.webRegistrationUrl = url;
-		} else {
-			changeStatus(Account.State.REGISTRATION_FAILED);
+		if (url != null) {
+			try {
+				this.redirectionUrl = new URL(url);
+				if (this.redirectionUrl.getProtocol().equals("https")) {
+					throw new StateChangingError(Account.State.REGISTRATION_WEB);
+				}
+			} catch (MalformedURLException e) {
+				//fall through
+			}
 		}
-		disconnect(true);
-		Log.d(Config.LOGTAG, account.getJid().toBareJid() + ": could not register. url=" + url);
+		throw new StateChangingError(Account.State.REGISTRATION_FAILED);
 	}
 
-	public String getWebRegistrationUrl() {
-		return this.webRegistrationUrl;
+	public URL getRedirectionUrl() {
+		return this.redirectionUrl;
 	}
 
 	public void resetEverything() {
@@ -1025,7 +1036,7 @@ public class XmppConnection implements Runnable {
 		resetStreamId();
 		clearIqCallbacks();
 		mStanzaQueue.clear();
-		this.webRegistrationUrl = null;
+		this.redirectionUrl = null;
 		synchronized (this.disco) {
 			disco.clear();
 		}
@@ -1698,10 +1709,11 @@ public class XmppConnection implements Runnable {
 		}
 
 		public boolean pepPublishOptions() {
-			synchronized (XmppConnection.this.disco) {
-				ServiceDiscoveryResult info = disco.get(account.getJid().toBareJid());
-				return info != null && info.getFeatures().contains(Namespace.PUBSUB_PUBLISH_OPTIONS);
-			}
+			return hasDiscoFeature(account.getJid().toBareJid(),Namespace.PUBSUB_PUBLISH_OPTIONS);
+		}
+
+		public boolean pepOmemoWhitelisted() {
+			return hasDiscoFeature(account.getJid().toBareJid(), AxolotlService.PEP_OMEMO_WHITELISTED);
 		}
 
 		public boolean mam() {

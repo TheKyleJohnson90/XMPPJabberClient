@@ -20,6 +20,7 @@
   <string name="title_activity_sharewith">Condividi con Conversation</string>
   <string name="title_activity_start_conversation">Inizia una conversazione</string>
   <string name="title_activity_choose_contact">Scegli un contatto</string>
+  <string name="title_activity_share_via_account">Condividi via account</string>
   <string name="title_activity_block_list">Lista nera</string>
   <string name="just_now">adesso</string>
   <string name="minute_ago">1 min fa</string>
@@ -29,6 +30,7 @@
   <string name="message_decrypting">Decifrazione messaggio. Attendere prego...</string>
   <string name="pgp_message">Messaggio cifrato con OpenPGP</string>
   <string name="nick_in_use">Nome utente già in uso</string>
+  <string name="invalid_muc_nick">Nickname non valido</string>
   <string name="admin">Amministratore</string>
   <string name="owner">Proprietario</string>
   <string name="moderator">Moderatore</string>
@@ -177,8 +179,6 @@
   <string name="account_settings_example_jabber_id">utente@esempio.com</string>
   <string name="account_settings_confirm_password">Conferma password</string>
   <string name="password">Password</string>
-  <string name="confirm_password">Conferma password</string>
-  <string name="passwords_do_not_match">Le Password non corrispondono</string>
   <string name="invalid_jid">Questo non è un ID Jabber valido</string>
   <string name="error_out_of_memory">Memoria esaurita. L’immagine è tropppo grande</string>
   <string name="add_phone_book_text">Vuoi aggiungere %s alla tua rubrica?</string>
@@ -246,9 +246,10 @@
   <string name="contact_added_you">Il contatto ti ha aggiunto alla sua lista contatti</string>
   <string name="add_back">Aggiungi anche tu</string>
   <string name="contact_has_read_up_to_this_point">%s ha letto fino a questo punto</string>
+  <string name="contacts_have_read_up_to_this_point">%s ha letto fino a questo punto</string>
+  <string name="contacts_and_n_more_have_read_up_to_this_point">%1$s +%2$d altri hanno letto fino a questo punto</string>
   <string name="publish">Pubblica</string>
   <string name="touch_to_choose_picture">Tocca l’avatar per selezionare l’immagine dalla galleria</string>
-  <string name="publish_avatar_explanation">Nota bene: tutti i contatti sottoscritti agli aggiornamenti della tua presenza avranno il permesso di vedere questa immagine.</string>
   <string name="publishing">Pubblicazione…</string>
   <string name="error_publish_avatar_server_reject">Il server ha rifiutato la tua pubblicazione</string>
   <string name="error_publish_avatar_converting">Qualcosa è andato storto durante la conversione della tua immagine</string>

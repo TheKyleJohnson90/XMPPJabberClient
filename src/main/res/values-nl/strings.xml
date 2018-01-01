@@ -20,6 +20,7 @@
   <string name="title_activity_sharewith">Delen in gesprek</string>
   <string name="title_activity_start_conversation">Gesprek starten</string>
   <string name="title_activity_choose_contact">Contact kiezen</string>
+  <string name="title_activity_share_via_account">Delen via account</string>
   <string name="title_activity_block_list">Geblokkeerde contacten</string>
   <string name="just_now">zojuist</string>
   <string name="minute_ago">1 min. geleden</string>
@@ -29,6 +30,7 @@
   <string name="message_decrypting">Bericht aan het ontsleutelen. Even geduld…</string>
   <string name="pgp_message">OpenPGP-versleuteld bericht</string>
   <string name="nick_in_use">Naam is al in gebruik</string>
+  <string name="invalid_muc_nick">Ongeldige bijnaam</string>
   <string name="admin">Beheerder</string>
   <string name="owner">Eigenaar</string>
   <string name="moderator">Moderator</string>
@@ -177,8 +179,6 @@
   <string name="account_settings_example_jabber_id">gebruikersnaam@voorbeeld.nl</string>
   <string name="account_settings_confirm_password">Wachtwoord bevestigen</string>
   <string name="password">Wachtwoord</string>
-  <string name="confirm_password">Wachtwoord bevestigen</string>
-  <string name="passwords_do_not_match">Wachtwoorden komen niet met elkaar overeen</string>
   <string name="invalid_jid">Dit is geen geldige Jabber-ID</string>
   <string name="error_out_of_memory">Geen geheugen beschikbaar. Afbeelding is te groot</string>
   <string name="add_phone_book_text">Wil je %s toevoegen aan je adresboek?</string>
@@ -250,7 +250,6 @@
   <string name="contacts_and_n_more_have_read_up_to_this_point">%1$s en nog %2$d meer hebben tot hier gelezen</string>
   <string name="publish">Publiceer</string>
   <string name="touch_to_choose_picture">Tik op avatar om een foto uit de galerij te kiezen</string>
-  <string name="publish_avatar_explanation">Let op: iedereen die je aanwezigheidsupdates ontvangt zal deze foto kunnen zien.</string>
   <string name="publishing">Publiceren…</string>
   <string name="error_publish_avatar_server_reject">De server weigerde de publicatie van je afbeelding</string>
   <string name="error_publish_avatar_converting">Fout bij converteren van afbeelding</string>

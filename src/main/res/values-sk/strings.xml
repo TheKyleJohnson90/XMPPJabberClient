@@ -139,8 +139,6 @@
   <string name="account_settings_example_jabber_id">meno@priklad.com</string>
   <string name="account_settings_confirm_password">Potvrdiť heslo</string>
   <string name="password">Heslo</string>
-  <string name="confirm_password">Potvrdiť heslo</string>
-  <string name="passwords_do_not_match">Heslá nezodpovedajú</string>
   <string name="invalid_jid">Toto nie je platné Jabber ID</string>
   <string name="error_out_of_memory">Nedostatok pamäti. Obrázok je príliš veľký</string>
   <string name="server_info_show_more">Informácie o serveri</string>
@@ -190,7 +188,6 @@
   <string name="contact_has_read_up_to_this_point">%s dočítal až potiaľ</string>
   <string name="publish">Zverejniť</string>
   <string name="touch_to_choose_picture">Kliknúť na avatar a vybrať obrázok z galérie</string>
-  <string name="publish_avatar_explanation">Pozor: Každý s povolením vidieť zmeny stavu má prístup k tomuto obrázku.</string>
   <string name="publishing">Zverejňujem…</string>
   <string name="error_publish_avatar_server_reject">Server odmietol toto zverejnenie</string>
   <string name="error_publish_avatar_converting">Pri konverzii obrázku sa niečo nepodarilo</string>

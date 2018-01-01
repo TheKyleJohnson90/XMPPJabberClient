@@ -42,8 +42,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdView;
-
 import net.java.otr4j.session.SessionStatus;
 
 import java.util.ArrayList;
@@ -87,9 +85,6 @@ import com.KDJStudios.XMPPJabberClient.xmpp.chatstate.ChatState;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 
 public class ConversationFragment extends Fragment implements EditMessage.KeyboardListener {
-
-	//ADMOB
-	protected AdView mAdView;
 
 	final protected List<Message> messageList = new ArrayList<>();
 	protected Conversation conversation;
@@ -139,8 +134,7 @@ public class ConversationFragment extends Fragment implements EditMessage.Keyboa
 
 				@Override
 				public String onValueEdited(String value) {
-					activity.xmppConnectionService.providePasswordForMuc(
-							conversation, value);
+					activity.xmppConnectionService.providePasswordForMuc(conversation, value);
 					return null;
 				}
 			});
@@ -646,11 +640,7 @@ public class ConversationFragment extends Fragment implements EditMessage.Keyboa
 		messagesView.setAdapter(messageListAdapter);
 
 		registerForContextMenu(messagesView);
-		//ADMOB
-		//MobileAds.initialize(super.getContext(),"ca-app-pub-3940256099942544~3347511713");
-		//mAdView = view.findViewById(R.id.adViewConversation);
-		//AdRequest adRequest = new AdRequest.Builder().build();
-		//mAdView.loadAd(adRequest);
+
 		return view;
 	}
 
@@ -1401,9 +1391,7 @@ public class ConversationFragment extends Fragment implements EditMessage.Keyboa
 					state = ChatState.PAUSED;
 					users = conversation.getMucOptions().getUsersWithChatState(state, 5);
 				}
-				int markersAdded = 0;
 				if (mucOptions.membersOnly() && mucOptions.nonanonymous()) {
-					//addedMarkers.addAll(ReadByMarker.from(users));
 					for (int i = this.messageList.size() - 1; i >= 0; --i) {
 						final Set<ReadByMarker> markersForMessage = messageList.get(i).getReadByMarkers();
 						final List<MucOptions.User> shownMarkers = new ArrayList<>();
@@ -1436,7 +1424,6 @@ public class ConversationFragment extends Fragment implements EditMessage.Keyboa
 							statusMessage = null;
 						}
 						if (statusMessage != null) {
-							++markersAdded;
 							this.messageList.add(i + 1, statusMessage);
 						}
 						addedMarkers.add(markerForSender);
@@ -1522,7 +1509,7 @@ public class ConversationFragment extends Fragment implements EditMessage.Keyboa
 			return;
 		}
 		if (conversation.getAccount().getPgpSignature() == null) {
-			activity.announcePgp(conversation.getAccount(), conversation, activity.onOpenPGPKeyPublished);
+			activity.announcePgp(conversation.getAccount(), conversation, null, activity.onOpenPGPKeyPublished);
 			return;
 		}
 		if (!mSendingPgpMessage.compareAndSet(false, true)) {

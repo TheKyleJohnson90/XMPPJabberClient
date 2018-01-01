@@ -134,8 +134,6 @@
   <string name="account_settings_example_jabber_id">username@example.com</string>
   <string name="account_settings_confirm_password">Επιβεβαίωση συνθηματικού</string>
   <string name="password">Συνθηματικό</string>
-  <string name="confirm_password">Επιβεβαίωση συνθηματικού</string>
-  <string name="passwords_do_not_match">Τα συνθηματικά δεν ταιριάζουν</string>
   <string name="invalid_jid">Αυτή δεν είναι έγκυρη ταυτότητα Jabber</string>
   <string name="error_out_of_memory">Πλήρης μνήμη. Η εικόνα είναι πολύ μεγάλη</string>
   <string name="server_info_show_more">Πληροφορίες διακομιστή</string>
@@ -178,7 +176,6 @@
   <string name="contact_has_read_up_to_this_point">Η επαφή %s έχει διαβάσει μέχρι αυτό το σημείο</string>
   <string name="publish">Δημοσίευση</string>
   <string name="touch_to_choose_picture">Επιλέξτε την εικόνα προφίλ για να διαλέξετε εικόνα από την έκθεση</string>
-  <string name="publish_avatar_explanation">Παρακαλώ σημειώστε: Όλοι όσοι είναι συνδρομητές στις ενημερώσεις παρουσίας σας θα έχουν την δυνατότητα να δουν αυτή την εικόνα.</string>
   <string name="publishing">Δημοσίευση...</string>
   <string name="error_publish_avatar_server_reject">Ο διακομιστής απέρριψε την δημοσίευσή σας</string>
   <string name="error_publish_avatar_converting">Κάτι πήγε στραβά κατά τη μετατροπή της εικόνας σας</string>

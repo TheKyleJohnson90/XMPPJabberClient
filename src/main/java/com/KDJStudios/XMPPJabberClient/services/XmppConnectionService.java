@@ -1250,7 +1250,7 @@ public class XmppConnectionService extends Service {
 					if (!message.needsUploading()) {
 						String pgpBody = message.getEncryptedBody();
 						String decryptedBody = message.getBody();
-						message.setBody(pgpBody);
+						message.setBody(pgpBody); //TODO might throw NPE
 						message.setEncryption(Message.ENCRYPTION_PGP);
 						if (message.edited()) {
 							message.setBody(decryptedBody);
@@ -1408,7 +1408,7 @@ public class XmppConnectionService extends Service {
 				if (account != null) {
 					conversation.setAccount(account);
 				} else {
-					Log.e(Config.LOGTAG, "unable to restore Conversations with " + conversation.getJid());
+					Log.e(Config.LOGTAG, "unable to restore XMPPJabberClient with " + conversation.getJid());
 					iterator.remove();
 				}
 			}
@@ -2808,28 +2808,22 @@ public class XmppConnectionService extends Service {
 		}
 	}
 
-	public void publishAvatar(Account account, Uri image, UiCallback<Avatar> callback) {
-		final Bitmap.CompressFormat format = Config.AVATAR_FORMAT;
-		final int size = Config.AVATAR_SIZE;
-		final Avatar avatar = getFileBackend().getPepAvatar(image, size, format);
-		if (avatar != null) {
-			avatar.height = size;
-			avatar.width = size;
-			if (format.equals(Bitmap.CompressFormat.WEBP)) {
-				avatar.type = "image/webp";
-			} else if (format.equals(Bitmap.CompressFormat.JPEG)) {
-				avatar.type = "image/jpeg";
-			} else if (format.equals(Bitmap.CompressFormat.PNG)) {
-				avatar.type = "image/png";
+	public void publishAvatar(final Account account, final Uri image, final UiCallback<Avatar> callback) {
+		new Thread(() -> {
+			final Bitmap.CompressFormat format = Config.AVATAR_FORMAT;
+			final int size = Config.AVATAR_SIZE;
+			final Avatar avatar = getFileBackend().getPepAvatar(image, size, format);
+			if (avatar != null) {
+				if (!getFileBackend().save(avatar)) {
+					callback.error(R.string.error_saving_avatar, avatar);
+					return;
+				}
+				publishAvatar(account, avatar, callback);
+			} else {
+				callback.error(R.string.error_publish_avatar_converting, null);
 			}
-			if (!getFileBackend().save(avatar)) {
-				callback.error(R.string.error_saving_avatar, avatar);
-				return;
-			}
-			publishAvatar(account, avatar, callback);
-		} else {
-			callback.error(R.string.error_publish_avatar_converting, null);
-		}
+		}).start();
+
 	}
 
 	public void publishAvatar(Account account, final Avatar avatar, final UiCallback<Avatar> callback) {

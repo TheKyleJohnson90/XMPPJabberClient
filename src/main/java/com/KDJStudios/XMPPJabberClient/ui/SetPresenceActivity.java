@@ -18,9 +18,6 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-
 import java.util.List;
 
 import com.KDJStudios.XMPPJabberClient.R;
@@ -71,12 +68,6 @@ public class SetPresenceActivity extends XmppActivity implements View.OnClickLis
 				executeChangePresence();
 			}
 		});
-
-		//ADMOB
-		MobileAds.initialize(this,"ca-app-pub-9589151137694589~5086560013");
-		mAdView = findViewById(R.id.adViewSetPresence);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
 	}
 
 	@Override
@@ -103,7 +94,7 @@ public class SetPresenceActivity extends XmppActivity implements View.OnClickLis
 		if (resultCode == RESULT_OK) {
 			if (xmppConnectionServiceBound && mAccount != null) {
 				if (requestCode == REQUEST_ANNOUNCE_PGP) {
-					announcePgp(mAccount, null, onPresenceChanged);
+					announcePgp(mAccount, null,data, onPresenceChanged);
 				}
 				this.mPostponedActivityResult = null;
 			} else {
@@ -125,7 +116,7 @@ public class SetPresenceActivity extends XmppActivity implements View.OnClickLis
 				finish();
 			} else {
 				xmppConnectionService.changeStatus(mAccount, status, statusMessage, false);
-				announcePgp(mAccount, null, onPresenceChanged);
+				announcePgp(mAccount, null,null, onPresenceChanged);
 			}
 		}
 	}

@@ -173,8 +173,6 @@
   <string name="account_settings_example_jabber_id">username@example.com</string>
   <string name="account_settings_confirm_password">Підтвердіть пароль</string>
   <string name="password">Пароль</string>
-  <string name="confirm_password">Підтвердіть пароль</string>
-  <string name="passwords_do_not_match">Пароль не збігається</string>
   <string name="invalid_jid">Це не є дійсним Jabber ID</string>
   <string name="error_out_of_memory">Пам\'ять вичерпано. Завелике зображення.</string>
   <string name="add_phone_book_text">Бажаєте додати %s до своєї книги контактів?</string>
@@ -234,7 +232,6 @@
   <string name="contact_has_read_up_to_this_point">%s дочитав до цього місця</string>
   <string name="publish">Опублікувати</string>
   <string name="touch_to_choose_picture">Торкніться аватару, щоб вибрати зображення з галереї</string>
-  <string name="publish_avatar_explanation">Будь ласка, зважте: Кожен, хто підписаний на оновлення Вашої присутності, зможе бачити це зображення.</string>
   <string name="publishing">Публікація…</string>
   <string name="error_publish_avatar_server_reject">Сервер відхилив Вашу публікацію</string>
   <string name="error_publish_avatar_converting">Щось пішло не так під час перетворення Вашого зображення</string>

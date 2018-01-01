@@ -142,6 +142,7 @@
                     android:textColor="@color/accent"/>
             </LinearLayout>
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -157,6 +158,7 @@
                 ads:adUnitId="ca-app-pub-9589151137694589/5824926611">
             </com.google.android.gms.ads.AdView>
         </RelativeLayout>
+
     </LinearLayout>
 
 </ScrollView>

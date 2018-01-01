@@ -92,7 +92,7 @@
   <string name="no_pgp_key">未發現 OpenPGP 金鑰</string>
   <string name="contact_has_no_pgp_key">XMPPJabberClient 無法加密資訊，因為連絡人未提供他/她的公開金鑰。\n\n<small>請通知連絡人設置 OpenPGP。</small></string>
   <string name="no_pgp_keys">未找到 OpenPGP 金鑰</string>
-  <string name="contacts_have_no_pgp_keys">因您的連絡人未公佈公開金鑰，XMPPJabberClient未能成功加密您的資訊.\n\n<small>請通知連絡人設置OpenPGP.</small></string>
+  <string name="contacts_have_no_pgp_keys">因您的連絡人未公佈公開金鑰，Conversations未能成功加密您的資訊.\n\n<small>請通知連絡人設置OpenPGP.</small></string>
   <string name="pref_general">常規</string>
   <string name="pref_xmpp_resource">XMPP 資源</string>
   <string name="pref_xmpp_resource_summary">用戶端標識名稱</string>
@@ -111,7 +111,7 @@
   <string name="pref_sound">鈴聲</string>
   <string name="pref_sound_summary">收到新消息時響鈴</string>
   <string name="pref_notification_grace_period">靜默期限</string>
-  <string name="pref_notification_grace_period_summary">發現在其它設備上的活動後，XMPPJabberClient保持安靜的時間</string>
+  <string name="pref_notification_grace_period_summary">發現在其它設備上的活動後，Conversations保持安靜的時間</string>
   <string name="pref_advanced_options">高級</string>
   <string name="pref_never_send_crash">總不發送崩潰報告</string>
   <string name="pref_never_send_crash_summary">發送堆疊跟蹤説明 XMPPJabberClient 開發人員</string>
@@ -172,8 +172,6 @@
   <string name="account_settings_example_jabber_id">username@example.com</string>
   <string name="account_settings_confirm_password">確認密碼</string>
   <string name="password">密碼</string>
-  <string name="confirm_password">確認密碼</string>
-  <string name="passwords_do_not_match">密碼不一致</string>
   <string name="invalid_jid">該 Jabber ID 無效</string>
   <string name="error_out_of_memory">空間不足。圖片過大</string>
   <string name="add_phone_book_text">是否添加 %s 到地址薄？</string>
@@ -233,7 +231,6 @@
   <string name="contact_has_read_up_to_this_point">%s 已讀此句</string>
   <string name="publish">發佈</string>
   <string name="touch_to_choose_picture">點擊頭像可從相冊中選擇頭像 </string>
-  <string name="publish_avatar_explanation">請注意: 所有關注您最新動態的人將看到該圖像。</string>
   <string name="publishing">正在發佈…</string>
   <string name="error_publish_avatar_server_reject">伺服器拒絕了您的發佈請求</string>
   <string name="error_publish_avatar_converting">轉換頭像圖片出錯</string>
@@ -501,9 +498,9 @@
   <string name="always">總是</string>
   <string name="automatically">自動</string>
   <string name="battery_optimizations_enabled">啟用節電模式</string>
-  <string name="battery_optimizations_enabled_explained">你的設備正在為XMPPJabberClient進行電池優化，這可能導致通知的延遲甚至消息的丟失。
+  <string name="battery_optimizations_enabled_explained">你的設備正在為Conversations進行電池優化，這可能導致通知的延遲甚至消息的丟失。
 建議不要這樣做</string>
-  <string name="battery_optimizations_enabled_dialog">你的設備正在為XMPPJabberClient進行電池優化，這可能導致通知的延遲甚至消息的丟失。
+  <string name="battery_optimizations_enabled_dialog">你的設備正在為Conversations進行電池優化，這可能導致通知的延遲甚至消息的丟失。
 你將會被提示禁用該功能。</string>
   <string name="disable">禁用</string>
   <string name="selection_too_large">選擇區域過大</string>
@@ -544,7 +541,7 @@
   <string name="gp_medium">中</string>
   <string name="gp_long">長</string>
   <string name="pref_broadcast_last_activity">廣播最後打開該應用的時間</string>
-  <string name="pref_broadcast_last_activity_summary">讓你的所有連絡人知道你使用XMPPJabberClient的時間</string>
+  <string name="pref_broadcast_last_activity_summary">讓你的所有連絡人知道你使用Conversations的時間</string>
   <string name="pref_privacy">隱私</string>
   <string name="pref_theme_options">主題</string>
   <string name="pref_theme_options_summary">選擇調色板</string>

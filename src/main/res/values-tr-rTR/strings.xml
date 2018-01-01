@@ -168,8 +168,6 @@
   <string name="account_settings_example_jabber_id">kullanıcıadı@ornek.com</string>
   <string name="account_settings_confirm_password">Parolayı doğrula</string>
   <string name="password">parola</string>
-  <string name="confirm_password">Parolayı doğrula</string>
-  <string name="passwords_do_not_match">Parolalar eşleşmiyor</string>
   <string name="invalid_jid">Jabber ID geçersiz</string>
   <string name="error_out_of_memory">Yetersiz bellek. Görüntü dosyası çok büyük.</string>
   <string name="add_phone_book_text">%s kişisini listenize eklemek ister misiniz?</string>
@@ -229,7 +227,6 @@
   <string name="contact_has_read_up_to_this_point">%s buraya kadar okudu</string>
   <string name="publish">Yayımla</string>
   <string name="touch_to_choose_picture">Galeriden resim seçmek için avatara dokun</string>
-  <string name="publish_avatar_explanation">Lütfen dikkat: Çevrim içi durum bildirimi güncellemelerinize abone olan herkes bu resmi görebilir.</string>
   <string name="publishing">Yayımlanıyor…</string>
   <string name="error_publish_avatar_server_reject">Sunucu yayımladığınızı reddetti</string>
   <string name="error_publish_avatar_converting">Resim dönüştürülürken hata oluştu</string>

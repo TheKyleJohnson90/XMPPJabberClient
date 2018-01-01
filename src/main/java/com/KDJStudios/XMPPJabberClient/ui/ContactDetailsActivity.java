@@ -27,8 +27,6 @@ import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
 import com.wefika.flowlayout.FlowLayout;
 
 import org.openintents.openpgp.util.OpenPgpUtils;
@@ -54,6 +52,8 @@ import com.KDJStudios.XMPPJabberClient.xmpp.OnUpdateBlocklist;
 import com.KDJStudios.XMPPJabberClient.xmpp.XmppConnection;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 
 public class ContactDetailsActivity extends OmemoActivity implements OnAccountUpdate, OnRosterUpdate, OnUpdateBlocklist, OnKeyStatusUpdated {
 	public static final String ACTION_VIEW_CONTACT = "view_contact";
@@ -239,10 +239,11 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
 		});
 
 		//ADMOB
-		MobileAds.initialize(this,"ca-app-pub-9589151137694589~5086560013");
+		MobileAds.initialize(this,getString(R.string.admobId));
 		mAdView = findViewById(R.id.adViewContactDetails);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);
+
 	}
 
 	@Override

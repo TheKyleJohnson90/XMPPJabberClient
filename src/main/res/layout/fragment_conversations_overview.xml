@@ -18,7 +18,6 @@
             android:background="?attr/color_background_primary"
             android:divider="@color/black12"
             android:dividerHeight="1dp" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -27,21 +26,25 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical" >
- <RelativeLayout
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:layout_marginTop="4dp">
-     <com.google.android.gms.ads.AdView
-         xmlns:ads="http://schemas.android.com/apk/res-auto"
-         android:id="@+id/adViewConversationOverview"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_centerHorizontal="true"
-         android:layout_alignParentTop="true"
-         ads:adSize="BANNER"
-         ads:adUnitId="ca-app-pub-9589151137694589/5824926611">
-     </com.google.android.gms.ads.AdView>
- </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp">
+
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adViewConversationOverview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                ads:adSize="SMART_BANNER"
+                ads:adUnitId="ca-app-pub-9589151137694589/5824926611">
+            </com.google.android.gms.ads.AdView>
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 </android.support.v4.widget.SlidingPaneLayout>

@@ -44,7 +44,7 @@ public class ImStyleParser {
 		return parse(text, 0, text.length() - 1);
 	}
 
-	private static List<Style> parse(CharSequence text, int start, int end) {
+	public static List<Style> parse(CharSequence text, int start, int end) {
 		List<Style> styles = new ArrayList<>();
 		for (int i = start; i <= end; ++i) {
 			char c = text.charAt(i);
@@ -72,7 +72,7 @@ public class ImStyleParser {
 	}
 
 	private static boolean isCharRepeatedTwoTimes(CharSequence text, char c, int index, int end) {
-		return index + 1 <= end && text.charAt(index) == c && text.charAt(index) == c;
+		return index + 1 <= end && text.charAt(index) == c && text.charAt(index+1) == c;
 	}
 
 	private static boolean precededByWhiteSpace(CharSequence text, int index, int start) {

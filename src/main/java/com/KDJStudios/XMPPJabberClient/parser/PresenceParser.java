@@ -69,7 +69,9 @@ public class PresenceParser extends AbstractParser implements
 						MucOptions.User user = parseItem(conversation, item, from);
 						if (codes.contains(MucOptions.STATUS_CODE_SELF_PRESENCE)
 								|| ((codes.isEmpty() || codes.contains(MucOptions.STATUS_CODE_ROOM_CREATED)) && jid.equals(item.getAttributeAsJid("jid")))) {
-							mucOptions.setOnline();
+							if (mucOptions.setOnline()) {
+								mXmppConnectionService.getAvatarService().clear(mucOptions);
+							}
 							mucOptions.setSelf(user);
 							invokeRenameListener(mucOptions, true);
 						}
@@ -139,7 +141,6 @@ public class PresenceParser extends AbstractParser implements
 					}
 				}
 			} else if (type.equals("error")) {
-
 				final Element error = packet.findChild("error");
 				if (error == null) {
 					return;
@@ -161,16 +162,12 @@ public class PresenceParser extends AbstractParser implements
 					if (text != null && text.contains("attribute 'to'")) {
 						if (mucOptions.online()) {
 							invokeRenameListener(mucOptions, false);
-
 						} else {
 							mucOptions.setError(MucOptions.Error.INVALID_NICK);
-
 						}
-
 					} else {
 						mucOptions.setError(MucOptions.Error.UNKNOWN);
 						Log.d(Config.LOGTAG, "unknown error in conference: " + packet);
-
 					}
 				}
 			}
@@ -181,16 +178,12 @@ public class PresenceParser extends AbstractParser implements
 		if (options.onRenameListener != null) {
 			if (success) {
 				options.onRenameListener.onSuccess();
-
 			} else {
 				options.onRenameListener.onFailure();
-
 			}
 			options.onRenameListener = null;
-
 		}
 	}
-
 
 	private static List<String> getStatusCodes(Element x) {
 		List<String> codes = new ArrayList<>();
@@ -320,5 +313,4 @@ public class PresenceParser extends AbstractParser implements
 			this.parseContactPresence(packet, account);
 		}
 	}
-
 }

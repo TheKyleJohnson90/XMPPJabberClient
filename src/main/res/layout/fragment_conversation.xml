@@ -4,22 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/color_background_secondary">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/conversation_name"
-        android:layout_marginTop="4dp">
-        <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adViewConversation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            ads:adSize="SMART_BANNER"
-            ads:adUnitId="ca-app-pub-9589151137694589/5824926611">
-        </com.google.android.gms.ads.AdView>
-    </RelativeLayout>
+
     <ListView
         android:id="@+id/messages_view"
         android:layout_width="fill_parent"
@@ -56,6 +41,7 @@
             android:inputType="textShortMessage|textMultiLine|textCapSentences"
             android:minHeight="48dp"
             android:minLines="1"
+            android:maxLines="8"
             android:paddingBottom="12dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"

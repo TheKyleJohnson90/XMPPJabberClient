@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <uses-permission
@@ -58,29 +57,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.KDJStudios.XMPPJabberClient.ui.StartConversationActivity"
+            android:name="com.KDJStudios.XMPPJabberClient.ui.UriHandlerActivity"
             android:label="@string/title_activity_start_conversation"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SENDTO" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="imto" />
-                <data android:host="jabber" />
-            </intent-filter>
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="xmpp" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="xmpp" />
             </intent-filter>
@@ -95,7 +80,19 @@
                 <data android:pathPrefix="/i/" />
                 <data android:pathPrefix="/j/" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="imto" />
+                <data android:host="jabber" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.StartConversationActivity"
+            android:label="@string/title_activity_start_conversation"
+            android:launchMode="singleTop">
         </activity>
         <activity
             android:name="com.KDJStudios.XMPPJabberClient.ui.WelcomeActivity"
@@ -127,6 +124,10 @@
             android:name="com.KDJStudios.XMPPJabberClient.ui.ManageAccountActivity"
             android:label="@string/title_activity_manage_accounts"
             android:launchMode="singleTask" />
+        <activity
+            android:name="com.KDJStudios.XMPPJabberClient.ui.ShareViaAccountActivity"
+            android:label="@string/title_activity_share_via_account"
+            android:launchMode="singleTop" />
         <activity
             android:name="com.KDJStudios.XMPPJabberClient.ui.EditAccountActivity"
             android:launchMode="singleTop"

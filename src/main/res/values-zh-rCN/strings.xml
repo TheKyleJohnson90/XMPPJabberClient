@@ -92,7 +92,7 @@
   <string name="no_pgp_key">未发现 OpenPGP 密钥</string>
   <string name="contact_has_no_pgp_key">XMPPJabberClient 无法加密信息，因为联系人未提供他/她的公钥。\n\n<small>请通知联系人设置 OpenPGP。</small></string>
   <string name="no_pgp_keys">未找到 OpenPGP 密钥</string>
-  <string name="contacts_have_no_pgp_keys">因您的联系人未公布公钥，XMPPJabberClient未能成功加密您的信息.\n\n<small>请通知联系人设置OpenPGP.</small></string>
+  <string name="contacts_have_no_pgp_keys">因您的联系人未公布公钥，Conversations未能成功加密您的信息.\n\n<small>请通知联系人设置OpenPGP.</small></string>
   <string name="pref_general">常规</string>
   <string name="pref_xmpp_resource">XMPP 资源</string>
   <string name="pref_xmpp_resource_summary">客户端标识名称</string>
@@ -111,7 +111,7 @@
   <string name="pref_sound">铃声</string>
   <string name="pref_sound_summary">收到新消息时响铃</string>
   <string name="pref_notification_grace_period">静默期限</string>
-  <string name="pref_notification_grace_period_summary">发现在其它设备上的活动后，XMPPJabberClient保持安静的时间</string>
+  <string name="pref_notification_grace_period_summary">发现在其它设备上的活动后，Conversations保持安静的时间</string>
   <string name="pref_advanced_options">高级</string>
   <string name="pref_never_send_crash">总不发送崩溃报告</string>
   <string name="pref_never_send_crash_summary">发送堆栈跟踪帮助 XMPPJabberClient 开发人员</string>
@@ -173,8 +173,6 @@
   <string name="account_settings_example_jabber_id">username@example.com</string>
   <string name="account_settings_confirm_password">确认密码</string>
   <string name="password">密码</string>
-  <string name="confirm_password">确认密码</string>
-  <string name="passwords_do_not_match">密码不一致</string>
   <string name="invalid_jid">该 Jabber ID 无效</string>
   <string name="error_out_of_memory">空间不足。图片过大</string>
   <string name="add_phone_book_text">是否添加 %s 到地址薄？</string>
@@ -234,7 +232,6 @@
   <string name="contact_has_read_up_to_this_point">%s 已读此句</string>
   <string name="publish">发布</string>
   <string name="touch_to_choose_picture">点击头像可从相册中选择头像 </string>
-  <string name="publish_avatar_explanation">请注意: 所有关注您最新动态的人将看到该图像。</string>
   <string name="publishing">正在发布…</string>
   <string name="error_publish_avatar_server_reject">服务器拒绝了您的发布请求</string>
   <string name="error_publish_avatar_converting">转换头像图片出错</string>
@@ -508,9 +505,9 @@
   <string name="always">总是</string>
   <string name="automatically">自动</string>
   <string name="battery_optimizations_enabled">启用节电模式</string>
-  <string name="battery_optimizations_enabled_explained">你的设备正在为XMPPJabberClient进行电池优化，这可能导致通知的延迟甚至消息的丢失。
+  <string name="battery_optimizations_enabled_explained">你的设备正在为Conversations进行电池优化，这可能导致通知的延迟甚至消息的丢失。
 建议不要这样做</string>
-  <string name="battery_optimizations_enabled_dialog">你的设备正在为XMPPJabberClient进行电池优化，这可能导致通知的延迟甚至消息的丢失。
+  <string name="battery_optimizations_enabled_dialog">你的设备正在为Conversations进行电池优化，这可能导致通知的延迟甚至消息的丢失。
 你将会被提示禁用该功能。</string>
   <string name="disable">禁用</string>
   <string name="selection_too_large">选择区域过大</string>
@@ -551,7 +548,7 @@
   <string name="gp_medium">中</string>
   <string name="gp_long">长</string>
   <string name="pref_broadcast_last_activity">广播最后打开该应用的时间</string>
-  <string name="pref_broadcast_last_activity_summary">让你的所有联系人知道你使用XMPPJabberClient的时间</string>
+  <string name="pref_broadcast_last_activity_summary">让你的所有联系人知道你使用Conversations的时间</string>
   <string name="pref_privacy">隐私</string>
   <string name="pref_theme_options">主题</string>
   <string name="pref_theme_options_summary">选择调色板</string>

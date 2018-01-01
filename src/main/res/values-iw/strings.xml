@@ -142,8 +142,6 @@
   <string name="account_settings_example_jabber_id">username@example.com</string>
   <string name="account_settings_confirm_password">אמת סיסמה</string>
   <string name="password">סיסמה</string>
-  <string name="confirm_password">אמת סיסמה</string>
-  <string name="passwords_do_not_match">סיסמאות לא תואמות</string>
   <string name="invalid_jid">מזהה ה Jabber אינו תקין</string>
   <string name="error_out_of_memory">חסר זיכרון. תצלום גדול מדי</string>
   <string name="server_info_show_more">פרטי השרת</string>
@@ -193,7 +191,6 @@
   <string name="contact_has_read_up_to_this_point">%s קרא עד לנקודה זו</string>
   <string name="publish">פרסם</string>
   <string name="touch_to_choose_picture">לחץ על תמות הפרופיל כדי לבחור תמונה מתוך הגלריה</string>
-  <string name="publish_avatar_explanation">לתשומת לבך: כל מי שרשום לעדכוני נוכחות שלך יורשה לראות את תמונה זו.</string>
   <string name="publishing">מעלה…</string>
   <string name="error_publish_avatar_server_reject">השרת דחה את ההעלאה</string>
   <string name="error_publish_avatar_converting">משהו השתבש במהלך המרת התמונה</string>
@@ -402,7 +399,7 @@
   </plurals>
   <string name="shared_file_with_x">שתף קובץ בעזרת %s</string>
   <string name="shared_image_with_x">שתף תמונה בעזרת %s</string>
-  <string name="no_storage_permission">‏XMPPJabberClient זקוקה לגישה לאחסון חיצוני</string>
+  <string name="no_storage_permission">‏Conversations זקוקה לגישה לאחסון חיצוני</string>
   <string name="sync_with_contacts">סנכרן עם אנשי קשר</string>
-  <string name="sync_with_contacts_long">‏XMPPJabberClient מבקשת להתאים את רשימת XMPP שלך עם אנשי הקשר שלך כדי להציג את השמות המלאים שלהם כולל אווטארים.\n\nXMPPJabberClient רק תקרא את אנשי הקשר שלך ותתאים אותם באופן מקומי מבלי להעלות אותם לשרת שלך.\n\nכעת אתה תתבקש להעניק הרשאה כדי לגשת להתקן שלך.</string>
+  <string name="sync_with_contacts_long">‏Conversations מבקשת להתאים את רשימת XMPP שלך עם אנשי הקשר שלך כדי להציג את השמות המלאים שלהם כולל אווטארים.\n\nXMPPJabberClient רק תקרא את אנשי הקשר שלך ותתאים אותם באופן מקומי מבלי להעלות אותם לשרת שלך.\n\nכעת אתה תתבקש להעניק הרשאה כדי לגשת להתקן שלך.</string>
 </resources>

@@ -34,10 +34,10 @@ import com.KDJStudios.XMPPJabberClient.ui.adapter.AccountAdapter;
 import com.KDJStudios.XMPPJabberClient.xmpp.XmppConnection;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
 
 import org.openintents.openpgp.util.OpenPgpApi;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 
 public class ManageAccountActivity extends XmppActivity implements OnAccountUpdate, KeyChainAliasCallback, XmppConnectionService.OnAccountCreated {
 
@@ -105,10 +105,11 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 		registerForContextMenu(accountListView);
 
 		//ADMOB
-		MobileAds.initialize(this,"ca-app-pub-9589151137694589~5086560013");
+		MobileAds.initialize(this,getString(R.string.admobId));
 		mAdView = findViewById(R.id.adViewManageAccounts);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);
+
 	}
 
 	@Override
@@ -354,7 +355,7 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 
 	private void publishOpenPGPPublicKey(Account account) {
 		if (ManageAccountActivity.this.hasPgp()) {
-			announcePgp(selectedAccount, null, onOpenPGPKeyPublished);
+			announcePgp(selectedAccount, null,null, onOpenPGPKeyPublished);
 		} else {
 			this.showInstallPgpDialog();
 		}
@@ -386,12 +387,12 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 				if (requestCode == REQUEST_CHOOSE_PGP_ID) {
 					if (data.getExtras().containsKey(OpenPgpApi.EXTRA_SIGN_KEY_ID)) {
 						selectedAccount.setPgpSignId(data.getExtras().getLong(OpenPgpApi.EXTRA_SIGN_KEY_ID));
-						announcePgp(selectedAccount, null, onOpenPGPKeyPublished);
+						announcePgp(selectedAccount, null, null, onOpenPGPKeyPublished);
 					} else {
 						choosePgpSignId(selectedAccount);
 					}
 				} else if (requestCode == REQUEST_ANNOUNCE_PGP) {
-					announcePgp(selectedAccount, null, onOpenPGPKeyPublished);
+					announcePgp(selectedAccount, null, data, onOpenPGPKeyPublished);
 				}
 				this.mPostponedActivityResult = null;
 			} else {

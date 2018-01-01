@@ -20,6 +20,7 @@
   <string name="title_activity_sharewith">Споделяне в разговора</string>
   <string name="title_activity_start_conversation">Започване на разговор</string>
   <string name="title_activity_choose_contact">Изберете контакт</string>
+  <string name="title_activity_share_via_account">Споделяне чрез профил</string>
   <string name="title_activity_block_list">Списък с блокирани</string>
   <string name="just_now">току-що</string>
   <string name="minute_ago">преди 1 минута</string>
@@ -29,6 +30,7 @@
   <string name="message_decrypting">Дешифроване на съобщението. Моля, изчакайте…</string>
   <string name="pgp_message">Съобщение, шифр. чрез OpenPGP</string>
   <string name="nick_in_use">Псевдонимът вече се използва</string>
+  <string name="invalid_muc_nick">Неправилен псевдоним</string>
   <string name="admin">Администратор</string>
   <string name="owner">Собственик</string>
   <string name="moderator">Модератор</string>
@@ -177,8 +179,6 @@
   <string name="account_settings_example_jabber_id">username@example.com</string>
   <string name="account_settings_confirm_password">Потвърдете паролата</string>
   <string name="password">Парола</string>
-  <string name="confirm_password">Потвърдете паролата</string>
-  <string name="passwords_do_not_match">Паролите са различни</string>
   <string name="invalid_jid">Това не е правилен Jabber идентификатор</string>
   <string name="error_out_of_memory">Няма достатъчно памет. Изображението е твърде голямо.</string>
   <string name="add_phone_book_text">Искате ли да добавите %s към адресния си указател?</string>
@@ -250,7 +250,6 @@
   <string name="contacts_and_n_more_have_read_up_to_this_point">%1$s и още %2$d човека са прочели до тук</string>
   <string name="publish">Публикуване</string>
   <string name="touch_to_choose_picture">Докоснете аватара, за да изберете изображение от галерията</string>
-  <string name="publish_avatar_explanation">Забележка: Всеки, абониран за актуализации на присъствието Ви, ще може да вижда тази снимка.</string>
   <string name="publishing">Публикуване…</string>
   <string name="error_publish_avatar_server_reject">Сървърът отказа Вашето публикуване</string>
   <string name="error_publish_avatar_converting">Нещо се обърка при преобразуването на снимката Ви</string>
