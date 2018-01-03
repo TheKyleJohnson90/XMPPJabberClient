@@ -11,4 +11,4 @@ android:
   licenses:
     - '.+'
 script:
-    - ./gradlew assemblePlaystoreRelease
+    - ./gradlew assembleFreeRelease
