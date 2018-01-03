@@ -397,6 +397,9 @@ public class ConversationActivity extends XmppActivity
 			sendReadMarkerIfNecessary(conversation);
 		}
 		listAdapter.notifyDataSetChanged();
+		//ADMOB
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
 	}
 
 	public void sendReadMarkerIfNecessary(final Conversation conversation) {

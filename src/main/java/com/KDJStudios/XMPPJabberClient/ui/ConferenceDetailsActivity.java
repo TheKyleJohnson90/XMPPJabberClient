@@ -294,6 +294,9 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
 		if (this.mTheme != theme) {
 			recreate();
 		}
+		//ADMOB
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
 	}
 
 	@Override

@@ -263,6 +263,9 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
 			this.showDynamicTags = preferences.getBoolean(SettingsActivity.SHOW_DYNAMIC_TAGS, false);
 			this.showLastSeen = preferences.getBoolean("last_activity", false);
 		}
+		//ADMOB
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
 	}
 
 	@Override

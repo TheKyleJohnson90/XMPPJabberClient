@@ -119,6 +119,9 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 		if (this.mTheme != theme) {
 			recreate();
 		}
+		//ADMOB
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
 	}
 
 	@Override
