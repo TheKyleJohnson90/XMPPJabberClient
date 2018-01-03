@@ -1,5 +1,25 @@
+<h1 align="center">XMPP Jabber Client</h1>
+
+<p align="center">XMPP Jabber Client is a amazing free and open source client for android. XMPP Jabber Client enables you to connect to an XMPP for instant messaging with other people over the Internet. XMPP Jabber Client works with many XMPP servers, but is recommended for use with the conversations.im server.</p>
+
+<p align="center">
+    <a href="https://play.google.com/store/apps/details?id=com.KDJStudios.XMPPJabberClient">
+       <img src="https://conversations.im/images/en-play-badge.png"
+            alt="Google Play">
+            </a>
+    <a href="http://a.co/854fmmu">
+        <img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png"
+             alt="Amazon App Store">
+    </a>
+</p>
+
+<p align="center">
+    <a href="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient">
+        <img src="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient.svg?branch=master" alt="build status">
+    </a>
+</p>
+
 # ABOUT XMPP Jabber Client
-XMPP Jabber Client is a amazing free and open source client for android. XMPP Jabber Client enables you to connect to an XMPP for instant messaging with other people over the Internet. XMPP Jabber Client works with many XMPP servers, but is recommended for use with the conversations.im server.
 
 Some of the features of XMPP Jabber Client are listed below
 
@@ -18,6 +38,15 @@ Some of the features of XMPP Jabber Client are listed below
 • Many more!
 
 Based off source code for Conversations provided by Daniel Gultsch
+
+# STATUS
+
+<p align="center">
+    <a href="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient">
+        <img src="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient.svg?branch=master"
+             alt="build status">
+    </a>
+</p>
 
 # DONATE
 
