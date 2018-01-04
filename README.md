@@ -13,12 +13,6 @@
     </a>
 </p>
 
-<p align="center">
-    <a href="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient">
-        <img src="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient.svg?branch=master" alt="build status">
-    </a>
-</p>
-
 # ABOUT XMPP Jabber Client
 
 Some of the features of XMPP Jabber Client are listed below
@@ -39,12 +33,11 @@ Some of the features of XMPP Jabber Client are listed below
 
 Based off source code for Conversations provided by Daniel Gultsch
 
-# STATUS
+# STATUS OF MASTER
 
 <p align="center">
     <a href="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient">
-        <img src="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient.svg?branch=master"
-             alt="build status">
+        <img src="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient.svg?branch=master" alt="build status">
     </a>
 </p>
 
