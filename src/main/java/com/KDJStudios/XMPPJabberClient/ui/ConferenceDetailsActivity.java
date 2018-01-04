@@ -279,12 +279,6 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
 		this.mNotifyStatusButton.setOnClickListener(this.mNotifyStatusClickListener);
 		this.mNotifyStatusText = (TextView) findViewById(R.id.notification_status_text);
 
-		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobId));
-		mAdView = findViewById(R.id.adViewMucDetails);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
-
 	}
 
 	@Override
@@ -295,6 +289,8 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
 			recreate();
 		}
 		//ADMOB
+		MobileAds.initialize(this,getString(R.string.admobAppId));
+		mAdView = findViewById(R.id.adViewMucDetails);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);
 	}

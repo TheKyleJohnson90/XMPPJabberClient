@@ -342,11 +342,7 @@ public class ConversationActivity extends XmppActivity
 				}
 			});
 		}
-		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobId));
-		mAdView = findViewById(R.id.adViewConversationOverview);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
+
 
 	}
 
@@ -1162,6 +1158,11 @@ public class ConversationActivity extends XmppActivity
 		if (conversationList.size() >= 1) {
 			this.onConversationUpdate();
 		}
+		//ADMOB
+		MobileAds.initialize(this,getString(R.string.admobAppId));
+		mAdView = findViewById(R.id.adViewConversationOverview);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
 	}
 
 	@Override

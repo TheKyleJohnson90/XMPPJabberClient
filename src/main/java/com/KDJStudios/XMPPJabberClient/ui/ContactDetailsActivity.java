@@ -238,12 +238,6 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
 			}
 		});
 
-		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobId));
-		mAdView = findViewById(R.id.adViewContactDetails);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
-
 	}
 
 	@Override
@@ -264,6 +258,8 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
 			this.showLastSeen = preferences.getBoolean("last_activity", false);
 		}
 		//ADMOB
+		MobileAds.initialize(this,getString(R.string.admobAppId));
+		mAdView = findViewById(R.id.adViewContactDetails);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);
 	}

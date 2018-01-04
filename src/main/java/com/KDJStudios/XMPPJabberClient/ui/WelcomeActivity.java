@@ -35,6 +35,11 @@ public class WelcomeActivity extends XmppActivity {
 		if (this.mTheme != theme) {
 			recreate();
 		}
+		//ADMOB
+		MobileAds.initialize(this,getString(R.string.admobAppId));
+		mAdView = findViewById(R.id.adViewWelcome);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
 	}
 
 	@Override
@@ -76,13 +81,6 @@ public class WelcomeActivity extends XmppActivity {
 			addInvitee(intent);
 			startActivity(intent);
 		});
-
-		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobId));
-		mAdView = findViewById(R.id.adViewWelcome);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
-
 
 	}
 

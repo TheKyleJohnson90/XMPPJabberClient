@@ -3,7 +3,10 @@
 	<string name="app_name" translatable="false">XMPPJabberClient</string>
 	<string name="action_settings">Settings</string>
 	<string name="gcm_defaultSenderId">xmpp-3755f</string>
-	<string name="admobId">ca-app-pub-9589151137694589~5086560013</string>
+	<string name="admobAppId">ca-app-pub-9589151137694589~5086560013</string>
+	<string name="admobStaticUnitId">ca-app-pub-9589151137694589/5824926611</string>
+	<string name="admobOptimizedUnitId">ca-app-pub-9589151137694589/2238133849</string>
+	<string name="admobTestUnitId">ca-app-pub-3940256099942544/6300978111</string>
 	<string name="action_add">New conversation</string>
 	<string name="action_accounts">Manage accounts</string>
 	<string name="action_end_conversation">End this conversation</string>

@@ -74,7 +74,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 8
+        versionCode 9
         versionName "0.1.7"
         archivesBaseName += "-$versionName"
         applicationId "com.KDJStudios.XMPPJabberClient"

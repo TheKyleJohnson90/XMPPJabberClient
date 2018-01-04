@@ -104,12 +104,6 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 		});
 		registerForContextMenu(accountListView);
 
-		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobId));
-		mAdView = findViewById(R.id.adViewManageAccounts);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
-
 	}
 
 	@Override
@@ -120,6 +114,8 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 			recreate();
 		}
 		//ADMOB
+		MobileAds.initialize(this,getString(R.string.admobAppId));
+		mAdView = findViewById(R.id.adViewManageAccounts);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);
 	}
