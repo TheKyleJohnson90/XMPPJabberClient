@@ -66,6 +66,7 @@ import com.KDJStudios.XMPPJabberClient.xmpp.forms.Data;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.KDJStudios.XMPPJabberClient.xmpp.pep.Avatar;
+import com.KDJStudios.XMPPJabberClient.ui.widget.DisabledActionModeCallback;
 
 public class EditAccountActivity extends OmemoActivity implements OnAccountUpdate, OnUpdateBlocklist,
 		OnKeyStatusUpdated, OnCaptchaRequested, KeyChainAliasCallback, XmppConnectionService.OnShowErrorToast, XmppConnectionService.OnMamPreferencesFetched {
@@ -855,6 +856,11 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
 		this.mAccountJid.setEnabled(editable);
 		this.mAccountJid.setFocusable(editable);
 		this.mAccountJid.setFocusableInTouchMode(editable);
+		if (editable) {
+			this.mPassword.setCustomSelectionActionModeCallback(null);
+		} else {
+			this.mPassword.setCustomSelectionActionModeCallback(new DisabledActionModeCallback());
+		}
 
 		if (!mInitMode) {
 			this.mAvatar.setVisibility(View.VISIBLE);

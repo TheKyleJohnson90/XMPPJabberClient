@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.KDJStudios.XMPPJabberClient.R;
 import com.KDJStudios.XMPPJabberClient.entities.Account;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
+import com.KDJStudios.XMPPJabberClient.ui.widget.DisabledActionModeCallback;
 
 public class ChangePasswordActivity extends XmppActivity implements XmppConnectionService.OnAccountPasswordChanged {
 
@@ -65,7 +66,9 @@ public class ChangePasswordActivity extends XmppActivity implements XmppConnecti
 		this.mChangePasswordButton.setOnClickListener(this.mOnChangePasswordButtonClicked);
 		this.mCurrentPasswordLabel =  findViewById(R.id.current_password_label);
 		this.mCurrentPassword = findViewById(R.id.current_password);
+		this.mCurrentPassword.setCustomSelectionActionModeCallback(new DisabledActionModeCallback());
 		this.mNewPassword = findViewById(R.id.new_password);
+		this.mNewPassword.setCustomSelectionActionModeCallback(new DisabledActionModeCallback());
 	}
 
 	@Override
