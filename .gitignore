@@ -44,4 +44,3 @@ proguard/
 import-summary.txt
 .navigation/
 *.json
-*.json
