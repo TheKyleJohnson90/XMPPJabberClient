@@ -74,8 +74,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 9
-        versionName "0.1.7"
+        versionCode 10
+        versionName "0.1.8"
         archivesBaseName += "-$versionName"
         applicationId "com.KDJStudios.XMPPJabberClient"
         //ADMOB
