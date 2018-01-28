@@ -26,7 +26,7 @@ public class AboutPreference extends Preference {
     }
 
     private void setSummary() {
-		setSummary("XMPPJabberClient " + PhoneHelper.getVersionName(getContext()));
+		setSummary("Conversations " + PhoneHelper.getVersionName(getContext()));
 	}
 }
 

@@ -40,9 +40,6 @@ import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService.OnConversationUpdate;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService.OnMucRosterUpdate;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-
 
 public class ConferenceDetailsActivity extends XmppActivity implements OnConversationUpdate, OnMucRosterUpdate, XmppConnectionService.OnAffiliationChanged, XmppConnectionService.OnRoleChanged, XmppConnectionService.OnConfigurationPushed {
 	public static final String ACTION_VIEW_MUC = "view_muc";
@@ -278,7 +275,6 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
 		this.mNotifyStatusButton = (ImageButton) findViewById(R.id.notification_status_button);
 		this.mNotifyStatusButton.setOnClickListener(this.mNotifyStatusClickListener);
 		this.mNotifyStatusText = (TextView) findViewById(R.id.notification_status_text);
-
 	}
 
 	@Override
@@ -288,11 +284,6 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
 		if (this.mTheme != theme) {
 			recreate();
 		}
-		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobAppId));
-		mAdView = findViewById(R.id.adViewMucDetails);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
 	}
 
 	@Override
@@ -471,7 +462,11 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
 				}
 				return true;
 			case R.id.send_private_message:
-				privateMsgInMuc(mConversation,mSelectedUser.getName());
+				if (mConversation.getMucOptions().allowPm()) {
+					privateMsgInMuc(mConversation,mSelectedUser.getName());
+				} else {
+					Toast.makeText(this, R.string.private_messages_are_disabled, Toast.LENGTH_SHORT).show();
+				}
 				return true;
 			case R.id.invite:
 				xmppConnectionService.directInvite(mConversation, jid);

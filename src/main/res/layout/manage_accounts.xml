@@ -1,27 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/color_background_secondary"
-    android:layout_marginTop="4dp">
-
-<com.google.android.gms.ads.AdView
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/adViewManageAccounts"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:layout_alignParentTop="true"
-    ads:adSize="BANNER"
-    ads:adUnitId="@string/admobStaticUnitId">
-</com.google.android.gms.ads.AdView>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="?attr/color_background_secondary"
-    android:layout_below="@id/adViewManageAccounts">
+    android:background="?attr/color_background_secondary" >
 
     <ListView
         android:id="@+id/account_list"
@@ -32,5 +14,3 @@
     </ListView>
 
 </LinearLayout>
-
-</RelativeLayout>

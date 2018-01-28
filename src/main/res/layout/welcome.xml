@@ -62,7 +62,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true">
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,7 +69,6 @@
                 android:layout_centerVertical="true"
                 android:padding="8dp"
                 android:src="@drawable/main_logo"/>
-
             <com.google.android.gms.ads.AdView
                 xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/adViewWelcome"
@@ -81,7 +79,6 @@
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/admobStaticUnitId">
             </com.google.android.gms.ads.AdView>
-
         </RelativeLayout>
         <TextView
             android:paddingLeft="8dp"

@@ -54,6 +54,7 @@ import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService.OnCaptchaR
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService.OnAccountUpdate;
 import com.KDJStudios.XMPPJabberClient.ui.adapter.KnownHostsAdapter;
+import com.KDJStudios.XMPPJabberClient.ui.widget.DisabledActionModeCallback;
 import com.KDJStudios.XMPPJabberClient.utils.CryptoHelper;
 import com.KDJStudios.XMPPJabberClient.utils.UIHelper;
 import com.KDJStudios.XMPPJabberClient.utils.XmppUri;
@@ -66,7 +67,6 @@ import com.KDJStudios.XMPPJabberClient.xmpp.forms.Data;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.KDJStudios.XMPPJabberClient.xmpp.pep.Avatar;
-import com.KDJStudios.XMPPJabberClient.ui.widget.DisabledActionModeCallback;
 
 public class EditAccountActivity extends OmemoActivity implements OnAccountUpdate, OnUpdateBlocklist,
 		OnKeyStatusUpdated, OnCaptchaRequested, KeyChainAliasCallback, XmppConnectionService.OnShowErrorToast, XmppConnectionService.OnMamPreferencesFetched {

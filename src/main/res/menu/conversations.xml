@@ -6,7 +6,6 @@
         android:orderInCategory="10"
         android:showAsAction="always"
         android:title="@string/action_add"/>
-
     <item
         android:id="@+id/action_security"
         android:icon="?attr/icon_not_secure"

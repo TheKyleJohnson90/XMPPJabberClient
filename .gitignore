@@ -11,6 +11,7 @@ captures/
 free/
 playstore/
 signing.properties
+*.jks
 # Ignore Gradle GUI config
 gradle-app.setting
 

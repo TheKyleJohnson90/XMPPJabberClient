@@ -15,7 +15,7 @@
    width="96"
    height="96"
    sodipodi:docname="ic_send_text_offline_white.svg"
-   inkscape:export-filename="/home/daniel/workspace/XMPPJabberClient/res/drawable-xxhdpi/ic_action_send_now_online.png"
+   inkscape:export-filename="/home/daniel/workspace/Conversations/res/drawable-xxhdpi/ic_action_send_now_online.png"
    inkscape:export-xdpi="154.28572"
    inkscape:export-ydpi="154.28572">
   <metadata
@@ -64,7 +64,7 @@
      id="path3633"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccc"
-     inkscape:export-filename="/home/daniel/workspace/XMPPJabberClient/res/drawable-mdpi/ic_action_send_now_dnd.png"
+     inkscape:export-filename="/home/daniel/workspace/Conversations/res/drawable-mdpi/ic_action_send_now_dnd.png"
      inkscape:export-xdpi="51.42857"
      inkscape:export-ydpi="51.42857" />
 </svg>

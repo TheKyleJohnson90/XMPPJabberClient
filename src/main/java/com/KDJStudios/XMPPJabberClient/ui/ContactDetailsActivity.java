@@ -52,8 +52,6 @@ import com.KDJStudios.XMPPJabberClient.xmpp.OnUpdateBlocklist;
 import com.KDJStudios.XMPPJabberClient.xmpp.XmppConnection;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
 
 public class ContactDetailsActivity extends OmemoActivity implements OnAccountUpdate, OnRosterUpdate, OnUpdateBlocklist, OnKeyStatusUpdated {
 	public static final String ACTION_VIEW_CONTACT = "view_contact";
@@ -237,7 +235,6 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
 				populateView();
 			}
 		});
-
 	}
 
 	@Override
@@ -257,11 +254,6 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
 			this.showDynamicTags = preferences.getBoolean(SettingsActivity.SHOW_DYNAMIC_TAGS, false);
 			this.showLastSeen = preferences.getBoolean("last_activity", false);
 		}
-		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobAppId));
-		mAdView = findViewById(R.id.adViewContactDetails);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
 	}
 
 	@Override

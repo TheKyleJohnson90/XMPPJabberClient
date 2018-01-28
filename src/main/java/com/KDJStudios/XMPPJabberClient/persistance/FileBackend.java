@@ -183,12 +183,12 @@ public class FileBackend {
 		if (Config.ONLY_INTERNAL_STORAGE) {
 			return mXmppConnectionService.getFilesDir().getAbsolutePath() + "/" + type + "/";
 		} else {
-			return Environment.getExternalStorageDirectory() + "/XMPPJabberClient/Media/XMPPJabberClient " + type + "/";
+			return Environment.getExternalStorageDirectory() + "/Conversations/Media/Conversations " + type + "/";
 		}
 	}
 
 	public static String getConversationsLogsDirectory() {
-		return Environment.getExternalStorageDirectory().getAbsolutePath() + "/XMPPJabberClient/";
+		return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Conversations/";
 	}
 
 	public Bitmap resize(Bitmap originalBitmap, int size) {

@@ -43,7 +43,6 @@
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/admobStaticUnitId">
             </com.google.android.gms.ads.AdView>
-
         </RelativeLayout>
 
     </LinearLayout>

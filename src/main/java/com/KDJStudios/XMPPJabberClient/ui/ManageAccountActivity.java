@@ -36,8 +36,6 @@ import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 
 import org.openintents.openpgp.util.OpenPgpApi;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
 
 public class ManageAccountActivity extends XmppActivity implements OnAccountUpdate, KeyChainAliasCallback, XmppConnectionService.OnAccountCreated {
 
@@ -103,7 +101,6 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 			}
 		});
 		registerForContextMenu(accountListView);
-
 	}
 
 	@Override
@@ -113,11 +110,6 @@ public class ManageAccountActivity extends XmppActivity implements OnAccountUpda
 		if (this.mTheme != theme) {
 			recreate();
 		}
-		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobAppId));
-		mAdView = findViewById(R.id.adViewManageAccounts);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
 	}
 
 	@Override

@@ -36,10 +36,11 @@ public class MessageGenerator extends AbstractGenerator {
 		Conversation conversation = message.getConversation();
 		Account account = conversation.getAccount();
 		MessagePacket packet = new MessagePacket();
+		final boolean isWithSelf = conversation.getContact().isSelf();
 		if (conversation.getMode() == Conversation.MODE_SINGLE) {
 			packet.setTo(message.getCounterpart());
 			packet.setType(MessagePacket.TYPE_CHAT);
-			if (this.mXmppConnectionService.indicateReceived()) {
+			if (this.mXmppConnectionService.indicateReceived() && !isWithSelf) {
 				packet.addChild("request", "urn:xmpp:receipts");
 			}
 		} else if (message.getType() == Message.TYPE_PRIVATE) {
@@ -53,8 +54,7 @@ public class MessageGenerator extends AbstractGenerator {
 			packet.setTo(message.getCounterpart().toBareJid());
 			packet.setType(MessagePacket.TYPE_GROUPCHAT);
 		}
-		if (conversation.getMode() == Conversation.MODE_SINGLE ||
-				(conversation.getMucOptions().nonanonymous() && conversation.getMucOptions().membersOnly() && message.getType() != Message.TYPE_PRIVATE)) {
+		if (conversation.isSingleOrPrivateAndNonAnonymous() && message.getType() != Message.TYPE_PRIVATE) {
 			packet.addChild("markable", "urn:xmpp:chat-markers:0");
 		}
 		packet.setFrom(account.getJid());
@@ -88,6 +88,15 @@ public class MessageGenerator extends AbstractGenerator {
 		packet.addChild("encryption","urn:xmpp:eme:0")
 				.setAttribute("name","OMEMO")
 				.setAttribute("namespace",AxolotlService.PEP_PREFIX);
+		return packet;
+	}
+
+	public MessagePacket generateKeyTransportMessage(Jid to, XmppAxolotlMessage axolotlMessage) {
+		MessagePacket packet = new MessagePacket();
+		packet.setType(MessagePacket.TYPE_CHAT);
+		packet.setTo(to);
+		packet.setAxolotlMessage(axolotlMessage.toElement());
+		packet.addChild("store", "urn:xmpp:hints");
 		return packet;
 	}
 
@@ -233,7 +242,17 @@ public class MessageGenerator extends AbstractGenerator {
 		for(String namespace : namespaces) {
 			receivedPacket.addChild("received", namespace).setAttribute("id", originalMessage.getId());
 		}
+		receivedPacket.addChild("store", "urn:xmpp:hints");
 		return receivedPacket;
+	}
+
+	public MessagePacket received(Account account, Jid to, String id) {
+		MessagePacket packet = new MessagePacket();
+		packet.setFrom(account.getJid());
+		packet.setTo(to);
+		packet.addChild("received","urn:xmpp:receipts").setAttribute("id",id);
+		packet.addChild("store", "urn:xmpp:hints");
+		return packet;
 	}
 
 	public MessagePacket generateOtrError(Jid to, String id, String errorText) {

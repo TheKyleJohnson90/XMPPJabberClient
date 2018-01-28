@@ -142,24 +142,6 @@
                     android:textColor="@color/accent"/>
             </LinearLayout>
         </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp">
-
-            <com.google.android.gms.ads.AdView
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/adViewContactDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/admobStaticUnitId">
-            </com.google.android.gms.ads.AdView>
-        </RelativeLayout>
-
     </LinearLayout>
 
 </ScrollView>

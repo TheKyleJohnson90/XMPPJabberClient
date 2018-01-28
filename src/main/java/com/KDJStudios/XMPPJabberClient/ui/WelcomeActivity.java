@@ -36,7 +36,7 @@ public class WelcomeActivity extends XmppActivity {
 			recreate();
 		}
 		//ADMOB
-		MobileAds.initialize(this,getString(R.string.admobAppId));
+		MobileAds.initialize(this, getString(R.string.admobAppId));
 		mAdView = findViewById(R.id.adViewWelcome);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);

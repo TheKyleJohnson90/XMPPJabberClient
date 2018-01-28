@@ -224,10 +224,11 @@ public class NotificationService {
 		}
 		synchronized (notifications) {
 			markAsReadIfHasDirectReply(conversation);
-			notifications.remove(conversation.getUuid());
-			final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mXmppConnectionService);
-			notificationManager.cancel(conversation.getUuid(), NOTIFICATION_ID);
-			updateNotification(false);
+			if (notifications.remove(conversation.getUuid()) != null) {
+				final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mXmppConnectionService);
+				notificationManager.cancel(conversation.getUuid(), NOTIFICATION_ID);
+				updateNotification(false, true);
+			}
 		}
 	}
 
@@ -251,6 +252,10 @@ public class NotificationService {
 	}
 
 	public void updateNotification(final boolean notify) {
+		updateNotification(notify, false);
+	}
+
+	public void updateNotification(final boolean notify, boolean summaryOnly) {
 		final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mXmppConnectionService);
 		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mXmppConnectionService);
 
@@ -268,11 +273,13 @@ public class NotificationService {
 			} else {
 				mBuilder = buildMultipleConversation();
 				modifyForSoundVibrationAndLight(mBuilder, notify, preferences);
-				for(Map.Entry<String,ArrayList<Message>> entry : notifications.entrySet()) {
-					Builder singleBuilder = buildSingleConversations(entry.getValue());
-					singleBuilder.setGroup(CONVERSATIONS_GROUP);
-					setNotificationColor(singleBuilder);
-					notificationManager.notify(entry.getKey(), NOTIFICATION_ID ,singleBuilder.build());
+				if (!summaryOnly) {
+					for (Map.Entry<String, ArrayList<Message>> entry : notifications.entrySet()) {
+						Builder singleBuilder = buildSingleConversations(entry.getValue());
+						singleBuilder.setGroup(CONVERSATIONS_GROUP);
+						setNotificationColor(singleBuilder);
+						notificationManager.notify(entry.getKey(), NOTIFICATION_ID, singleBuilder.build());
+					}
 				}
 				notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 			}

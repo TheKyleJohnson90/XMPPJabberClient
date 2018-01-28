@@ -72,6 +72,7 @@ import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 
+
 public class ConversationActivity extends XmppActivity
 	implements OnAccountUpdate, OnConversationUpdate, OnRosterUpdate, OnUpdateBlocklist, XmppConnectionService.OnShowErrorToast {
 
@@ -342,8 +343,6 @@ public class ConversationActivity extends XmppActivity
 				}
 			});
 		}
-
-
 	}
 
 	@Override
@@ -1613,6 +1612,7 @@ public class ConversationActivity extends XmppActivity
 		}
 		final Toast prepareFileToast = Toast.makeText(getApplicationContext(),getText(R.string.preparing_file), Toast.LENGTH_LONG);
 		prepareFileToast.show();
+		delegateUriPermissionsToService(uri);
 		xmppConnectionService.attachFileToConversation(conversation, uri, new UiInformableCallback<Message>() {
 			@Override
 			public void inform(final String text) {
@@ -1666,6 +1666,7 @@ public class ConversationActivity extends XmppActivity
 		}
 		final Toast prepareFileToast = Toast.makeText(getApplicationContext(),getText(R.string.preparing_image), Toast.LENGTH_LONG);
 		prepareFileToast.show();
+		delegateUriPermissionsToService(uri);
 		xmppConnectionService.attachImageToConversation(conversation, uri,
 				new UiCallback<Message>() {
 

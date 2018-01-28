@@ -423,7 +423,10 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
             }
 
             final Contact contact = account.getRoster().getContact(contactJid);
-            if (contact.showInRoster()) {
+            if (contact.isSelf()) {
+                switchToConversation(contact,null);
+                return true;
+            } else if (contact.showInRoster()) {
                 throw new EnterJidDialog.JidError(getString(R.string.contact_already_exists));
             } else {
                 xmppConnectionService.createContact(contact);
@@ -625,6 +628,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
             case R.id.action_scan_qr_code:
                 Intent intent = new Intent(this, UriHandlerActivity.class);
                 intent.setAction(UriHandlerActivity.ACTION_SCAN_QR_CODE);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 return true;
             case R.id.action_hide_offline:
