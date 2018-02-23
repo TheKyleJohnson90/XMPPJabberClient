@@ -1,14 +1,11 @@
 ---
 layout: default
 ---
-[Home](index)
-[Privacy Policy](PRIVACYPOLICY)
-[Mission](MISSION)
-[Supported XEPs](XEPs)
+
 
 ###### [](#header-6)
 
-| Home | Privacy Policy | Mission | Supported XEPs |
+| [Home](index) | [Mission](MISSION) | [Supported XEPs](XEPs) | [Observations](OBSERVATIONS) | [Privacy Policy](PRIVACYPOLICY) |
 
 # [](#header-1)XMPP Jabber Client
 
