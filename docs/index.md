@@ -49,5 +49,3 @@ Please check out the source code for XMPP Jabber Client: [Source Code](https://g
 Please check out the source code that XMPP Jabber Client is based on; which is provided by Daniel Gultsch: [Source Code](https://github.com/siacs/Conversations).
 
 ### [](#header-3)Privacy Policy
-
-[Click Here](Privacy Policy.md).
