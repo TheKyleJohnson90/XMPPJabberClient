@@ -27,9 +27,7 @@ Based off source code for Conversations provided by Daniel Gultsch
 
 A free XMPP Jabber Client for Android. Available soon on the Play Store and Amazon App store.
 
-[<img src="https://conversations.im/images/en-play-badge.png">](https://play.google.com/store/apps/details?id=com.KDJStudios.XMPPJabberClient)
-
-[<img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png">](http://a.co/0nId7Og)
+[<img src="https://conversations.im/images/en-play-badge.png">](https://play.google.com/store/apps/details?id=com.KDJStudios.XMPPJabberClient) [<img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png">](http://a.co/0nId7Og)
 
 # DONATE
 
