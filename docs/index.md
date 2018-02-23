@@ -75,19 +75,17 @@ My Faircoin Address is: `fQU8XqvvorKcsKcCxtZ8c1neE5BF9xPgQx`
 
 ## [](#header-2)Source Code
 
-Based off open source code and licensed under GPLv3
-
-Please check out the source code for XMPP Jabber Client: [Source Code](https://github.com/TheKyleJohnson90/XMPPJabberClient).
-
-Please check out the source code that XMPP Jabber Client is based on; which is provided by Daniel Gultsch: [Source Code](https://github.com/siacs/Conversations).
-
-### [](#header-3)STATUS OF MASTER BUILD
-
 <p align="center">
     <a href="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient">
         <img src="https://travis-ci.org/TheKyleJohnson90/XMPPJabberClient.svg?branch=master" alt="build status">
     </a>
 </p>
+
+Based off open source code and licensed under GPLv3
+
+Please check out the source code for XMPP Jabber Client: [Source Code](https://github.com/TheKyleJohnson90/XMPPJabberClient).
+
+Please check out the source code that XMPP Jabber Client is based on; which is provided by Daniel Gultsch: [Source Code](https://github.com/siacs/Conversations).
 
 ## [](#header-2)Contact the Developer
 
