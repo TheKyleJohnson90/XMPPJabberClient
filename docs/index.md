@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: main
 ---
 
 # [](#header-1)XMPP Jabber Client
