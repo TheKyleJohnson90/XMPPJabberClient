@@ -1,3 +1,7 @@
+###### [](#header-6)
+
+| [Home](index) | [Mission](MISSION) | [Supported XEPs](XEPs) | [Observations](OBSERVATIONS) | [Privacy Policy](PRIVACYPOLICY) | 
+
 Observations on implementing XMPP
 =================================
 After spending the last two and a half month basically writing my own XMPP
