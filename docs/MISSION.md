@@ -1,3 +1,7 @@
+###### [](#header-6)
+
+| [Home](index) | [Mission](MISSION) | [Supported XEPs](XEPs) | [Observations](OBSERVATIONS) | [Privacy Policy](PRIVACYPOLICY) | 
+
 XMPPJabberClient is a messenger for the next decade. Based on already established
 internet standards that have been around for over ten years XMPPJabberClient isn’t
 trying to replace current commercial messengers. It will simply outlive them.
