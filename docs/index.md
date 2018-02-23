@@ -1,9 +1,14 @@
 ---
 layout: default
 ---
+[Home](index)
+[Privacy Policy](PRIVACYPOLICY)
+[Mission](MISSION)
+[Supported XEPs](XEPs)
 
-| Home | Pricavy Policy | Liecenese| Mission | Supported XEPs |
-|:-----|:---------------|:---------|:--------|:---------------|
+###### [](#header-6)
+
+| Home | Privacy Policy | Mission | Supported XEPs |
 
 # [](#header-1)XMPP Jabber Client
 
