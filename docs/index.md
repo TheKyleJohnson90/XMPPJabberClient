@@ -1,7 +1,3 @@
----
-layout: default
----
-
 # [](#header-1)XMPP Jabber Client
 
 XMPP Jabber Client is a amazing free and open source client for android. XMPP Jabber Client enables you to connect to an XMPP for instant messaging with other people over the Internet. XMPP Jabber Client works with many XMPP servers, but is recommended for use with the conversations.im server.
