@@ -1,3 +1,9 @@
+###### [](#header-6)
+
+| [Home](index) | [Mission](MISSION) | [Supported XEPs](XEPs) | [Observations](OBSERVATIONS) | [Privacy Policy](PRIVACYPOLICY) | 
+
+# [](#header-1)Supported XEPs:
+
 * XEP-0027: Current Jabber OpenPGP Usage
 * XEP-0030: Service Discovery
 * XEP-0045: Multi-User Chat
