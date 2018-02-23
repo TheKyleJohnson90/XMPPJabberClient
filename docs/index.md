@@ -2,122 +2,52 @@
 layout: default
 ---
 
-Text can be **bold**, _italic_, or ~~strikethrough~~.
+# [](#header-1)XMPP Jabber Client
 
-[Link to another page](another-page).
+XMPP Jabber Client is a amazing free and open source client for android. XMPP Jabber Client enables you to connect to an XMPP for instant messaging with other people over the Internet. XMPP Jabber Client works with many XMPP servers, but is recommended for use with the conversations.im server.
 
-There should be whitespace between paragraphs.
+Some of the features of XMPP Jabber Client are listed below
 
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
+*   Multiple Accounts
+*   Exceptional battery life
+*   Contact Avatars
+*   Various forms of end-to-end encryption
+*   Photo transfers
+*   Conferences chats
+*   Many more!
 
-# [](#header-1)Header 1
+Based off source code for Conversations provided by Daniel Gultsch
 
-This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
+# [](#header-1)Install
 
-## [](#header-2)Header 2
+A free XMPP Jabber Client for Android. Available soon on the Play Store and Amazon App store.
 
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
+[<img src="https://conversations.im/images/en-play-badge.png">](https://play.google.com/store/apps/details?id=com.KDJStudios.XMPPJabberClient)
 
-### [](#header-3)Header 3
-
-```js
-// Javascript code with syntax highlighting.
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
-}
-```
-
-```ruby
-# Ruby code with syntax highlighting
-GitHubPages::Dependencies.gems.each do |gem, version|
-  s.add_dependency(gem, "= #{version}")
-end
-```
-
-#### [](#header-4)Header 4
-
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-
-##### [](#header-5)Header 5
-
-1.  This is an ordered list following a header.
-2.  This is an ordered list following a header.
-3.  This is an ordered list following a header.
-
-###### [](#header-6)Header 6
-
-| head1        | head two          | three |
-|:-------------|:------------------|:------|
-| ok           | good swedish fish | nice  |
-| out of stock | good and plenty   | nice  |
-| ok           | good `oreos`      | hmm   |
-| ok           | good `zoute` drop | yumm  |
-
-### There's a horizontal rule below this.
-
-* * *
-
-### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-
-### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-
-### And a nested list:
-
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-
-### Small image
-
-![](https://assets-cdn.github.com/images/icons/emoji/octocat.png)
-
-### Large image
-
-![](https://guides.github.com/activities/hello-world/branching.png)
+[<img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png">](http://a.co/0nId7Og)
 
 
-### Definition lists can be used with HTML syntax.
+## [](#header-2)Donate
 
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
+Donations are appreciated Donations are appreciated 
 
-```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
+Help out and buy me a beer.
 
-```
-The final element.
-```
+*   My Bitcoin Address is: `3PHsZ6hovPC4DdsNwdtu8Ph9YHggvnkz2u`
+*   My Litecoin Address is: `LaAfYj2KNQWcudC8MHmVpJqNDhFmBEgfXw`
+*   My Dogecoin Address is: `DKZM88QNQB7yFJmDjQQXsLRxhvbhujQmxL`
+*   My Blackcoin Address is: `BPRiDNkjRbyXZx9PENFXxHkw4fFY4a1zHZ`
+*   My Dashcoin Address is: `XjCzQUUArLssraLAAJVLh5eiHzqWZFYYCX`
+*   My Peercoin Address is: `PQaMnrM8KtPYkNxPqYjXSFVZjFX6MGadNJ`
+
+## [](#header-2)Source Code
+
+Based off open source code and licensed under GPLv3
+
+Please check out the source code for XMPP Jabber Client: [Source Code](https://github.com/TheKyleJohnson90/XMPPJabberClient).
+
+Please check out the source code that XMPP Jabber Client is based on; which is provided by Daniel Gultsch: [Source Code](https://github.com/siacs/Conversations).
+
+### [](#header-3)Privacy Policy
+
+[Click Here](Privacy Policy.md).
