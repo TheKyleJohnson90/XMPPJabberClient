@@ -269,7 +269,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
             recreate();
         } else {
             Intent i = getIntent();
-            if (i == null || !i.hasExtra(WelcomeActivity.EXTRA_INVITEE)) {
+            if (i == null || !i.hasExtra(WelcomeActivity.EXTRA_INVITE_URI)) {
                 askForContactsPermissions();
             }
         }
@@ -342,7 +342,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
             return;
         }
         Conversation conversation = xmppConnectionService.findOrCreateConversation(bookmark.getAccount(), jid, true, true, true);
-        conversation.setBookmark(bookmark);
+        bookmark.setConversation(conversation);
         if (!bookmark.autojoin() && getPreferences().getBoolean("autojoin", getResources().getBoolean(R.bool.autojoin))) {
             bookmark.setAutojoin(true);
             xmppConnectionService.pushBookmarks(bookmark.getAccount());
@@ -393,7 +393,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                bookmark.unregisterConversation();
+                bookmark.setConversation(null);
                 Account account = bookmark.getAccount();
                 account.getBookmarks().remove(bookmark);
                 xmppConnectionService.pushBookmarks(account);
@@ -423,6 +423,9 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
             }
 
             final Contact contact = account.getRoster().getContact(contactJid);
+            if (invite != null && invite.getName() != null) {
+                contact.setServerName(invite.getName());
+            }
             if (contact.isSelf()) {
                 switchToConversation(contact,null);
                 return true;
@@ -498,7 +501,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
                                 xmppConnectionService.pushBookmarks(account);
                                 final Conversation conversation = xmppConnectionService
                                         .findOrCreateConversation(account, conferenceJid, true, true, true);
-                                conversation.setBookmark(bookmark);
+                                bookmark.setConversation(conversation);
                                 dialog.dismiss();
                                 mCurrentDialog = null;
                                 switchToConversation(conversation);
@@ -796,9 +799,9 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
         if (intent == null) {
             return false;
         }
-        final String invitee = intent.getStringExtra(WelcomeActivity.EXTRA_INVITEE);
-        if (invitee != null) {
-            Invite invite = new Invite("xmpp:" + invitee);
+        final String inviteUri = intent.getStringExtra(WelcomeActivity.EXTRA_INVITE_URI);
+        if (inviteUri != null) {
+            Invite invite = new Invite(inviteUri);
             if (invite.isJidValid()) {
                 return invite.invite();
             }

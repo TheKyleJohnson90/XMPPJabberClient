@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
 import java.util.Arrays;
 import java.util.List;
 
 import com.KDJStudios.XMPPJabberClient.persistance.DatabaseBackend;
 import com.KDJStudios.XMPPJabberClient.utils.XmppUri;
+import com.KDJStudios.XMPPJabberClient.utils.zxing.IntentIntegrator;
+import com.KDJStudios.XMPPJabberClient.utils.zxing.IntentResult;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 
 public class UriHandlerActivity extends Activity {
@@ -35,7 +34,7 @@ public class UriHandlerActivity extends Activity {
 
         if (accounts.size() == 0) {
             intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-            WelcomeActivity.addInvitee(intent, xmppUri);
+            WelcomeActivity.addInviteUri(intent, xmppUri);
             startActivity(intent);
             return;
         }
@@ -91,8 +90,7 @@ public class UriHandlerActivity extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if ((requestCode & 0xFFFF) == IntentIntegrator.REQUEST_CODE) {
-            IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,
-                    intent);
+            IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
             if (scanResult != null && scanResult.getFormatName() != null) {
                 String data = scanResult.getContents();

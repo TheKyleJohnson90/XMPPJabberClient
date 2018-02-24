@@ -14,9 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
@@ -28,6 +25,8 @@ import com.KDJStudios.XMPPJabberClient.entities.Account;
 import com.KDJStudios.XMPPJabberClient.ui.widget.Switch;
 import com.KDJStudios.XMPPJabberClient.utils.CryptoHelper;
 import com.KDJStudios.XMPPJabberClient.utils.XmppUri;
+import com.KDJStudios.XMPPJabberClient.utils.zxing.IntentIntegrator;
+import com.KDJStudios.XMPPJabberClient.utils.zxing.IntentResult;
 
 
 public abstract class OmemoActivity extends XmppActivity {

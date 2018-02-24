@@ -192,7 +192,12 @@
                 android:value="com.KDJStudios.XMPPJabberClient.ui.SettingsActivity" />
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-
+        <activity android:name="com.KDJStudios.XMPPJabberClient.ui.widget.ShareApp">
+            <intent-filter>
+                <action android:name="com.KDJStudios.XMPPJabberClient.SHARE_APP" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <service android:name="com.KDJStudios.XMPPJabberClient.services.ExportLogsService" />
         <service
             android:name="com.KDJStudios.XMPPJabberClient.services.ContactChooserTargetService"

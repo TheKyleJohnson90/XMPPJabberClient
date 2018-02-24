@@ -13,9 +13,11 @@ import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 
 public class XmppUri {
 
+	protected Uri uri;
 	protected String jid;
 	protected List<Fingerprint> fingerprints = new ArrayList<>();
 	private String body;
+	private String name;
 	private String action;
 	protected boolean safeSource = true;
 
@@ -51,6 +53,7 @@ public class XmppUri {
 	}
 
 	protected void parse(Uri uri) {
+		this.uri = uri;
 		String scheme = uri.getScheme();
 		String host = uri.getHost();
 		List<String> segments = uri.getPathSegments();
@@ -92,7 +95,8 @@ public class XmppUri {
 				}
 			}
 			this.fingerprints = parseFingerprints(uri.getQuery());
-			this.body = parseBody(uri.getQuery());
+			this.body = parseParameter("body", uri.getQuery());
+			this.name = parseParameter("name", uri.getQuery());
 		} else if ("imto".equalsIgnoreCase(scheme)) {
 			// sample: imto://xmpp/foo@bar.com
 			try {
@@ -107,6 +111,13 @@ public class XmppUri {
 				jid = null;
 			}
 		}
+	}
+
+	public String toString() {
+		if (uri != null) {
+			return uri.toString();
+		}
+		return "";
 	}
 
 	protected List<Fingerprint> parseFingerprints(String query) {
@@ -137,10 +148,10 @@ public class XmppUri {
 		return fingerprints;
 	}
 
-	protected String parseBody(String query) {
+	protected String parseParameter(String key, String query) {
 		for(String pair : query == null ? new String[0] : query.split(";")) {
 			final String[] parts = pair.split("=",2);
-			if (parts.length == 2 && "body".equals(parts[0].toLowerCase(Locale.US))) {
+			if (parts.length == 2 && key.equals(parts[0].toLowerCase(Locale.US))) {
 				try {
 					return URLDecoder.decode(parts[1],"UTF-8");
 				} catch (UnsupportedEncodingException e) {
@@ -188,6 +199,10 @@ public class XmppUri {
 
 	public String getBody() {
 		return body;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public List<Fingerprint> getFingerprints() {
