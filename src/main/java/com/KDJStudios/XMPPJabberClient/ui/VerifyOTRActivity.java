@@ -13,9 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
 import net.java.otr4j.OtrException;
 import net.java.otr4j.session.Session;
 
@@ -26,6 +23,8 @@ import com.KDJStudios.XMPPJabberClient.entities.Conversation;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
 import com.KDJStudios.XMPPJabberClient.utils.CryptoHelper;
 import com.KDJStudios.XMPPJabberClient.utils.XmppUri;
+import com.KDJStudios.XMPPJabberClient.utils.zxing.IntentIntegrator;
+import com.KDJStudios.XMPPJabberClient.utils.zxing.IntentResult;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
 import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 
