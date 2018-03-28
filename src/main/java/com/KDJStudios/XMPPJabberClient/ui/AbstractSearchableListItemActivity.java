@@ -1,7 +1,9 @@
 package com.KDJStudios.XMPPJabberClient.ui;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -16,11 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.KDJStudios.XMPPJabberClient.R;
+import com.KDJStudios.XMPPJabberClient.databinding.ActivityChooseContactBinding;
 import com.KDJStudios.XMPPJabberClient.entities.ListItem;
 import com.KDJStudios.XMPPJabberClient.ui.adapter.ListItemAdapter;
 
 public abstract class AbstractSearchableListItemActivity extends XmppActivity {
-	private ListView mListView;
+	protected ActivityChooseContactBinding binding;
 	private final List<ListItem> listItems = new ArrayList<>();
 	private ArrayAdapter<ListItem> mListItemsAdapter;
 
@@ -74,7 +77,7 @@ public abstract class AbstractSearchableListItemActivity extends XmppActivity {
 	};
 
 	public ListView getListView() {
-		return mListView;
+		return binding.chooseContactList;
 	}
 
 	public List<ListItem> getListItems() {
@@ -92,11 +95,12 @@ public abstract class AbstractSearchableListItemActivity extends XmppActivity {
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_choose_contact);
-		mListView = (ListView) findViewById(R.id.choose_contact_list);
-		mListView.setFastScrollEnabled(true);
+		this.binding = DataBindingUtil.setContentView(this,R.layout.activity_choose_contact);
+		setSupportActionBar((Toolbar) binding.toolbar);
+		configureActionBar(getSupportActionBar());
+		this.binding.chooseContactList.setFastScrollEnabled(true);
 		mListItemsAdapter = new ListItemAdapter(this, listItems);
-		mListView.setAdapter(mListItemsAdapter);
+		this.binding.chooseContactList.setAdapter(mListItemsAdapter);
 	}
 
 	@Override
@@ -104,8 +108,7 @@ public abstract class AbstractSearchableListItemActivity extends XmppActivity {
 		getMenuInflater().inflate(R.menu.choose_contact, menu);
 		final MenuItem menuSearchView = menu.findItem(R.id.action_search);
 		final View mSearchView = menuSearchView.getActionView();
-		mSearchEditText = (EditText) mSearchView
-			.findViewById(R.id.search_field);
+		mSearchEditText = (EditText) mSearchView.findViewById(R.id.search_field);
 		mSearchEditText.addTextChangedListener(mSearchTextWatcher);
 		menuSearchView.setOnActionExpandListener(mOnActionExpandListener);
 		return true;

@@ -21,6 +21,9 @@ repositories {
     maven {
         url "https://jitpack.io"
     }
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }
 
 configurations {
@@ -29,31 +32,30 @@ configurations {
 }
 
 ext {
-    supportLibVersion = '27.0.2'
+    supportLibVersion = '27.1.0'
 }
 
 dependencies {
-    implementation project(':libs:MemorizingTrustManager')
     implementation project(':libs:EnhancedListView')
     playstoreImplementation 'com.google.android.gms:play-services-gcm:11.8.0'
     implementation 'org.sufficientlysecure:openpgp-api:10.0'
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
     implementation "com.android.support:support-v13:$supportLibVersion"
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
+    implementation "com.android.support:cardview-v7:$supportLibVersion"
+    implementation "com.android.support:support-emoji-appcompat:$supportLibVersion"
     implementation "com.android.support:support-emoji:$supportLibVersion"
+    implementation "com.android.support:design:$supportLibVersion"
     freeImplementation "com.android.support:support-emoji-bundled:$supportLibVersion"
     implementation 'org.bouncycastle:bcmail-jdk15on:1.58'
-    implementation 'org.jitsi:org.otr4j:0.22'
-    implementation 'org.gnu.inet:libidn:1.15'
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'de.measite.minidns:minidns-hla:0.2.4'
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
-    implementation 'com.kyleduo.switchbutton:library:1.2.8'
     implementation 'org.whispersystems:signal-protocol-java:2.6.2'
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation "com.wefika:flowlayout:0.4.1"
     implementation 'net.ypresto.androidtranscoder:android-transcoder:0.2.0'
-    implementation 'com.github.scottyab:showhidepasswordedittext:0.8'
+    implementation 'rocks.xmpp:xmpp-addr:0.8.0-SNAPSHOT'
 	//ADMOB
     implementation 'com.google.android.gms:play-services-ads:11.8.0'
     implementation 'com.android.support:multidex:1.0.1'
@@ -69,14 +71,21 @@ android {
     buildToolsVersion "27.0.3"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 25
-        versionCode 13
-        versionName "0.1.11"
+        versionCode 14
+        versionName "0.1.12"
         archivesBaseName += "-$versionName"
         applicationId "com.KDJStudios.XMPPJabberClient"
+        resValue "string", "applicationId", applicationId
+        resValue "string", "app_name", "XMPPJabberClient"
         //ADMOB
         multiDexEnabled true
+
+    }
+
+    dataBinding {
+        enabled true
     }
 
     dexOptions {

@@ -4,10 +4,7 @@ import android.content.Context;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.Pair;
-import android.widget.PopupMenu;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.Arrays;
@@ -26,7 +23,7 @@ import com.KDJStudios.XMPPJabberClient.entities.Message;
 import com.KDJStudios.XMPPJabberClient.entities.MucOptions;
 import com.KDJStudios.XMPPJabberClient.entities.Presence;
 import com.KDJStudios.XMPPJabberClient.entities.Transferable;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class UIHelper {
 
@@ -418,12 +415,14 @@ public class UIHelper {
 	public static String concatNames(List<MucOptions.User> users, int max) {
 		StringBuilder builder = new StringBuilder();
 		final boolean shortNames = users.size() >= 3;
-		for (int i = 0; i < Math.max(users.size(), max); ++i) {
+		for (int i = 0; i < Math.min(users.size(), max); ++i) {
 			if (builder.length() != 0) {
 				builder.append(", ");
 			}
 			final String name = UIHelper.getDisplayName(users.get(i));
-			builder.append(shortNames ? name.split("\\s+")[0] : name);
+			if (name != null) {
+				builder.append(shortNames ? name.split("\\s+")[0] : name);
+			}
 		}
 		return builder.toString();
 	}
@@ -470,7 +469,7 @@ public class UIHelper {
 				return conversation.getMucOptions().getSelf().getName();
 			} else {
 				final Jid jid = conversation.getAccount().getJid();
-				return jid.hasLocalpart() ? jid.getLocalpart() : jid.toDomainJid().toString();
+				return jid.getLocal() != null ? jid.getLocal() : Jid.ofDomain(jid.getDomain()).toString();
 			}
 		}
 	}
@@ -483,8 +482,6 @@ public class UIHelper {
 				} else {
 					return context.getString(R.string.send_message_to_x, conversation.getName());
 				}
-			case Message.ENCRYPTION_OTR:
-				return context.getString(R.string.send_otr_message);
 			case Message.ENCRYPTION_AXOLOTL:
 				AxolotlService axolotlService = conversation.getAccount().getAxolotlService();
 				if (axolotlService != null && axolotlService.trustedSessionVerified(conversation)) {
@@ -503,7 +500,7 @@ public class UIHelper {
 		if (counterpart == null) {
 			return "";
 		} else if (!counterpart.isBareJid()) {
-			return counterpart.getResourcepart().trim();
+			return counterpart.getResource().trim();
 		} else {
 			return counterpart.toString().trim();
 		}
@@ -532,38 +529,6 @@ public class UIHelper {
 				return new ListItem.Tag(context.getString(R.string.presence_dnd), 0xfff44336);
 			default:
 				return new ListItem.Tag(context.getString(R.string.presence_online), 0xff259b24);
-		}
-	}
-
-	public static String tranlasteType(Context context, String type) {
-		switch (type.toLowerCase()) {
-			case "pc":
-				return context.getString(R.string.type_pc);
-			case "phone":
-				return context.getString(R.string.type_phone);
-			case "tablet":
-				return context.getString(R.string.type_tablet);
-			case "web":
-				return context.getString(R.string.type_web);
-			case "console":
-				return context.getString(R.string.type_console);
-			default:
-				return type;
-		}
-	}
-
-	public static boolean showIconsInPopup(PopupMenu attachFilePopup) {
-		try {
-			Field field = attachFilePopup.getClass().getDeclaredField("mPopup");
-			field.setAccessible(true);
-			Object menuPopupHelper = field.get(attachFilePopup);
-			Class<?> cls = Class.forName("com.android.internal.view.menu.MenuPopupHelper");
-			Method method = cls.getDeclaredMethod("setForceShowIcon", new Class[]{boolean.class});
-			method.setAccessible(true);
-			method.invoke(menuPopupHelper, new Object[]{true});
-			return true;
-		} catch (Exception e) {
-			return false;
 		}
 	}
 }

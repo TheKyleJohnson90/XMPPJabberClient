@@ -21,8 +21,7 @@ import com.KDJStudios.XMPPJabberClient.utils.Emoticons;
 import com.KDJStudios.XMPPJabberClient.utils.GeoHelper;
 import com.KDJStudios.XMPPJabberClient.utils.MimeUtils;
 import com.KDJStudios.XMPPJabberClient.utils.UIHelper;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class Message extends AbstractEntity {
 
@@ -114,7 +113,7 @@ public class Message extends AbstractEntity {
 	public Message(Conversation conversation, String body, int encryption, int status) {
 		this(conversation, java.util.UUID.randomUUID().toString(),
 				conversation.getUuid(),
-				conversation.getJid() == null ? null : conversation.getJid().toBareJid(),
+				conversation.getJid() == null ? null : conversation.getJid().asBareJid(),
 				null,
 				body,
 				System.currentTimeMillis(),
@@ -169,11 +168,11 @@ public class Message extends AbstractEntity {
 		try {
 			String value = cursor.getString(cursor.getColumnIndex(COUNTERPART));
 			if (value != null) {
-				jid = Jid.fromString(value, true);
+				jid = Jid.of(value);
 			} else {
 				jid = null;
 			}
-		} catch (InvalidJidException e) {
+		} catch (IllegalArgumentException e) {
 			jid = null;
 		} catch (IllegalStateException e) {
 			return null; // message too long?
@@ -182,11 +181,11 @@ public class Message extends AbstractEntity {
 		try {
 			String value = cursor.getString(cursor.getColumnIndex(TRUE_COUNTERPART));
 			if (value != null) {
-				trueCounterpart = Jid.fromString(value, true);
+				trueCounterpart = Jid.of(value);
 			} else {
 				trueCounterpart = null;
 			}
-		} catch (InvalidJidException e) {
+		} catch (IllegalArgumentException e) {
 			trueCounterpart = null;
 		}
 		return new Message(conversation,
@@ -243,12 +242,12 @@ public class Message extends AbstractEntity {
 		if (counterpart == null) {
 			values.putNull(COUNTERPART);
 		} else {
-			values.put(COUNTERPART, counterpart.toPreppedString());
+			values.put(COUNTERPART, counterpart.toString());
 		}
 		if (trueCounterpart == null) {
 			values.putNull(TRUE_COUNTERPART);
 		} else {
-			values.put(TRUE_COUNTERPART, trueCounterpart.toPreppedString());
+			values.put(TRUE_COUNTERPART, trueCounterpart.toString());
 		}
 		values.put(BODY, body.length() > Config.MAX_STORAGE_MESSAGE_CHARS ? body.substring(0,Config.MAX_STORAGE_MESSAGE_CHARS) : body);
 		values.put(TIME_SENT, timeSent);
@@ -435,7 +434,7 @@ public class Message extends AbstractEntity {
 
 	public boolean addReadByMarker(ReadByMarker readByMarker) {
 		if (readByMarker.getRealJid() != null) {
-			if (readByMarker.getRealJid().toBareJid().equals(trueCounterpart)) {
+			if (readByMarker.getRealJid().asBareJid().equals(trueCounterpart)) {
 				return false;
 			}
 		} else if (readByMarker.getFullJid() != null) {
@@ -564,7 +563,8 @@ public class Message extends AbstractEntity {
 						!message.bodyIsOnlyEmojis() &&
 						((this.axolotlFingerprint == null && message.axolotlFingerprint == null) || this.axolotlFingerprint.equals(message.getFingerprint())) &&
 						UIHelper.sameDay(message.getTimeSent(),this.getTimeSent()) &&
-						this.getReadByMarkers().equals(message.getReadByMarkers())
+						this.getReadByMarkers().equals(message.getReadByMarkers()) &&
+						!this.conversation.getJid().asBareJid().equals(Config.BUG_REPORTS)
 				);
 	}
 
@@ -646,15 +646,15 @@ public class Message extends AbstractEntity {
 
 	public boolean fixCounterpart() {
 		Presences presences = conversation.getContact().getPresences();
-		if (counterpart != null && presences.has(counterpart.getResourcepart())) {
+		if (counterpart != null && presences.has(counterpart.getResource())) {
 			return true;
 		} else if (presences.size() >= 1) {
 			try {
-				counterpart = Jid.fromParts(conversation.getJid().getLocalpart(),
-						conversation.getJid().getDomainpart(),
+				counterpart = Jid.of(conversation.getJid().getLocal(),
+						conversation.getJid().getDomain(),
 						presences.toResourceArray()[0]);
 				return true;
-			} catch (InvalidJidException e) {
+			} catch (IllegalArgumentException e) {
 				counterpart = null;
 				return false;
 			}

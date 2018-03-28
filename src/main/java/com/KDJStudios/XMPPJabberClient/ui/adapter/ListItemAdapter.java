@@ -1,8 +1,8 @@
 package com.KDJStudios.XMPPJabberClient.ui.adapter;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,11 +22,14 @@ import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 
 import com.KDJStudios.XMPPJabberClient.R;
+import com.KDJStudios.XMPPJabberClient.databinding.ContactBinding;
 import com.KDJStudios.XMPPJabberClient.entities.ListItem;
 import com.KDJStudios.XMPPJabberClient.ui.SettingsActivity;
 import com.KDJStudios.XMPPJabberClient.ui.XmppActivity;
 import com.KDJStudios.XMPPJabberClient.utils.EmojiWrapper;
+import com.KDJStudios.XMPPJabberClient.utils.IrregularUnicodeDetector;
 import com.KDJStudios.XMPPJabberClient.utils.UIHelper;
+import rocks.xmpp.addr.Jid;
 
 public class ListItemAdapter extends ArrayAdapter<ListItem> {
 
@@ -81,13 +84,16 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = activity.getLayoutInflater();
 		ListItem item = getItem(position);
+		ViewHolder viewHolder;
 		if (view == null) {
-			view = inflater.inflate(R.layout.contact, parent, false);
+			ContactBinding binding = DataBindingUtil.inflate(inflater,R.layout.contact,parent,false);
+			viewHolder = ViewHolder.get(binding);
+			view = binding.getRoot();
+		} else {
+			viewHolder = (ViewHolder) view.getTag();
 		}
-
-		ViewHolder viewHolder = ViewHolder.get(view);
 
 		List<ListItem.Tag> tags = item.getTags(activity);
 		if (tags.size() == 0 || !this.showDynamicTags) {
@@ -103,10 +109,10 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 				viewHolder.tags.addView(tv);
 			}
 		}
-		final String jid = item.getDisplayJid();
+		final Jid jid = item.getJid();
 		if (jid != null) {
 			viewHolder.jid.setVisibility(View.VISIBLE);
-			viewHolder.jid.setText(jid);
+			viewHolder.jid.setText(IrregularUnicodeDetector.style(activity, jid));
 		} else {
 			viewHolder.jid.setVisibility(View.GONE);
 		}
@@ -127,7 +133,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 				imageView.setImageBitmap(bm);
 				imageView.setBackgroundColor(0x00000000);
 			} else {
-				String seed = item.getJid() != null ? item.getJid().toBareJid().toString() : item.getDisplayName();
+				String seed = item.getJid() != null ? item.getJid().asBareJid().toString() : item.getDisplayName();
 				imageView.setBackgroundColor(UIHelper.getColorForName(seed));
 				imageView.setImageDrawable(null);
 				final BitmapWorkerTask task = new BitmapWorkerTask(imageView);
@@ -155,16 +161,13 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 
 		}
 
-		public static ViewHolder get(View layout) {
-			ViewHolder viewHolder = (ViewHolder) layout.getTag();
-			if (viewHolder == null) {
-				viewHolder = new ViewHolder();
-				viewHolder.name = layout.findViewById(R.id.contact_display_name);
-				viewHolder.jid = layout.findViewById(R.id.contact_jid);
-				viewHolder.avatar = layout.findViewById(R.id.contact_photo);
-				viewHolder.tags = layout.findViewById(R.id.tags);
-				layout.setTag(viewHolder);
-			}
+		public static ViewHolder get(ContactBinding binding) {
+			ViewHolder viewHolder = new ViewHolder();
+			viewHolder.name = binding.contactDisplayName;
+			viewHolder.jid = binding.contactJid;
+			viewHolder.avatar = binding.contactPhoto;
+			viewHolder.tags = binding.tags;
+			binding.getRoot().setTag(viewHolder);
 			return viewHolder;
 		}
 	}
@@ -192,7 +195,8 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 
 		@Override
 		protected Bitmap doInBackground(ListItem... params) {
-			return activity.avatarService().get(params[0], activity.getPixel(48), isCancelled());
+			this.item = params[0];
+			return activity.avatarService().get(this.item, activity.getPixel(48), isCancelled());
 		}
 
 		@Override

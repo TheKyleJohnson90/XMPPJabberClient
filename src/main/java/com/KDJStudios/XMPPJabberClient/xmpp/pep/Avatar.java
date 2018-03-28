@@ -3,7 +3,7 @@ package com.KDJStudios.XMPPJabberClient.xmpp.pep;
 import android.util.Base64;
 
 import com.KDJStudios.XMPPJabberClient.xml.Element;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class Avatar {
 

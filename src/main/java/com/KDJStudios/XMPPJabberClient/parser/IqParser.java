@@ -31,8 +31,8 @@ import com.KDJStudios.XMPPJabberClient.xml.Namespace;
 import com.KDJStudios.XMPPJabberClient.xml.Element;
 import com.KDJStudios.XMPPJabberClient.xmpp.OnIqPacketReceived;
 import com.KDJStudios.XMPPJabberClient.xmpp.OnUpdateBlocklist;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.KDJStudios.XMPPJabberClient.xmpp.stanzas.IqPacket;
+import rocks.xmpp.addr.Jid;
 
 public class IqParser extends AbstractParser implements OnIqPacketReceived {
 
@@ -70,7 +70,7 @@ public class IqParser extends AbstractParser implements OnIqPacketReceived {
 				}
 				boolean both = contact.getOption(Contact.Options.TO) && contact.getOption(Contact.Options.FROM);
 				if ((both != bothPre) && both) {
-					Log.d(Config.LOGTAG,account.getJid().toBareJid()+": gained mutual presence subscription with "+contact.getJid());
+					Log.d(Config.LOGTAG,account.getJid().asBareJid()+": gained mutual presence subscription with "+contact.getJid());
 					AxolotlService axolotlService = account.getAxolotlService();
 					if (axolotlService != null) {
 						axolotlService.clearErrorsInFetchStatusMap(contact.getJid());
@@ -82,11 +82,11 @@ public class IqParser extends AbstractParser implements OnIqPacketReceived {
 		mXmppConnectionService.updateConversationUi();
 		mXmppConnectionService.updateRosterUi();
 		mXmppConnectionService.getShortcutService().refresh();
+		mXmppConnectionService.syncRoster(account);
 	}
 
 	public String avatarData(final IqPacket packet) {
-		final Element pubsub = packet.findChild("pubsub",
-				"http://jabber.org/protocol/pubsub");
+		final Element pubsub = packet.findChild("pubsub", Namespace.PUBSUB);
 		if (pubsub == null) {
 			return null;
 		}
@@ -98,8 +98,7 @@ public class IqParser extends AbstractParser implements OnIqPacketReceived {
 	}
 
 	public Element getItem(final IqPacket packet) {
-		final Element pubsub = packet.findChild("pubsub",
-				"http://jabber.org/protocol/pubsub");
+		final Element pubsub = packet.findChild("pubsub", Namespace.PUBSUB);
 		if (pubsub == null) {
 			return null;
 		}

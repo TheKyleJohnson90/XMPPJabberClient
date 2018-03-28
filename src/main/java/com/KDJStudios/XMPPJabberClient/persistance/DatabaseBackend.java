@@ -7,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.util.Base64;
 import android.util.Log;
 
@@ -51,16 +52,15 @@ import com.KDJStudios.XMPPJabberClient.services.ShortcutService;
 import com.KDJStudios.XMPPJabberClient.utils.CryptoHelper;
 import com.KDJStudios.XMPPJabberClient.utils.MimeUtils;
 import com.KDJStudios.XMPPJabberClient.utils.Resolver;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.KDJStudios.XMPPJabberClient.xmpp.mam.MamReference;
+import rocks.xmpp.addr.Jid;
 
 public class DatabaseBackend extends SQLiteOpenHelper {
 
 	private static DatabaseBackend instance = null;
 
 	private static final String DATABASE_NAME = "history";
-	private static final int DATABASE_VERSION = 39;
+	private static final int DATABASE_VERSION = 40;
 
 	private static String CREATE_CONTATCS_STATEMENT = "create table "
 			+ Contact.TABLENAME + "(" + Contact.ACCOUNT + " TEXT, "
@@ -182,6 +182,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 				+ Account.AVATAR + " TEXT, "
 				+ Account.KEYS + " TEXT, "
 				+ Account.HOSTNAME + " TEXT, "
+				+ Account.RESOURCE + " TEXT,"
 				+ Account.PORT + " NUMBER DEFAULT 5222)");
 		db.execSQL("create table " + Conversation.TABLENAME + " ("
 				+ Conversation.UUID + " TEXT PRIMARY KEY, " + Conversation.NAME
@@ -303,6 +304,9 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 			db.execSQL("ALTER TABLE " + Account.TABLENAME + " ADD COLUMN " + Account.STATUS + " TEXT");
 			db.execSQL("ALTER TABLE " + Account.TABLENAME + " ADD COLUMN " + Account.STATUS_MESSAGE + " TEXT");
 		}
+		if (oldVersion < 40 && newVersion >= 40) {
+			db.execSQL("ALTER TABLE " + Account.TABLENAME + " ADD COLUMN " + Account.RESOURCE + " TEXT");
+		}
 		/* Any migrations that alter the Account table need to happen BEFORE this migration, as it
 		 * depends on account de-serialization.
 		 */
@@ -314,7 +318,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 					continue;
 				}
 				int ownDeviceId = Integer.valueOf(ownDeviceIdString);
-				SignalProtocolAddress ownAddress = new SignalProtocolAddress(account.getJid().toBareJid().toPreppedString(), ownDeviceId);
+				SignalProtocolAddress ownAddress = new SignalProtocolAddress(account.getJid().asBareJid().toString(), ownDeviceId);
 				deleteSession(db, account, ownAddress);
 				IdentityKeyPair identityKeyPair = loadOwnIdentityKeyPair(db, account);
 				if (identityKeyPair != null) {
@@ -329,7 +333,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 									+ SQLiteAxolotlStore.FINGERPRINT + " = ? ",
 							selectionArgs);
 				} else {
-					Log.d(Config.LOGTAG, account.getJid().toBareJid() + ": could not load own identity key pair");
+					Log.d(Config.LOGTAG, account.getJid().asBareJid() + ": could not load own identity key pair");
 				}
 			}
 		}
@@ -491,10 +495,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		while (cursor.moveToNext()) {
 			String newJid;
 			try {
-				newJid = Jid.fromString(
-						cursor.getString(cursor.getColumnIndex(Conversation.CONTACTJID))
-				).toPreppedString();
-			} catch (InvalidJidException ignored) {
+				newJid = Jid.of(cursor.getString(cursor.getColumnIndex(Conversation.CONTACTJID))).toString();
+			} catch (IllegalArgumentException ignored) {
 				Log.e(Config.LOGTAG, "Failed to migrate Conversation CONTACTJID "
 						+ cursor.getString(cursor.getColumnIndex(Conversation.CONTACTJID))
 						+ ": " + ignored + ". Skipping...");
@@ -516,10 +518,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		while (cursor.moveToNext()) {
 			String newJid;
 			try {
-				newJid = Jid.fromString(
-						cursor.getString(cursor.getColumnIndex(Contact.JID))
-				).toPreppedString();
-			} catch (InvalidJidException ignored) {
+				newJid = Jid.of(cursor.getString(cursor.getColumnIndex(Contact.JID))).toString();
+			} catch (IllegalArgumentException ignored) {
 				Log.e(Config.LOGTAG, "Failed to migrate Contact JID "
 						+ cursor.getString(cursor.getColumnIndex(Contact.JID))
 						+ ": " + ignored + ". Skipping...");
@@ -543,12 +543,12 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		while (cursor.moveToNext()) {
 			String newServer;
 			try {
-				newServer = Jid.fromParts(
+				newServer = Jid.of(
 						cursor.getString(cursor.getColumnIndex(Account.USERNAME)),
 						cursor.getString(cursor.getColumnIndex(Account.SERVER)),
-						"mobile"
-				).getDomainpart();
-			} catch (InvalidJidException ignored) {
+						null
+				).getDomain();
+			} catch (IllegalArgumentException ignored) {
 				Log.e(Config.LOGTAG, "Failed to migrate Account SERVER "
 						+ cursor.getString(cursor.getColumnIndex(Account.SERVER))
 						+ ": " + ignored + ". Skipping...");
@@ -638,6 +638,10 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 
 	public void insertPresenceTemplate(PresenceTemplate template) {
 		SQLiteDatabase db = this.getWritableDatabase();
+		String whereToDelete = PresenceTemplate.MESSAGE+"=?";
+		String[] whereToDeleteArgs = {template.getStatusMessage()};
+		db.delete(PresenceTemplate.TABELNAME,whereToDelete,whereToDeleteArgs);
+		db.delete(PresenceTemplate.TABELNAME,PresenceTemplate.UUID+" not in (select "+PresenceTemplate.UUID+" from "+PresenceTemplate.TABELNAME+" order by "+PresenceTemplate.LAST_USED+" desc limit 9)",null);
 		db.insert(PresenceTemplate.TABELNAME, null, template.getContentValues());
 	}
 
@@ -650,14 +654,6 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		}
 		cursor.close();
 		return templates;
-	}
-
-	public void deletePresenceTemplate(PresenceTemplate template) {
-		Log.d(Config.LOGTAG,"deleting presence template with uuid "+template.getUuid());
-		SQLiteDatabase db = this.getWritableDatabase();
-		String where = PresenceTemplate.UUID+"=?";
-		String[] whereArgs = {template.getUuid()};
-		db.delete(PresenceTemplate.TABELNAME,where,whereArgs);
 	}
 
 	public CopyOnWriteArrayList<Conversation> getConversations(int status) {
@@ -749,8 +745,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 	public Conversation findConversation(final Account account, final Jid contactJid) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		String[] selectionArgs = {account.getUuid(),
-				contactJid.toBareJid().toPreppedString() + "/%",
-				contactJid.toBareJid().toPreppedString()
+				contactJid.asBareJid().toString() + "/%",
+				contactJid.asBareJid().toString()
 		};
 		Cursor cursor = db.query(Conversation.TABLENAME, null,
 				Conversation.ACCOUNT + "=? AND (" + Conversation.CONTACTJID
@@ -781,10 +777,11 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		final List<Jid> jids = new ArrayList<>();
 		final String[] columns = new String[]{Account.USERNAME, Account.SERVER};
-		Cursor cursor = db.query(Account.TABLENAME,columns,null,null,null,null,null);
+		String where = "not options & (1 <<1)";
+		Cursor cursor = db.query(Account.TABLENAME,columns,where,null,null,null,null);
 		try {
 			while(cursor.moveToNext()) {
-				jids.add(Jid.fromParts(cursor.getString(0),cursor.getString(1),null));
+				jids.add(Jid.of(cursor.getString(0),cursor.getString(1),null));
 			}
 			return jids;
 		} catch (Exception e) {
@@ -854,6 +851,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 	}
 
 	public void writeRoster(final Roster roster) {
+		long start = SystemClock.elapsedRealtime();
 		final Account account = roster.getAccount();
 		final SQLiteDatabase db = this.getWritableDatabase();
 		db.beginTransaction();
@@ -862,7 +860,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 				db.insert(Contact.TABLENAME, null, contact.getContentValues());
 			} else {
 				String where = Contact.ACCOUNT + "=? AND " + Contact.JID + "=?";
-				String[] whereArgs = {account.getUuid(), contact.getJid().toPreppedString()};
+				String[] whereArgs = {account.getUuid(), contact.getJid().toString()};
 				db.delete(Contact.TABLENAME, where, whereArgs);
 			}
 		}
@@ -870,6 +868,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		db.endTransaction();
 		account.setRosterVersion(roster.getVersion());
 		updateAccount(account);
+		long duration = SystemClock.elapsedRealtime() - start;
+		Log.d(Config.LOGTAG,account.getJid().asBareJid()+": persisted roster in "+duration+"ms");
 	}
 
 	public void deleteMessagesInConversation(Conversation conversation) {
@@ -1255,7 +1255,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 	}
 
 	private IdentityKeyPair loadOwnIdentityKeyPair(SQLiteDatabase db, Account account) {
-		String name = account.getJid().toBareJid().toPreppedString();
+		String name = account.getJid().asBareJid().toString();
 		IdentityKeyPair identityKeyPair = null;
 		Cursor cursor = getIdentityKeyCursor(db, account, name, true);
 		if (cursor.getCount() != 0) {
@@ -1263,7 +1263,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 			try {
 				identityKeyPair = new IdentityKeyPair(Base64.decode(cursor.getString(cursor.getColumnIndex(SQLiteAxolotlStore.KEY)), Base64.DEFAULT));
 			} catch (InvalidKeyException e) {
-				Log.d(Config.LOGTAG, AxolotlService.getLogprefix(account) + "Encountered invalid IdentityKey in database for account" + account.getJid().toBareJid() + ", address: " + name);
+				Log.d(Config.LOGTAG, AxolotlService.getLogprefix(account) + "Encountered invalid IdentityKey in database for account" + account.getJid().asBareJid() + ", address: " + name);
 			}
 		}
 		cursor.close();
@@ -1288,10 +1288,10 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 				if (key != null) {
 					identityKeys.add(new IdentityKey(Base64.decode(key, Base64.DEFAULT), 0));
 				} else {
-					Log.d(Config.LOGTAG, AxolotlService.getLogprefix(account) + "Missing key (possibly preverified) in database for account" + account.getJid().toBareJid() + ", address: " + name);
+					Log.d(Config.LOGTAG, AxolotlService.getLogprefix(account) + "Missing key (possibly preverified) in database for account" + account.getJid().asBareJid() + ", address: " + name);
 				}
 			} catch (InvalidKeyException e) {
-				Log.d(Config.LOGTAG, AxolotlService.getLogprefix(account) + "Encountered invalid IdentityKey in database for account" + account.getJid().toBareJid() + ", address: " + name);
+				Log.d(Config.LOGTAG, AxolotlService.getLogprefix(account) + "Encountered invalid IdentityKey in database for account" + account.getJid().asBareJid() + ", address: " + name);
 			}
 		}
 		cursor.close();
@@ -1427,7 +1427,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 	}
 
 	public void storeOwnIdentityKeyPair(Account account, IdentityKeyPair identityKeyPair) {
-		storeIdentityKey(account, account.getJid().toBareJid().toPreppedString(), true, CryptoHelper.bytesToHex(identityKeyPair.getPublicKey().serialize()), Base64.encodeToString(identityKeyPair.serialize(), Base64.DEFAULT), FingerprintStatus.createActiveVerified(false));
+		storeIdentityKey(account, account.getJid().asBareJid().toString(), true, CryptoHelper.bytesToHex(identityKeyPair.getPublicKey().serialize()), Base64.encodeToString(identityKeyPair.serialize(), Base64.DEFAULT), FingerprintStatus.createActiveVerified(false));
 	}
 
 
@@ -1472,7 +1472,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 		ArrayList<ShortcutService.FrequentContact> contacts = new ArrayList<>();
 		while(cursor.moveToNext()) {
 			try {
-				contacts.add(new ShortcutService.FrequentContact(cursor.getString(0), Jid.fromString(cursor.getString(1))));
+				contacts.add(new ShortcutService.FrequentContact(cursor.getString(0), Jid.of(cursor.getString(1))));
 			} catch (Exception e) {
 				Log.d(Config.LOGTAG,e.getMessage());
 			}

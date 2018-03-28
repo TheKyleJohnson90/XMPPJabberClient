@@ -23,7 +23,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.KDJStudios.XMPPJabberClient.Config;
 import com.KDJStudios.XMPPJabberClient.xml.Element;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class XmppAxolotlMessage {
 	public static final String CONTAINERTAG = "encrypted";
@@ -86,6 +86,18 @@ public class XmppAxolotlMessage {
 
 		public byte[] getIv() {
 			return iv;
+		}
+	}
+
+	public static int parseSourceId(final Element axolotlMessage) throws IllegalArgumentException {
+		final Element header = axolotlMessage.findChild(HEADER);
+		if (header == null) {
+			throw new IllegalArgumentException("No header found");
+		}
+		try {
+			return Integer.parseInt(header.getAttribute(SOURCEID));
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException("invalid source id");
 		}
 	}
 

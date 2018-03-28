@@ -2,19 +2,14 @@
 <resources>
 
     <attr name="TextSizeInfo" format="dimension" />
-    <attr name="TextSizeBody" format="dimension" />
-    <attr name="TextSizeHeadline" format="dimension" />
     <attr name="TextSeparation" format="dimension"/>
 
     <attr name="IconSize" format="dimension"/>
 
-    <attr name="color_text_primary" format="reference|color" />
-    <attr name="color_text_secondary" format="reference|color" />
-
     <attr name="color_background_secondary" format="reference|color" />
     <attr name="color_background_primary" format="reference|color" />
+    <attr name="color_warning" format="reference|color"/>
 
-    <attr name="infocard_border" format="reference"/>
     <attr name="ic_send_cancel_offline" format="reference"/>
     <attr name="ic_send_location_offline" format="reference"/>
     <attr name="ic_send_photo_offline" format="reference"/>
@@ -62,6 +57,7 @@
     <attr name="icon_share" format="reference"/>
     <attr name="icon_import_export" format="reference"/>
     <attr name="icon_scan_qr_code" format="reference"/>
+    <attr name="icon_enable_undecided_device" format="reference"/>
 
     <attr name="icon_notifications" format="reference"/>
     <attr name="icon_notifications_off" format="reference"/>
@@ -74,5 +70,7 @@
     <declare-styleable name="UnreadCountCustomView">
         <attr name="backgroundColor" format="reference|color"/>
     </declare-styleable>
+
+    <attr name="popupOverlayStyle" format="reference"/>
 
 </resources>

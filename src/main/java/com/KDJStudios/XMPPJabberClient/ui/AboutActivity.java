@@ -1,12 +1,14 @@
 package com.KDJStudios.XMPPJabberClient.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 
 import com.KDJStudios.XMPPJabberClient.R;
 
-public class AboutActivity extends Activity {
+import static com.KDJStudios.XMPPJabberClient.ui.XmppActivity.configureActionBar;
+
+public class AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,9 +16,11 @@ public class AboutActivity extends Activity {
 
         Boolean dark = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                         .getString("theme", "light").equals("dark");
-        int mTheme = dark ? R.style.ConversationsTheme_Dark : R.style.ConversationsTheme;
+        int mTheme = dark ? R.style.XMPPJabberClientTheme_Dark : R.style.XMPPJabberClientTheme;
         setTheme(mTheme);
 
         setContentView(R.layout.activity_about);
+        setSupportActionBar(findViewById(R.id.toolbar));
+        configureActionBar(getSupportActionBar());
     }
 }

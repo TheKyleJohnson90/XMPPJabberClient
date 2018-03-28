@@ -29,8 +29,8 @@ import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
 import com.KDJStudios.XMPPJabberClient.utils.CryptoHelper;
 import com.KDJStudios.XMPPJabberClient.xml.Namespace;
 import com.KDJStudios.XMPPJabberClient.xml.Element;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.KDJStudios.XMPPJabberClient.xmpp.stanzas.IqPacket;
+import rocks.xmpp.addr.Jid;
 
 public class HttpUploadConnection implements Transferable {
 
@@ -121,7 +121,7 @@ public class HttpUploadConnection implements Transferable {
 		try {
 			pair = AbstractConnectionManager.createInputStream(file, true);
 		} catch (FileNotFoundException e) {
-			Log.d(Config.LOGTAG, account.getJid().toBareJid()+": could not find file to upload - "+e.getMessage());
+			Log.d(Config.LOGTAG, account.getJid().asBareJid()+": could not find file to upload - "+e.getMessage());
 			fail(e.getMessage());
 			return;
 		}
@@ -186,6 +186,7 @@ public class HttpUploadConnection implements Transferable {
 			if (connection instanceof HttpsURLConnection) {
 				mHttpConnectionManager.setupTrustManager((HttpsURLConnection) connection, true);
 			}
+			connection.setUseCaches(false);
 			connection.setRequestMethod("PUT");
 			connection.setFixedLengthStreamingMode(expectedFileSize);
 			connection.setRequestProperty("Content-Type", mime == null ? "application/octet-stream" : mime);
@@ -220,7 +221,7 @@ public class HttpUploadConnection implements Transferable {
 				mXmppConnectionService.getFileBackend().updateFileParams(message, mGetUrl);
 				mXmppConnectionService.getFileBackend().updateMediaScanner(file);
 				message.setTransferable(null);
-				message.setCounterpart(message.getConversation().getJid().toBareJid());
+				message.setCounterpart(message.getConversation().getJid().asBareJid());
 				mXmppConnectionService.resendMessage(message, delayed);
 			} else {
 				Log.d(Config.LOGTAG,"http upload failed because response code was "+code);

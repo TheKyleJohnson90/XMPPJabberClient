@@ -31,9 +31,9 @@ import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
 import com.KDJStudios.XMPPJabberClient.xml.Namespace;
 import com.KDJStudios.XMPPJabberClient.xml.Element;
 import com.KDJStudios.XMPPJabberClient.xmpp.forms.Data;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.KDJStudios.XMPPJabberClient.xmpp.pep.Avatar;
 import com.KDJStudios.XMPPJabberClient.xmpp.stanzas.IqPacket;
+import rocks.xmpp.addr.Jid;
 
 public class IqGenerator extends AbstractGenerator {
 
@@ -98,8 +98,7 @@ public class IqGenerator extends AbstractGenerator {
 
 	protected IqPacket publish(final String node, final Element item, final Bundle options) {
 		final IqPacket packet = new IqPacket(IqPacket.TYPE.SET);
-		final Element pubsub = packet.addChild("pubsub",
-				"http://jabber.org/protocol/pubsub");
+		final Element pubsub = packet.addChild("pubsub",Namespace.PUBSUB);
 		final Element publish = pubsub.addChild("publish");
 		publish.setAttribute("node", node);
 		publish.addChild(item);
@@ -116,8 +115,7 @@ public class IqGenerator extends AbstractGenerator {
 
 	protected IqPacket retrieve(String node, Element item) {
 		final IqPacket packet = new IqPacket(IqPacket.TYPE.GET);
-		final Element pubsub = packet.addChild("pubsub",
-				"http://jabber.org/protocol/pubsub");
+		final Element pubsub = packet.addChild("pubsub",Namespace.PUBSUB);
 		final Element items = pubsub.addChild("items");
 		items.setAttribute("node", node);
 		if (item != null) {
@@ -284,7 +282,7 @@ public class IqGenerator extends AbstractGenerator {
 	public IqPacket generateSetBlockRequest(final Jid jid, boolean reportSpam) {
 		final IqPacket iq = new IqPacket(IqPacket.TYPE.SET);
 		final Element block = iq.addChild("block", Namespace.BLOCKING);
-		final Element item = block.addChild("item").setAttribute("jid", jid.toBareJid().toString());
+		final Element item = block.addChild("item").setAttribute("jid", jid.asBareJid().toString());
 		if (reportSpam) {
 			item.addChild("report", "urn:xmpp:reporting:0").addChild("spam");
 		}
@@ -295,16 +293,16 @@ public class IqGenerator extends AbstractGenerator {
 	public IqPacket generateSetUnblockRequest(final Jid jid) {
 		final IqPacket iq = new IqPacket(IqPacket.TYPE.SET);
 		final Element block = iq.addChild("unblock", Namespace.BLOCKING);
-		block.addChild("item").setAttribute("jid", jid.toBareJid().toString());
+		block.addChild("item").setAttribute("jid", jid.asBareJid().toString());
 		return iq;
 	}
 
 	public IqPacket generateSetPassword(final Account account, final String newPassword) {
 		final IqPacket packet = new IqPacket(IqPacket.TYPE.SET);
-		packet.setTo(account.getServer());
+		packet.setTo(Jid.of(account.getServer()));
 		final Element query = packet.addChild("query", Namespace.REGISTER);
 		final Jid jid = account.getJid();
-		query.addChild("username").setContent(jid.getLocalpart());
+		query.addChild("username").setContent(jid.getLocal());
 		query.addChild("password").setContent(newPassword);
 		return packet;
 	}
@@ -317,7 +315,7 @@ public class IqGenerator extends AbstractGenerator {
 
 	public IqPacket changeAffiliation(Conversation conference, List<Jid> jids, String affiliation) {
 		IqPacket packet = new IqPacket(IqPacket.TYPE.SET);
-		packet.setTo(conference.getJid().toBareJid());
+		packet.setTo(conference.getJid().asBareJid());
 		packet.setFrom(conference.getAccount().getJid());
 		Element query = packet.query("http://jabber.org/protocol/muc#admin");
 		for(Jid jid : jids) {
@@ -330,7 +328,7 @@ public class IqGenerator extends AbstractGenerator {
 
 	public IqPacket changeRole(Conversation conference, String nick, String role) {
 		IqPacket packet = new IqPacket(IqPacket.TYPE.SET);
-		packet.setTo(conference.getJid().toBareJid());
+		packet.setTo(conference.getJid().asBareJid());
 		packet.setFrom(conference.getAccount().getJid());
 		Element item = packet.query("http://jabber.org/protocol/muc#admin").addChild("item");
 		item.setAttribute("nick", nick);
@@ -367,8 +365,8 @@ public class IqGenerator extends AbstractGenerator {
 
 	public IqPacket generateCreateAccountWithCaptcha(Account account, String id, Data data) {
 		final IqPacket register = new IqPacket(IqPacket.TYPE.SET);
-		register.setFrom(account.getJid().toBareJid());
-		register.setTo(account.getServer());
+		register.setFrom(account.getJid().asBareJid());
+		register.setTo(Jid.of(account.getServer()));
 		register.setId(id);
 		Element query = register.query("jabber:iq:register");
 		if (data != null) {
@@ -397,7 +395,7 @@ public class IqGenerator extends AbstractGenerator {
 		enable.setAttribute("jid",jid.toString());
 		enable.setAttribute("node", node);
 		Data data = new Data();
-		data.setFormType("http://jabber.org/protocol/pubsub#publish-options");
+		data.setFormType(Namespace.PUBSUB_PUBLISH_OPTIONS);
 		data.put("secret",secret);
 		data.submit();
 		enable.addChild(data);
@@ -406,7 +404,7 @@ public class IqGenerator extends AbstractGenerator {
 
 	public IqPacket queryAffiliation(Conversation conversation, String affiliation) {
 		IqPacket packet = new IqPacket(IqPacket.TYPE.GET);
-		packet.setTo(conversation.getJid().toBareJid());
+		packet.setTo(conversation.getJid().asBareJid());
 		packet.query("http://jabber.org/protocol/muc#admin").addChild("item").setAttribute("affiliation",affiliation);
 		return packet;
 	}
@@ -417,6 +415,7 @@ public class IqGenerator extends AbstractGenerator {
 		options.putString("muc#roomconfig_membersonly", "1");
 		options.putString("muc#roomconfig_publicroom", "0");
 		options.putString("muc#roomconfig_whois", "anyone");
+		options.putString("muc#roomconfig_enablearchiving","1");
 		options.putString("mam","1");
 		return options;
 	}

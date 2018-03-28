@@ -1,9 +1,12 @@
 package com.KDJStudios.XMPPJabberClient.ui.service;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageButton;
@@ -16,7 +19,9 @@ import java.util.Locale;
 
 import com.KDJStudios.XMPPJabberClient.R;
 import com.KDJStudios.XMPPJabberClient.entities.Message;
+import com.KDJStudios.XMPPJabberClient.ui.ConversationsActivity;
 import com.KDJStudios.XMPPJabberClient.ui.adapter.MessageAdapter;
+import com.KDJStudios.XMPPJabberClient.ui.util.PendingItem;
 import com.KDJStudios.XMPPJabberClient.utils.WeakReferenceSet;
 
 public class AudioPlayer implements View.OnClickListener, MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener, Runnable {
@@ -27,6 +32,8 @@ public class AudioPlayer implements View.OnClickListener, MediaPlayer.OnCompleti
 	private static Message currentlyPlayingMessage = null;
 	private final MessageAdapter messageAdapter;
 	private final WeakReferenceSet<RelativeLayout> audioPlayerLayouts = new WeakReferenceSet<>();
+
+	private final PendingItem<WeakReference<ImageButton>> pendingOnClickView = new PendingItem<>();
 
 	private final Handler handler = new Handler();
 
@@ -56,7 +63,11 @@ public class AudioPlayer implements View.OnClickListener, MediaPlayer.OnCompleti
 	}
 
 	private boolean init(ViewHolder viewHolder, Message message) {
-		viewHolder.runtime.setTextColor(this.messageAdapter.getMessageTextColor(viewHolder.darkBackground, false));
+		if (viewHolder.darkBackground) {
+			viewHolder.runtime.setTextAppearance(this.messageAdapter.getContext(), R.style.TextAppearance_XMPPJabberClient_Caption_OnDark);
+		} else {
+			viewHolder.runtime.setTextAppearance(this.messageAdapter.getContext(), R.style.TextAppearance_XMPPJabberClient_Caption);
+		}
 		viewHolder.progress.setOnSeekBarChangeListener(this);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			ColorStateList color = ContextCompat.getColorStateList(messageAdapter.getContext(), viewHolder.darkBackground ? R.color.white70 : R.color.bubble);
@@ -93,6 +104,11 @@ public class AudioPlayer implements View.OnClickListener, MediaPlayer.OnCompleti
 	}
 
 	private void startStop(ImageButton playPause) {
+		if (ContextCompat.checkSelfPermission(messageAdapter.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			pendingOnClickView.push(new WeakReference<>(playPause));
+			ActivityCompat.requestPermissions(messageAdapter.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, ConversationsActivity.REQUEST_PLAY_PAUSE);
+			return;
+		}
 		final RelativeLayout audioPlayer = (RelativeLayout) playPause.getParent();
 		final ViewHolder viewHolder = ViewHolder.get(audioPlayer);
 		final Message message = (Message) audioPlayer.getTag();
@@ -136,6 +152,16 @@ public class AudioPlayer implements View.OnClickListener, MediaPlayer.OnCompleti
 			messageAdapter.flagScreenOff();
 			AudioPlayer.currentlyPlayingMessage = null;
 			return false;
+		}
+	}
+
+	public void startStopPending() {
+		WeakReference<ImageButton> reference = pendingOnClickView.pop();
+		if (reference != null) {
+			ImageButton imageButton = reference.get();
+			if (imageButton != null) {
+				startStop(imageButton);
+			}
 		}
 	}
 

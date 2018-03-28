@@ -29,9 +29,9 @@ import com.KDJStudios.XMPPJabberClient.persistance.FileBackend;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
 import com.KDJStudios.XMPPJabberClient.ui.adapter.ConversationAdapter;
 import com.KDJStudios.XMPPJabberClient.ui.service.EmojiService;
+import com.KDJStudios.XMPPJabberClient.ui.util.PresenceSelector;
 import com.KDJStudios.XMPPJabberClient.xmpp.XmppConnection;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class ShareWithActivity extends XmppActivity implements XmppConnectionService.OnConversationUpdate {
 
@@ -52,6 +52,7 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 		public String text;
 		public String uuid;
 		public boolean multiple = false;
+		public String type;
 	}
 
 	private Share share;
@@ -67,12 +68,7 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 
 		@Override
 		public void inform(final String text) {
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					replaceToast(text);
-				}
-			});
+			runOnUiThread(() -> replaceToast(text));
 		}
 
 		@Override
@@ -83,25 +79,21 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 
 		@Override
 		public void success(final Message message) {
-			xmppConnectionService.sendMessage(message);
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					if (attachmentCounter.decrementAndGet() <=0 ) {
-						int resId;
-						if (share.image && share.multiple) {
-							resId = R.string.shared_images_with_x;
-						} else if (share.image) {
-							resId = R.string.shared_image_with_x;
-						} else {
-							resId = R.string.shared_file_with_x;
-						}
-						replaceToast(getString(resId, message.getConversation().getName()));
-						if (mReturnToPrevious) {
-							finish();
-						} else {
-							switchToConversation(message.getConversation());
-						}
+			runOnUiThread(() -> {
+				if (attachmentCounter.decrementAndGet() <=0 ) {
+					int resId;
+					if (share.image && share.multiple) {
+						resId = R.string.shared_images_with_x;
+					} else if (share.image) {
+						resId = R.string.shared_image_with_x;
+					} else {
+						resId = R.string.shared_file_with_x;
+					}
+					replaceToast(getString(resId, message.getConversation().getName()));
+					if (mReturnToPrevious) {
+						finish();
+					} else {
+						switchToConversation(message.getConversation());
 					}
 				}
 			});
@@ -109,13 +101,10 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 
 		@Override
 		public void error(final int errorCode, Message object) {
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					replaceToast(getString(errorCode));
-					if (attachmentCounter.decrementAndGet() <=0 ) {
-						finish();
-					}
+			runOnUiThread(() -> {
+				replaceToast(getString(errorCode));
+				if (attachmentCounter.decrementAndGet() <=0 ) {
+					finish();
 				}
 			});
 		}
@@ -168,12 +157,15 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		new EmojiService(this).init();
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(false);
-			getActionBar().setHomeButtonEnabled(false);
+
+		setContentView(R.layout.activity_share_with);
+
+		setSupportActionBar(findViewById(R.id.toolbar));
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+			getSupportActionBar().setHomeButtonEnabled(false);
 		}
 
-		setContentView(R.layout.share_with);
 		setTitle(getString(R.string.title_activity_sharewith));
 
 		mListView = findViewById(R.id.choose_conversation_list);
@@ -226,6 +218,7 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 				this.share.uris.clear();
 				this.share.uris.add(uri);
 				this.share.image = type.startsWith("image/") || isImage(uri);
+				this.share.type = type;
 			} else {
 				this.share.text = text;
 			}
@@ -275,8 +268,8 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 		}else{
 			Account account;
 			try {
-				account = xmppConnectionService.findAccountByJid(Jid.fromString(share.account));
-			} catch (final InvalidJidException e) {
+				account = xmppConnectionService.findAccountByJid(Jid.of(share.account));
+			} catch (final IllegalArgumentException e) {
 				account = null;
 			}
 			if (account == null) {
@@ -285,8 +278,8 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 
 			try {
 				conversation = xmppConnectionService
-						.findOrCreateConversation(account, Jid.fromString(share.contact), false,true);
-			} catch (final InvalidJidException e) {
+						.findOrCreateConversation(account, Jid.of(share.contact), false,true);
+			} catch (final IllegalArgumentException e) {
 				return;
 			}
 		}
@@ -312,7 +305,7 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 			return;
 		}
 		if (share.uris.size() != 0) {
-			OnPresenceSelected callback = () -> {
+			PresenceSelector.OnPresenceSelected callback = () -> {
 				attachmentCounter.set(share.uris.size());
 				if (share.image) {
 					share.multiple = share.uris.size() > 1;
@@ -326,24 +319,22 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 					replaceToast(getString(R.string.preparing_file));
 					final Uri uri = share.uris.get(0);
 					delegateUriPermissionsToService(uri);
-					xmppConnectionService.attachFileToConversation(conversation, uri, attachFileCallback);
+					xmppConnectionService.attachFileToConversation(conversation, uri, share.type,  attachFileCallback);
 				}
 			};
 			if (account.httpUploadAvailable()
 					&& ((share.image && !neverCompressPictures())
 					|| conversation.getMode() == Conversation.MODE_MULTI
-					|| FileBackend.allFilesUnderSize(this, share.uris, max))
-					&& conversation.getNextEncryption() != Message.ENCRYPTION_OTR) {
+					|| FileBackend.allFilesUnderSize(this, share.uris, max))) {
 				callback.onPresenceSelected();
 			} else {
 				selectPresence(conversation, callback);
 			}
 		} else {
 			if (mReturnToPrevious && this.share.text != null && !this.share.text.isEmpty() ) {
-				final OnPresenceSelected callback = new OnPresenceSelected() {
+				final PresenceSelector.OnPresenceSelected callback = new PresenceSelector.OnPresenceSelected() {
 
 					private void finishAndSend(Message message) {
-						xmppConnectionService.sendMessage(message);
 						replaceToast(getString(R.string.shared_text_with_x, conversation.getName()));
 						finish();
 					}
@@ -351,23 +342,14 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 					private UiCallback<Message> messageEncryptionCallback = new UiCallback<Message>() {
 						@Override
 						public void success(final Message message) {
-							message.setEncryption(Message.ENCRYPTION_DECRYPTED);
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									finishAndSend(message);
-								}
-							});
+							runOnUiThread(() -> finishAndSend(message));
 						}
 
 						@Override
 						public void error(final int errorCode, Message object) {
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									replaceToast(getString(errorCode));
-									finish();
-								}
+							runOnUiThread(() -> {
+								replaceToast(getString(errorCode));
+								finish();
 							});
 						}
 
@@ -391,10 +373,7 @@ public class ShareWithActivity extends XmppActivity implements XmppConnectionSer
 							xmppConnectionService.getPgpEngine().encrypt(message,messageEncryptionCallback);
 							return;
 						}
-
-						if (encryption == Message.ENCRYPTION_OTR) {
-							message.setCounterpart(conversation.getNextCounterpart());
-						}
+						xmppConnectionService.sendMessage(message);
 						finishAndSend(message);
 					}
 				};

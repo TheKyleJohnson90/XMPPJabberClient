@@ -1,6 +1,6 @@
 package com.KDJStudios.XMPPJabberClient.ui;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.SpannableString;
@@ -16,10 +16,10 @@ import android.widget.Toast;
 import com.KDJStudios.XMPPJabberClient.R;
 import com.KDJStudios.XMPPJabberClient.entities.Blockable;
 import com.KDJStudios.XMPPJabberClient.entities.Conversation;
+import rocks.xmpp.addr.Jid;
 
 public final class BlockContactDialog {
-	public static void show(final XmppActivity xmppActivity,
-			final Blockable blockable) {
+	public static void show(final XmppActivity xmppActivity, final Blockable blockable) {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(xmppActivity);
 		final boolean isBlocked = blockable.isBlocked();
 		builder.setNegativeButton(R.string.cancel, null);
@@ -33,14 +33,14 @@ public final class BlockContactDialog {
 
 		String value;
 		SpannableString spannable;
-		if (blockable.getJid().isDomainJid() || blockable.getAccount().isBlocked(blockable.getJid().toDomainJid())) {
+		if (blockable.getJid().getLocal() == null || blockable.getAccount().isBlocked(Jid.ofDomain(blockable.getJid().getDomain()))) {
 			builder.setTitle(isBlocked ? R.string.action_unblock_domain : R.string.action_block_domain);
-			value = blockable.getJid().toDomainJid().toString();
+			value = Jid.ofDomain(blockable.getJid().getDomain()).toString();
 			spannable = new SpannableString(xmppActivity.getString(isBlocked ? R.string.unblock_domain_text : R.string.block_domain_text, value));
 		} else {
 			int resBlockAction = blockable instanceof Conversation && ((Conversation) blockable).isWithStranger() ? R.string.block_stranger : R.string.action_block_contact;
 			builder.setTitle(isBlocked ? R.string.action_unblock_contact : resBlockAction);
-			value = blockable.getJid().toBareJid().toString();
+			value = blockable.getJid().asBareJid().toString();
 			spannable = new SpannableString(xmppActivity.getString(isBlocked ? R.string.unblock_contact_text : R.string.block_contact_text, value));
 		}
 		int start = spannable.toString().indexOf(value);

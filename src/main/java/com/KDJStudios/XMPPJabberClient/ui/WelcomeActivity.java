@@ -1,10 +1,10 @@
 package com.KDJStudios.XMPPJabberClient.ui;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
 import java.util.List;
@@ -13,9 +13,12 @@ import com.KDJStudios.XMPPJabberClient.R;
 import com.KDJStudios.XMPPJabberClient.entities.Account;
 import com.KDJStudios.XMPPJabberClient.utils.XmppUri;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
 public class WelcomeActivity extends XmppActivity {
+	//ADMOB
+	protected AdView mAdView;
 
 	public static final String EXTRA_INVITE_URI = "com.KDJStudios.XMPPJabberClient.invite_uri";
 
@@ -57,7 +60,8 @@ public class WelcomeActivity extends XmppActivity {
 		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome);
-		final ActionBar ab = getActionBar();
+		setSupportActionBar(findViewById(R.id.toolbar));
+		final ActionBar ab = getSupportActionBar();
 		if (ab != null) {
 			ab.setDisplayShowHomeEnabled(false);
 			ab.setDisplayHomeAsUpEnabled(false);
@@ -74,7 +78,7 @@ public class WelcomeActivity extends XmppActivity {
 			List<Account> accounts = xmppConnectionService.getAccounts();
 			Intent intent = new Intent(WelcomeActivity.this, EditAccountActivity.class);
 			if (accounts.size() == 1) {
-				intent.putExtra("jid", accounts.get(0).getJid().toBareJid().toString());
+				intent.putExtra("jid", accounts.get(0).getJid().asBareJid().toString());
 				intent.putExtra("init", true);
 			} else if (accounts.size() >= 1) {
 				intent = new Intent(WelcomeActivity.this, ManageAccountActivity.class);
@@ -101,9 +105,9 @@ public class WelcomeActivity extends XmppActivity {
 		}
 	}
 
-	public static void launch(Activity activity) {
+	public static void launch(AppCompatActivity activity) {
 		Intent intent = new Intent(activity, WelcomeActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		activity.startActivity(intent);
 		activity.overridePendingTransition(0,0);
 	}

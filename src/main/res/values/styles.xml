@@ -1,21 +1,50 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="Divider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1.5dp</item>
-        <item name="android:background">@color/black12</item>
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="TextAppearance.XMPPJabberClient.Body1.Secondary" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">?android:textColorSecondary</item>
     </style>
-    <style name="MD">
-        <item name="animationVelocity">6</item>
-        <item name="insetBottom">16dp</item>
-        <item name="insetTop">16dp</item>
-        <item name="insetLeft">16dp</item>
-        <item name="insetRight">16dp</item>
-        <item name="measureFactor">1.4</item>
-        <item name="offDrawable">@drawable/switch_back_off</item>
-        <item name="onDrawable">@drawable/switch_back_on</item>
-        <item name="thumbDrawable">@drawable/switch_thumb</item>
-        <item name="thumb_margin">-17dp</item>
-        <item name="android:padding">16dp</item>
+    <style name="TextAppearance.XMPPJabberClient.Fingerprint" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">monospace</item>
+        <item name="android:typeface">monospace</item>
     </style>
-
+    <style name="InputLabel" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:paddingBottom">@dimen/input_label_vertical_spacing</item>
+        <item name="android:paddingLeft">@dimen/input_label_horizontal_spacing</item>
+        <item name="android:paddingRight">@dimen/input_label_horizontal_spacing</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Status" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textStyle">italic</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Tag" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Caption.OnDark" parent="TextAppearance.XMPPJabberClient.Caption">
+        <item name="android:textColor">@color/white70</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Caption.OnDark.Bold" parent="TextAppearance.XMPPJabberClient.Caption.OnDark">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Caption" parent="TextAppearance.AppCompat.Caption">
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Caption.Waring" parent="TextAppearance.XMPPJabberClient.Caption">
+        <item name="android:textColor">@color/red800</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Caption.Highlight" parent="TextAppearance.XMPPJabberClient.Caption">
+        <item name="android:textColor">?colorAccent</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Caption.Disabled" parent="TextAppearance.XMPPJabberClient.Caption">
+        <item name="android:textColor">?android:textColorTertiary</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Fingerprint.Disabled" parent="TextAppearance.XMPPJabberClient.Fingerprint">
+        <item name="android:textColor">?android:textColorTertiary</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Body1.OnDark" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorLink">@color/white</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Body1.Secondary.OnDark" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/white70</item>
+    </style>
+    <style name="TextAppearance.XMPPJabberClient.Body1" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColorLink">?android:textColorPrimary</item>
+    </style>
 </resources>

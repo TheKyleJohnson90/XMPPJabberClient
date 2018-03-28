@@ -1,9 +1,7 @@
 package com.KDJStudios.XMPPJabberClient.utils;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,9 +25,7 @@ import com.KDJStudios.XMPPJabberClient.entities.Account;
 import com.KDJStudios.XMPPJabberClient.entities.Conversation;
 import com.KDJStudios.XMPPJabberClient.entities.Message;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
-import com.KDJStudios.XMPPJabberClient.ui.ConversationActivity;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import com.KDJStudios.XMPPJabberClient.ui.XmppActivity;
 
 public class ExceptionHelper {
 
@@ -43,10 +39,13 @@ public class ExceptionHelper {
 		}
 	}
 
-	public static boolean checkForCrash(ConversationActivity activity, final XmppConnectionService service) {
+	public static boolean checkForCrash(XmppActivity activity) {
 		try {
-			final SharedPreferences preferences = PreferenceManager
-					.getDefaultSharedPreferences(activity);
+			final XmppConnectionService service = activity == null ? null : activity.xmppConnectionService;
+			if (service == null) {
+				return false;
+			}
+			final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 			boolean neverSend = preferences.getBoolean("never_send", false);
 			if (neverSend || Config.BUG_REPORTS == null) {
 				return false;
@@ -92,35 +91,14 @@ public class ExceptionHelper {
 			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 			builder.setTitle(activity.getString(R.string.crash_report_title));
 			builder.setMessage(activity.getText(R.string.crash_report_message));
-			builder.setPositiveButton(activity.getText(R.string.send_now),
-					new OnClickListener() {
+			builder.setPositiveButton(activity.getText(R.string.send_now), (dialog, which) -> {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-
-							Log.d(Config.LOGTAG, "using account="
-									+ finalAccount.getJid().toBareJid()
-									+ " to send in stack trace");
-							Conversation conversation = null;
-							try {
-								conversation = service.findOrCreateConversation(finalAccount,
-										Jid.fromString(Config.BUG_REPORTS), false, true);
-							} catch (final InvalidJidException ignored) {
-							}
-							Message message = new Message(conversation, report
-									.toString(), Message.ENCRYPTION_NONE);
-							service.sendMessage(message);
-						}
-					});
-			builder.setNegativeButton(activity.getText(R.string.send_never),
-					new OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							preferences.edit().putBoolean("never_send", true)
-									.apply();
-						}
-					});
+				Log.d(Config.LOGTAG, "using account=" + finalAccount.getJid().asBareJid() + " to send in stack trace");
+				Conversation conversation = service.findOrCreateConversation(finalAccount, Config.BUG_REPORTS, false, true);
+				Message message = new Message(conversation, report.toString(), Message.ENCRYPTION_NONE);
+				service.sendMessage(message);
+			});
+			builder.setNegativeButton(activity.getText(R.string.send_never), (dialog, which) -> preferences.edit().putBoolean("never_send", true).apply());
 			builder.create().show();
 			return true;
 		} catch (final IOException ignored) {
@@ -128,7 +106,7 @@ public class ExceptionHelper {
 		}
 	}
 
-	public static void writeToStacktraceFile(Context context, String msg) {
+	static void writeToStacktraceFile(Context context, String msg) {
 		try {
 			OutputStream os = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			os.write(msg.getBytes());

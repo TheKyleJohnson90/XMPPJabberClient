@@ -29,7 +29,7 @@
 
 package com.KDJStudios.XMPPJabberClient.entities;
 
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class ReceiptRequest {
 
@@ -43,7 +43,7 @@ public class ReceiptRequest {
 		if (jid == null) {
 			throw new IllegalArgumentException("jid must not be null");
 		}
-		this.jid = jid.toBareJid();
+		this.jid = jid.asBareJid();
 		this.id = id;
 	}
 

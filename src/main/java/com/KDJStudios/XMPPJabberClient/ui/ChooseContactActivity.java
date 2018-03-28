@@ -1,10 +1,14 @@
 package com.KDJStudios.XMPPJabberClient.ui;
 
-import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,10 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -25,21 +29,56 @@ import com.KDJStudios.XMPPJabberClient.Config;
 import com.KDJStudios.XMPPJabberClient.R;
 import com.KDJStudios.XMPPJabberClient.entities.Account;
 import com.KDJStudios.XMPPJabberClient.entities.Contact;
+import com.KDJStudios.XMPPJabberClient.entities.Conversation;
 import com.KDJStudios.XMPPJabberClient.entities.ListItem;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import com.KDJStudios.XMPPJabberClient.entities.MucOptions;
+import com.KDJStudios.XMPPJabberClient.ui.interfaces.OnBackendConnected;
+import com.KDJStudios.XMPPJabberClient.ui.util.ActivityResult;
+import com.KDJStudios.XMPPJabberClient.ui.util.PendingItem;
+import com.KDJStudios.XMPPJabberClient.utils.XmppUri;
+import rocks.xmpp.addr.Jid;
 
 public class ChooseContactActivity extends AbstractSearchableListItemActivity {
-	private List<String> mActivatedAccounts = new ArrayList<>();
-	private List<String> mKnownHosts;
-
-	private Set<Contact> selected;
-	private Set<String> filterContacts;
 	public static final String EXTRA_TITLE_RES_ID = "extra_title_res_id";
+	private List<String> mActivatedAccounts = new ArrayList<>();
+	private Set<String> selected = new HashSet<>();
+	private Set<String> filterContacts;
+
+	private PendingItem<ActivityResult> postponedActivityResult = new PendingItem<>();
+
+	public static Intent create(Activity activity, Conversation conversation) {
+		final Intent intent = new Intent(activity, ChooseContactActivity.class);
+		List<String> contacts = new ArrayList<>();
+		if (conversation.getMode() == Conversation.MODE_MULTI) {
+			for (MucOptions.User user : conversation.getMucOptions().getUsers(false)) {
+				Jid jid = user.getRealJid();
+				if (jid != null) {
+					contacts.add(jid.asBareJid().toString());
+				}
+			}
+		} else {
+			contacts.add(conversation.getJid().asBareJid().toString());
+		}
+		intent.putExtra("filter_contacts", contacts.toArray(new String[contacts.size()]));
+		intent.putExtra("conversation", conversation.getUuid());
+		intent.putExtra("multiple", true);
+		intent.putExtra("show_enter_jid", true);
+		intent.putExtra(EXTRA_ACCOUNT, conversation.getAccount().getJid().asBareJid().toString());
+		return intent;
+	}
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		filterContacts = new HashSet<>();
+		if (savedInstanceState != null) {
+			String[] selectedContacts = savedInstanceState.getStringArray("selected_contacts");
+			if (selectedContacts != null) {
+				selected.clear();
+				selected.addAll(Arrays.asList(selectedContacts));
+			}
+		}
+
 		String[] contacts = getIntent().getStringArrayExtra("filter_contacts");
 		if (contacts != null) {
 			Collections.addAll(filterContacts, contacts);
@@ -50,28 +89,35 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 			getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
 				@Override
-				public  boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 					return false;
 				}
 
 				@Override
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+					binding.fab.setVisibility(View.GONE);
+					final View view = getSearchEditText();
 					final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(getSearchEditText().getWindowToken(),
-							InputMethodManager.HIDE_IMPLICIT_ONLY);
+					if (view != null && imm != null) {
+						imm.hideSoftInputFromWindow(getSearchEditText().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+					}
 					MenuInflater inflater = getMenuInflater();
 					inflater.inflate(R.menu.select_multiple, menu);
-					selected = new HashSet<>();
+					MenuItem selectButton = menu.findItem(R.id.selection_submit);
+					String buttonText = getResources().getQuantityString(R.plurals.select_contact, selected.size(), selected.size());
+					selectButton.setTitle(buttonText);
 					return true;
 				}
 
 				@Override
 				public void onDestroyActionMode(ActionMode mode) {
+					binding.fab.setVisibility(View.VISIBLE);
+					selected.clear();
 				}
 
 				@Override
 				public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-					switch(item.getItemId()) {
+					switch (item.getItemId()) {
 						case R.id.selection_submit:
 							final Intent request = getIntent();
 							final Intent data = new Intent();
@@ -80,7 +126,7 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 							String[] selection = getSelectedContactJids();
 							data.putExtra("contacts", selection);
 							data.putExtra("multiple", true);
-							data.putExtra(EXTRA_ACCOUNT,request.getStringExtra(EXTRA_ACCOUNT));
+							data.putExtra(EXTRA_ACCOUNT, request.getStringExtra(EXTRA_ACCOUNT));
 							data.putExtra("subject", request.getStringExtra("subject"));
 							setResult(RESULT_OK, data);
 							finish();
@@ -93,9 +139,9 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 				public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 					Contact item = (Contact) getListItems().get(position);
 					if (checked) {
-						selected.add(item);
+						selected.add(item.getJid().toString());
 					} else {
-						selected.remove(item);
+						selected.remove(item.getJid().toString());
 					}
 					int numSelected = selected.size();
 					MenuItem selectButton = mode.getMenu().findItem(R.id.selection_submit);
@@ -106,32 +152,31 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 			});
 		}
 
-		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(final AdapterView<?> parent, final View view,
-					final int position, final long id) {
-				final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(getSearchEditText().getWindowToken(),
-						InputMethodManager.HIDE_IMPLICIT_ONLY);
-				final Intent request = getIntent();
-				final Intent data = new Intent();
-				final ListItem mListItem = getListItems().get(position);
-				data.putExtra("contact", mListItem.getJid().toString());
-				String account = request.getStringExtra(EXTRA_ACCOUNT);
-				if (account == null && mListItem instanceof Contact) {
-					account = ((Contact) mListItem).getAccount().getJid().toBareJid().toString();
-				}
-				data.putExtra(EXTRA_ACCOUNT, account);
-				data.putExtra("conversation",
-						request.getStringExtra("conversation"));
-				data.putExtra("multiple", false);
-				data.putExtra("subject", request.getStringExtra("subject"));
-				setResult(RESULT_OK, data);
-				finish();
+		getListView().setOnItemClickListener((parent, view, position, id) -> {
+			final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(getSearchEditText().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+			final Intent request = getIntent();
+			final Intent data = new Intent();
+			final ListItem mListItem = getListItems().get(position);
+			data.putExtra("contact", mListItem.getJid().toString());
+			String account = request.getStringExtra(EXTRA_ACCOUNT);
+			if (account == null && mListItem instanceof Contact) {
+				account = ((Contact) mListItem).getAccount().getJid().asBareJid().toString();
 			}
+			data.putExtra(EXTRA_ACCOUNT, account);
+			data.putExtra("conversation", request.getStringExtra("conversation"));
+			data.putExtra("multiple", false);
+			data.putExtra("subject", request.getStringExtra("subject"));
+			setResult(RESULT_OK, data);
+			finish();
 		});
-
+		final Intent i = getIntent();
+		boolean showEnterJid = i != null && i.getBooleanExtra("show_enter_jid", false);
+		if (showEnterJid) {
+			this.binding.fab.setOnClickListener((v) -> showEnterJidDialog(null));
+		} else {
+			this.binding.fab.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -139,8 +184,8 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 		super.onStart();
 		Intent intent = getIntent();
 		@StringRes
-		int res = intent != null ? intent.getIntExtra(EXTRA_TITLE_RES_ID,R.string.title_activity_choose_contact) : R.string.title_activity_choose_contact;
-		ActionBar bar = getActionBar();
+		int res = intent != null ? intent.getIntExtra(EXTRA_TITLE_RES_ID, R.string.title_activity_choose_contact) : R.string.title_activity_choose_contact;
+		ActionBar bar = getSupportActionBar();
 		if (bar != null) {
 			try {
 				bar.setTitle(res);
@@ -155,8 +200,14 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 		super.onCreateOptionsMenu(menu);
 		final Intent i = getIntent();
 		boolean showEnterJid = i != null && i.getBooleanExtra("show_enter_jid", false);
-		menu.findItem(R.id.action_create_contact).setVisible(showEnterJid);
+		menu.findItem(R.id.action_scan_qr_code).setVisible(isCameraFeatureAvailable() && showEnterJid);
 		return true;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		savedInstanceState.putStringArray("selected_contacts",getSelectedContactJids());
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	protected void filterContacts(final String needle) {
@@ -169,7 +220,7 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 			if (account.getStatus() != Account.State.DISABLED) {
 				for (final Contact contact : account.getRoster().getContacts()) {
 					if (contact.showInRoster() &&
-							!filterContacts.contains(contact.getJid().toBareJid().toString())
+							!filterContacts.contains(contact.getJid().asBareJid().toString())
 							&& contact.match(this, needle)) {
 						getListItems().add(contact);
 					}
@@ -181,13 +232,8 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 	}
 
 	private String[] getSelectedContactJids() {
-		List<String> result = new ArrayList<>();
-		for (Contact contact : selected) {
-			result.add(contact.getJid().toString());
-		}
-		return result.toArray(new String[result.size()]);
+		return selected.toArray(new String[selected.size()]);
 	}
-
 
 	public void refreshUiReal() {
 		//nothing to do. This Activity doesn't implement any listeners
@@ -196,39 +242,67 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_create_contact:
-				showEnterJidDialog();
+			case R.id.action_scan_qr_code:
+				ScanActivity.scan(this);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	protected void showEnterJidDialog() {
-		EnterJidDialog dialog = new EnterJidDialog(
-			this, mKnownHosts, mActivatedAccounts,
-			getString(R.string.enter_contact), getString(R.string.select),
-			null, getIntent().getStringExtra(EXTRA_ACCOUNT), true
+	protected void showEnterJidDialog(XmppUri uri) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+		Jid jid = uri == null ? null : uri.getJid();
+		EnterJidDialog dialog = EnterJidDialog.newInstance(
+				mActivatedAccounts,
+				getString(R.string.enter_contact),
+				getString(R.string.select),
+				jid == null ? null : jid.asBareJid().toString(),
+				getIntent().getStringExtra(EXTRA_ACCOUNT),
+				true
 		);
 
-		dialog.setOnEnterJidDialogPositiveListener(new EnterJidDialog.OnEnterJidDialogPositiveListener() {
-			@Override
-			public boolean onEnterJidDialogPositive(Jid accountJid, Jid contactJid) throws EnterJidDialog.JidError {
-				final Intent request = getIntent();
-				final Intent data = new Intent();
-				data.putExtra("contact", contactJid.toString());
-				data.putExtra(EXTRA_ACCOUNT, accountJid.toString());
-				data.putExtra("conversation",
-						request.getStringExtra("conversation"));
-				data.putExtra("multiple", false);
-				data.putExtra("subject", request.getStringExtra("subject"));
-				setResult(RESULT_OK, data);
-				finish();
+		dialog.setOnEnterJidDialogPositiveListener((accountJid, contactJid) -> {
+			final Intent request = getIntent();
+			final Intent data = new Intent();
+			data.putExtra("contact", contactJid.toString());
+			data.putExtra(EXTRA_ACCOUNT, accountJid.toString());
+			data.putExtra("conversation",
+					request.getStringExtra("conversation"));
+			data.putExtra("multiple", false);
+			data.putExtra("subject", request.getStringExtra("subject"));
+			setResult(RESULT_OK, data);
+			finish();
 
-				return true;
-			}
+			return true;
 		});
 
-		dialog.show();
+		dialog.show(ft, "dialog");
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, requestCode, intent);
+		ActivityResult activityResult = ActivityResult.of(requestCode, resultCode, intent);
+		if (xmppConnectionService != null) {
+			handleActivityResult(activityResult);
+		} else {
+			this.postponedActivityResult.push(activityResult);
+		}
+	}
+
+	private void handleActivityResult(ActivityResult activityResult) {
+		if (activityResult.resultCode == RESULT_OK && activityResult.requestCode == ScanActivity.REQUEST_SCAN_QR_CODE) {
+			String result = activityResult.data.getStringExtra(ScanActivity.INTENT_EXTRA_RESULT);
+			XmppUri uri = new XmppUri(result == null ? "" : result);
+			if (uri.isJidValid()) {
+				showEnterJidDialog(uri);
+			}
+		}
 	}
 
 	@Override
@@ -238,12 +312,24 @@ public class ChooseContactActivity extends AbstractSearchableListItemActivity {
 		for (Account account : xmppConnectionService.getAccounts()) {
 			if (account.getStatus() != Account.State.DISABLED) {
 				if (Config.DOMAIN_LOCK != null) {
-					this.mActivatedAccounts.add(account.getJid().getLocalpart());
+					this.mActivatedAccounts.add(account.getJid().getLocal());
 				} else {
-					this.mActivatedAccounts.add(account.getJid().toBareJid().toString());
+					this.mActivatedAccounts.add(account.getJid().asBareJid().toString());
 				}
 			}
 		}
-		this.mKnownHosts = xmppConnectionService.getKnownHosts();
+		ActivityResult activityResult = this.postponedActivityResult.pop();
+		if (activityResult != null) {
+			handleActivityResult(activityResult);
+		}
+		Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DIALOG);
+		if (fragment != null && fragment instanceof OnBackendConnected) {
+			((OnBackendConnected) fragment).onBackendConnected();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+		ScanActivity.onRequestPermissionResult(this, requestCode, grantResults);
 	}
 }

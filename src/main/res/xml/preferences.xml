@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
+    android:key="main_screen"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="?attr/color_background_secondary">
 
     <PreferenceCategory android:title="@string/pref_general"
         android:key="general">
-        <CheckBoxPreference
-            android:defaultValue="@bool/grant_new_contacts"
-            android:key="grant_new_contacts"
-            android:summary="@string/pref_grant_presence_updates_summary"
-            android:title="@string/pref_grant_presence_updates"/>
-
-        <ListPreference
-            android:defaultValue="@string/default_resource"
-            android:entries="@array/resources"
-            android:entryValues="@array/resources"
-            android:key="resource"
-            android:summary="@string/pref_xmpp_resource_summary"
-            android:title="@string/pref_xmpp_resource"/>
         <PreferenceScreen
             android:key="huawei"
             android:title="@string/huawei_protected_apps"
@@ -42,6 +31,14 @@
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_privacy">
+        <ListPreference
+            android:key="omemo"
+            android:title="@string/pref_omemo_setting"
+            android:summary="@string/pref_omemo_setting_summary_default_on"
+            android:defaultValue="@string/omemo_setting_default"
+            android:entryValues="@array/omemo_setting_entry_values"
+            android:entries="@array/omemo_setting_entries"
+            />
         <CheckBoxPreference
             android:defaultValue="@bool/confirm_messages"
             android:key="confirm_messages"
@@ -101,6 +98,12 @@
             android:key="quiet_hours"
             android:summary="@string/pref_quiet_hours_summary"
             android:title="@string/title_pref_quiet_hours">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="@string/applicationId"
+                android:targetClass="com.KDJStudios.XMPPJabberClient.ui.SettingsActivity" >
+                <extra android:name="page" android:value="quiet_hours" />
+            </intent>
             <CheckBoxPreference
                 android:defaultValue="@bool/enable_quiet_hours"
                 android:key="enable_quiet_hours"
@@ -169,11 +172,6 @@
             android:summary="@string/pref_use_green_background_summary"
             android:title="@string/pref_use_green_background"/>
         <CheckBoxPreference
-            android:defaultValue="@bool/use_larger_font"
-            android:key="use_larger_font"
-            android:summary="@string/pref_use_larger_font_summary"
-            android:title="@string/pref_use_larger_font"/>
-        <CheckBoxPreference
             android:defaultValue="@bool/send_button_status"
             android:key="send_button_status"
             android:summary="@string/pref_use_send_button_to_indicate_status_summary"
@@ -199,6 +197,12 @@
             android:key="expert"
             android:summary="@string/pref_expert_options_summary"
             android:title="@string/pref_expert_options">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="@string/applicationId"
+                android:targetClass="com.KDJStudios.XMPPJabberClient.ui.SettingsActivity" >
+                <extra android:name="page" android:value="expert" />
+            </intent>
             <PreferenceCategory android:title="@string/pref_security_settings"
                 android:key="security_options">
                 <CheckBoxPreference
@@ -210,9 +214,7 @@
                     android:key="automatic_message_deletion"
                     android:title="@string/pref_automatically_delete_messages"
                     android:summary="@string/pref_automatically_delete_messages_description"
-                    android:defaultValue="@integer/automatic_message_deletion"
-                    android:entries="@array/automatic_message_deletion"
-                    android:entryValues="@array/automatic_message_deletion_values" />
+                    android:defaultValue="@integer/automatic_message_deletion"/>
                 <CheckBoxPreference
                     android:defaultValue="@bool/dont_trust_system_cas"
                     android:key="dont_trust_system_cas"
@@ -270,6 +272,11 @@
                     android:key="display_enter_key"
                     android:summary="@string/pref_display_enter_key_summary"
                     android:title="@string/pref_display_enter_key"/>
+                <CheckBoxPreference
+                    android:defaultValue="@bool/scroll_to_bottom"
+                    android:key="scroll_to_bottom"
+                    android:title="@string/pref_scroll_to_bottom"
+                    android:summary="@string/pref_scroll_to_bottom_summary"/>
             </PreferenceCategory>
             <PreferenceCategory android:title="@string/pref_presence_settings">
                 <CheckBoxPreference

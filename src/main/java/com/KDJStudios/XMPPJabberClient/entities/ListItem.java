@@ -4,12 +4,11 @@ import android.content.Context;
 
 import java.util.List;
 
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
+
 
 public interface ListItem extends Comparable<ListItem> {
 	String getDisplayName();
-
-	String getDisplayJid();
 
 	Jid getJid();
 

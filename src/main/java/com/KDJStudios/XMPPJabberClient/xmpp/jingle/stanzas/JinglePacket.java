@@ -3,8 +3,8 @@ package com.KDJStudios.XMPPJabberClient.xmpp.jingle.stanzas;
 import android.util.Base64;
 
 import com.KDJStudios.XMPPJabberClient.xml.Element;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.KDJStudios.XMPPJabberClient.xmpp.stanzas.IqPacket;
+import rocks.xmpp.addr.Jid;
 
 public class JinglePacket extends IqPacket {
 	Content content = null;

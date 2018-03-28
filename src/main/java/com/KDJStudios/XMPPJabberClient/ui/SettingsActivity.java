@@ -1,12 +1,14 @@
 package com.KDJStudios.XMPPJabberClient.ui;
 
-import android.app.AlertDialog;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,16 +27,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
-import de.duenndns.ssl.MemorizingTrustManager;
 import com.KDJStudios.XMPPJabberClient.Config;
 import com.KDJStudios.XMPPJabberClient.R;
+import com.KDJStudios.XMPPJabberClient.crypto.OmemoSetting;
 import com.KDJStudios.XMPPJabberClient.entities.Account;
 import com.KDJStudios.XMPPJabberClient.services.ExportLogsService;
-import com.KDJStudios.XMPPJabberClient.xmpp.XmppConnection;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import com.KDJStudios.XMPPJabberClient.services.MemorizingTrustManager;
+import com.KDJStudios.XMPPJabberClient.ui.util.Color;
+import com.KDJStudios.XMPPJabberClient.utils.TimeframeUtils;
+import rocks.xmpp.addr.Jid;
 
 public class SettingsActivity extends XmppActivity implements
 		OnSharedPreferenceChangeListener {
@@ -49,6 +51,7 @@ public class SettingsActivity extends XmppActivity implements
 	public static final String BROADCAST_LAST_ACTIVITY = "last_activity";
 	public static final String THEME = "theme";
 	public static final String SHOW_DYNAMIC_TAGS = "show_dynamic_tags";
+	public static final String OMEMO_SETTING = "omemo";
 
 	public static final int REQUEST_WRITE_LOGS = 0xbf8701;
 	private SettingsFragment mSettingsFragment;
@@ -56,19 +59,19 @@ public class SettingsActivity extends XmppActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_settings);
 		FragmentManager fm = getFragmentManager();
-		mSettingsFragment = (SettingsFragment) fm.findFragmentById(android.R.id.content);
+		mSettingsFragment = (SettingsFragment) fm.findFragmentById(R.id.settings_content);
 		if (mSettingsFragment == null || !mSettingsFragment.getClass().equals(SettingsFragment.class)) {
 			mSettingsFragment = new SettingsFragment();
-			fm.beginTransaction().replace(android.R.id.content, mSettingsFragment).commit();
+			fm.beginTransaction().replace(R.id.settings_content, mSettingsFragment).commit();
 		}
-
+		mSettingsFragment.setActivityIntent(getIntent());
 		this.mTheme = findTheme();
 		setTheme(this.mTheme);
-
-		int bgcolor = getPrimaryBackgroundColor();
-		getWindow().getDecorView().setBackgroundColor(bgcolor);
-
+		getWindow().getDecorView().setBackgroundColor(Color.get(this, R.attr.color_background_primary));
+		setSupportActionBar(findViewById(R.id.toolbar));
+		configureActionBar(getSupportActionBar());
 	}
 
 	@Override
@@ -80,15 +83,8 @@ public class SettingsActivity extends XmppActivity implements
 	public void onStart() {
 		super.onStart();
 		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-		ListPreference resources = (ListPreference) mSettingsFragment.findPreference("resource");
-		if (resources != null) {
-			ArrayList<CharSequence> entries = new ArrayList<>(Arrays.asList(resources.getEntries()));
-			if (!entries.contains(Build.MODEL)) {
-				entries.add(0, Build.MODEL);
-				resources.setEntries(entries.toArray(new CharSequence[entries.size()]));
-				resources.setEntryValues(entries.toArray(new CharSequence[entries.size()]));
-			}
-		}
+
+		changeOmemoSettingSummary();
 
 		if (Config.FORCE_ORBOT) {
 			PreferenceCategory connectionOptions = (PreferenceCategory) mSettingsFragment.findPreference("connection_options");
@@ -98,6 +94,8 @@ public class SettingsActivity extends XmppActivity implements
 			}
 		}
 
+		PreferenceScreen mainPreferenceScreen = (PreferenceScreen) mSettingsFragment.findPreference("main_screen");
+
 		//this feature is only available on Huawei Android 6.
 		PreferenceScreen huaweiPreferenceScreen = (PreferenceScreen) mSettingsFragment.findPreference("huawei");
 		if (huaweiPreferenceScreen != null) {
@@ -106,8 +104,31 @@ public class SettingsActivity extends XmppActivity implements
 			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M || !isCallable(intent)) {
 				PreferenceCategory generalCategory = (PreferenceCategory) mSettingsFragment.findPreference("general");
 				generalCategory.removePreference(huaweiPreferenceScreen);
+				if (generalCategory.getPreferenceCount() == 0) {
+					if (mainPreferenceScreen != null) {
+						mainPreferenceScreen.removePreference(generalCategory);
+					}
+				}
 			}
 		}
+
+		ListPreference automaticMessageDeletionList = (ListPreference) mSettingsFragment.findPreference(AUTOMATIC_MESSAGE_DELETION);
+		if (automaticMessageDeletionList != null) {
+			final int[] choices = getResources().getIntArray(R.array.automatic_message_deletion_values);
+			CharSequence[] entries = new CharSequence[choices.length];
+			CharSequence[] entryValues = new CharSequence[choices.length];
+			for (int i = 0; i < choices.length; ++i) {
+				entryValues[i] = String.valueOf(choices[i]);
+				if (choices[i] == 0) {
+					entries[i] = getString(R.string.never);
+				} else {
+					entries[i] = TimeframeUtils.resolve(this, 1000L * choices[i]);
+				}
+			}
+			automaticMessageDeletionList.setEntries(entries);
+			automaticMessageDeletionList.setEntryValues(entryValues);
+		}
+
 
 		boolean removeLocation = new Intent("com.KDJStudios.XMPPJabberClient.location.request").resolveActivity(getPackageManager()) == null;
 		boolean removeVoice = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION).resolveActivity(getPackageManager()) == null;
@@ -131,57 +152,49 @@ public class SettingsActivity extends XmppActivity implements
 		}
 
 		final Preference removeCertsPreference = mSettingsFragment.findPreference("remove_trusted_certificates");
-		removeCertsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
+		if (removeCertsPreference != null) {
+			removeCertsPreference.setOnPreferenceClickListener(preference -> {
 				final MemorizingTrustManager mtm = xmppConnectionService.getMemorizingTrustManager();
 				final ArrayList<String> aliases = Collections.list(mtm.getCertificates());
 				if (aliases.size() == 0) {
 					displayToast(getString(R.string.toast_no_trusted_certs));
 					return true;
 				}
-				final ArrayList selectedItems = new ArrayList<>();
+				final ArrayList<Integer> selectedItems = new ArrayList<>();
 				final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this);
 				dialogBuilder.setTitle(getResources().getString(R.string.dialog_manage_certs_title));
 				dialogBuilder.setMultiChoiceItems(aliases.toArray(new CharSequence[aliases.size()]), null,
-						new DialogInterface.OnMultiChoiceClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int indexSelected,
-												boolean isChecked) {
-								if (isChecked) {
-									selectedItems.add(indexSelected);
-								} else if (selectedItems.contains(indexSelected)) {
-									selectedItems.remove(Integer.valueOf(indexSelected));
-								}
-								if (selectedItems.size() > 0)
-									((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-								else {
-									((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-								}
+						(dialog, indexSelected, isChecked) -> {
+							if (isChecked) {
+								selectedItems.add(indexSelected);
+							} else if (selectedItems.contains(indexSelected)) {
+								selectedItems.remove(Integer.valueOf(indexSelected));
+							}
+							if (selectedItems.size() > 0)
+								((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+							else {
+								((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 							}
 						});
 
 				dialogBuilder.setPositiveButton(
-						getResources().getString(R.string.dialog_manage_certs_positivebutton), new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								int count = selectedItems.size();
-								if (count > 0) {
-									for (int i = 0; i < count; i++) {
-										try {
-											Integer item = Integer.valueOf(selectedItems.get(i).toString());
-											String alias = aliases.get(item);
-											mtm.deleteCertificate(alias);
-										} catch (KeyStoreException e) {
-											e.printStackTrace();
-											displayToast("Error: " + e.getLocalizedMessage());
-										}
+						getResources().getString(R.string.dialog_manage_certs_positivebutton), (dialog, which) -> {
+							int count = selectedItems.size();
+							if (count > 0) {
+								for (int i = 0; i < count; i++) {
+									try {
+										Integer item = Integer.valueOf(selectedItems.get(i).toString());
+										String alias = aliases.get(item);
+										mtm.deleteCertificate(alias);
+									} catch (KeyStoreException e) {
+										e.printStackTrace();
+										displayToast("Error: " + e.getLocalizedMessage());
 									}
-									if (xmppConnectionServiceBound) {
-										reconnectAccounts();
-									}
-									displayToast(getResources().getQuantityString(R.plurals.toast_delete_certificates, count, count));
 								}
+								if (xmppConnectionServiceBound) {
+									reconnectAccounts();
+								}
+								displayToast(getResources().getQuantityString(R.plurals.toast_delete_certificates, count, count));
 							}
 						});
 				dialogBuilder.setNegativeButton(getResources().getString(R.string.dialog_manage_certs_negativebutton), null);
@@ -189,48 +202,55 @@ public class SettingsActivity extends XmppActivity implements
 				removeCertsDialog.show();
 				removeCertsDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 				return true;
-			}
-		});
+			});
+		}
 
 		final Preference exportLogsPreference = mSettingsFragment.findPreference("export_logs");
-		exportLogsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
+		if (exportLogsPreference != null) {
+			exportLogsPreference.setOnPreferenceClickListener(preference -> {
 				if (hasStoragePermission(REQUEST_WRITE_LOGS)) {
 					startExport();
 				}
 				return true;
-			}
-		});
-
-		if (Config.ONLY_INTERNAL_STORAGE) {
-			final Preference cleanCachePreference = mSettingsFragment.findPreference("clean_cache");
-			cleanCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					cleanCache();
-					return true;
-				}
-			});
-
-			final Preference cleanPrivateStoragePreference = mSettingsFragment.findPreference("clean_private_storage");
-			cleanPrivateStoragePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					cleanPrivateStorage();
-					return true;
-				}
 			});
 		}
 
-		final Preference deleteOmemoPreference = mSettingsFragment.findPreference("delete_omemo_identities");
-		deleteOmemoPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				deleteOmemoIdentities();
-				return true;
+		if (Config.ONLY_INTERNAL_STORAGE) {
+			final Preference cleanCachePreference = mSettingsFragment.findPreference("clean_cache");
+			if (cleanCachePreference != null) {
+				cleanCachePreference.setOnPreferenceClickListener(preference -> cleanCache());
 			}
-		});
+
+			final Preference cleanPrivateStoragePreference = mSettingsFragment.findPreference("clean_private_storage");
+			if (cleanPrivateStoragePreference != null) {
+				cleanPrivateStoragePreference.setOnPreferenceClickListener(preference -> cleanPrivateStorage());
+			}
+		}
+
+		final Preference deleteOmemoPreference = mSettingsFragment.findPreference("delete_omemo_identities");
+		if (deleteOmemoPreference != null) {
+			deleteOmemoPreference.setOnPreferenceClickListener(preference -> deleteOmemoIdentities());
+		}
+	}
+
+	private void changeOmemoSettingSummary() {
+		ListPreference omemoPreference = (ListPreference) mSettingsFragment.findPreference(OMEMO_SETTING);
+		if (omemoPreference != null) {
+			String value = omemoPreference.getValue();
+			switch (value) {
+				case "always":
+					omemoPreference.setSummary(R.string.pref_omemo_setting_summary_always);
+					break;
+				case "default_on":
+					omemoPreference.setSummary(R.string.pref_omemo_setting_summary_default_on);
+					break;
+				case "default_off":
+					omemoPreference.setSummary(R.string.pref_omemo_setting_summary_default_off);
+					break;
+			}
+		} else {
+			Log.d(Config.LOGTAG,"unable to find preference named "+OMEMO_SETTING);
+		}
 	}
 
 	private boolean isCallable(final Intent i) {
@@ -238,15 +258,17 @@ public class SettingsActivity extends XmppActivity implements
 	}
 
 
-	private void cleanCache() {
+	private boolean cleanCache() {
 		Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
 		intent.setData(Uri.parse("package:" + getPackageName()));
 		startActivity(intent);
+		return true;
 	}
 
-	private void cleanPrivateStorage() {
+	private boolean cleanPrivateStorage() {
 		cleanPrivatePictures();
 		cleanPrivateFiles();
+		return true;
 	}
 
 	private void cleanPrivatePictures() {
@@ -289,53 +311,48 @@ public class SettingsActivity extends XmppActivity implements
 		}
 	}
 
-	private void deleteOmemoIdentities() {
+	private boolean deleteOmemoIdentities() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.pref_delete_omemo_identities);
 		final List<CharSequence> accounts = new ArrayList<>();
-		for(Account account : xmppConnectionService.getAccounts()) {
+		for (Account account : xmppConnectionService.getAccounts()) {
 			if (account.isEnabled()) {
-				accounts.add(account.getJid().toBareJid().toString());
+				accounts.add(account.getJid().asBareJid().toString());
 			}
 		}
 		final boolean[] checkedItems = new boolean[accounts.size()];
-		builder.setMultiChoiceItems(accounts.toArray(new CharSequence[accounts.size()]), checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-				checkedItems[which] = isChecked;
-				final AlertDialog alertDialog = (AlertDialog) dialog;
-				for(boolean item : checkedItems) {
-					if (item) {
-						alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-						return;
-					}
+		builder.setMultiChoiceItems(accounts.toArray(new CharSequence[accounts.size()]), checkedItems, (dialog, which, isChecked) -> {
+			checkedItems[which] = isChecked;
+			final AlertDialog alertDialog = (AlertDialog) dialog;
+			for (boolean item : checkedItems) {
+				if (item) {
+					alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+					return;
 				}
-				alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 			}
+			alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 		});
-		builder.setNegativeButton(R.string.cancel,null);
-		builder.setPositiveButton(R.string.delete_selected_keys, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				for(int i = 0; i < checkedItems.length; ++i) {
-					if (checkedItems[i]) {
-						try {
-							Jid jid = Jid.fromString(accounts.get(i).toString());
-							Account account = xmppConnectionService.findAccountByJid(jid);
-							if (account != null) {
-								account.getAxolotlService().regenerateKeys(true);
-							}
-						} catch (InvalidJidException e) {
-							//
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.setPositiveButton(R.string.delete_selected_keys, (dialog, which) -> {
+			for (int i = 0; i < checkedItems.length; ++i) {
+				if (checkedItems[i]) {
+					try {
+						Jid jid = Jid.of(accounts.get(i).toString());
+						Account account = xmppConnectionService.findAccountByJid(jid);
+						if (account != null) {
+							account.getAxolotlService().regenerateKeys(true);
 						}
-
+					} catch (IllegalArgumentException e) {
+						//
 					}
+
 				}
 			}
 		});
 		AlertDialog dialog = builder.create();
 		dialog.show();
 		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+		return true;
 	}
 
 	@Override
@@ -355,31 +372,15 @@ public class SettingsActivity extends XmppActivity implements
 				TREAT_VIBRATE_AS_SILENT,
 				MANUALLY_CHANGE_PRESENCE,
 				BROADCAST_LAST_ACTIVITY);
-		if (name.equals("resource")) {
-			String resource = preferences.getString("resource", "mobile")
-					.toLowerCase(Locale.US);
-			if (xmppConnectionServiceBound) {
-				for (Account account : xmppConnectionService.getAccounts()) {
-					if (account.setResource(resource)) {
-						if (account.isEnabled()) {
-							XmppConnection connection = account.getXmppConnection();
-							if (connection != null) {
-								connection.resetStreamId();
-							}
-							xmppConnectionService.reconnectAccountInBackground(account);
-						}
-					}
-				}
-			}
+		if (name.equals(OMEMO_SETTING)) {
+			OmemoSetting.load(this, preferences);
+			changeOmemoSettingSummary();
 		} else if (name.equals(KEEP_FOREGROUND_SERVICE)) {
 			xmppConnectionService.toggleForegroundService();
 		} else if (resendPresence.contains(name)) {
 			if (xmppConnectionServiceBound) {
 				if (name.equals(AWAY_WHEN_SCREEN_IS_OFF) || name.equals(MANUALLY_CHANGE_PRESENCE)) {
 					xmppConnectionService.toggleScreenEventReceiver();
-				}
-				if (name.equals(MANUALLY_CHANGE_PRESENCE) && !noAccountUsesPgp()) {
-					Toast.makeText(this, R.string.republish_pgp_keys, Toast.LENGTH_LONG).show();
 				}
 				xmppConnectionService.refreshAllPresences();
 			}
@@ -400,7 +401,7 @@ public class SettingsActivity extends XmppActivity implements
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		if (grantResults.length > 0)
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				if (requestCode == REQUEST_WRITE_LOGS) {
@@ -416,12 +417,7 @@ public class SettingsActivity extends XmppActivity implements
 	}
 
 	private void displayToast(final String msg) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				Toast.makeText(SettingsActivity.this, msg, Toast.LENGTH_LONG).show();
-			}
-		});
+		runOnUiThread(() -> Toast.makeText(SettingsActivity.this, msg, Toast.LENGTH_LONG).show());
 	}
 
 	private void reconnectAccounts() {

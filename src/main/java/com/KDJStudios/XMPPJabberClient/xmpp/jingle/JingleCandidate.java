@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.KDJStudios.XMPPJabberClient.xml.Element;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class JingleCandidate {
 

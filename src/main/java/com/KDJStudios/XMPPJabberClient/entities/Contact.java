@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,9 +20,8 @@ import com.KDJStudios.XMPPJabberClient.Config;
 import com.KDJStudios.XMPPJabberClient.utils.JidHelper;
 import com.KDJStudios.XMPPJabberClient.utils.UIHelper;
 import com.KDJStudios.XMPPJabberClient.xml.Element;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
 import com.KDJStudios.XMPPJabberClient.xmpp.pep.Avatar;
+import rocks.xmpp.addr.Jid;
 
 public class Contact implements ListItem, Blockable {
 	public static final String TABLENAME = "contacts";
@@ -37,18 +38,18 @@ public class Contact implements ListItem, Blockable {
 	public static final String LAST_PRESENCE = "last_presence";
 	public static final String LAST_TIME = "last_time";
 	public static final String GROUPS = "groups";
-	protected String accountUuid;
-	protected String systemName;
-	protected String serverName;
-	protected String presenceName;
-	protected String commonName;
+	private String accountUuid;
+	private String systemName;
+	private String serverName;
+	private String presenceName;
+	private String commonName;
 	protected Jid jid;
-	protected int subscription = 0;
-	protected String systemAccount;
-	protected String photoUri;
-	protected JSONObject keys = new JSONObject();
-	protected JSONArray groups = new JSONArray();
-	protected final Presences presences = new Presences();
+	private int subscription = 0;
+	private String systemAccount;
+	private String photoUri;
+	private final JSONObject keys;
+	private JSONArray groups = new JSONArray();
+	private final Presences presences = new Presences();
 	protected Account account;
 	protected Avatar avatar;
 
@@ -57,9 +58,9 @@ public class Contact implements ListItem, Blockable {
 	private String mLastPresence = null;
 
 	public Contact(final String account, final String systemName, final String serverName,
-			final Jid jid, final int subscription, final String photoUri,
-			final String systemAccount, final String keys, final String avatar, final long lastseen,
-				   final String presence, final String groups) {
+	               final Jid jid, final int subscription, final String photoUri,
+	               final String systemAccount, final String keys, final String avatar, final long lastseen,
+	               final String presence, final String groups) {
 		this.accountUuid = account;
 		this.systemName = systemName;
 		this.serverName = serverName;
@@ -67,11 +68,13 @@ public class Contact implements ListItem, Blockable {
 		this.subscription = subscription;
 		this.photoUri = photoUri;
 		this.systemAccount = systemAccount;
+		JSONObject tmpJsonObject;
 		try {
-			this.keys = (keys == null ? new JSONObject("") : new JSONObject(keys));
+			tmpJsonObject = (keys == null ? new JSONObject("") : new JSONObject(keys));
 		} catch (JSONException e) {
-			this.keys = new JSONObject();
+			tmpJsonObject = new JSONObject();
 		}
+		this.keys = tmpJsonObject;
 		if (avatar != null) {
 			this.avatar = new Avatar();
 			this.avatar.sha1sum = avatar;
@@ -88,13 +91,14 @@ public class Contact implements ListItem, Blockable {
 
 	public Contact(final Jid jid) {
 		this.jid = jid;
+		this.keys = new JSONObject();
 	}
 
 	public static Contact fromCursor(final Cursor cursor) {
 		final Jid jid;
 		try {
-			jid = Jid.fromString(cursor.getString(cursor.getColumnIndex(JID)), true);
-		} catch (final InvalidJidException e) {
+			jid = Jid.of(cursor.getString(cursor.getColumnIndex(JID)));
+		} catch (final IllegalArgumentException e) {
 			// TODO: Borked DB... handle this somehow?
 			return null;
 		}
@@ -113,27 +117,18 @@ public class Contact implements ListItem, Blockable {
 	}
 
 	public String getDisplayName() {
-		if (Config.X509_VERIFICATION && this.commonName != null && !this.commonName.isEmpty()) {
+		if (Config.X509_VERIFICATION && !TextUtils.isEmpty(this.commonName)) {
 			return this.commonName;
-		} else if (this.systemName != null && !this.systemName.isEmpty()) {
+		} else if (!TextUtils.isEmpty(this.systemName)) {
 			return this.systemName;
-		} else if (this.serverName != null && !this.serverName.isEmpty()) {
+		} else if (!TextUtils.isEmpty(this.serverName)) {
 			return this.serverName;
-		} else if (this.presenceName != null && !this.presenceName.isEmpty() && mutualPresenceSubscription() ) {
+		} else if (!TextUtils.isEmpty(this.presenceName) && mutualPresenceSubscription()) {
 			return this.presenceName;
-		} else if (jid.hasLocalpart()) {
+		} else if (jid.getLocal() != null) {
 			return JidHelper.localPartOrFallback(jid);
 		} else {
-			return jid.getDomainpart();
-		}
-	}
-
-	@Override
-	public String getDisplayJid() {
-		if (jid != null) {
-			return jid.toString();
-		} else {
-			return null;
+			return jid.getDomain();
 		}
 	}
 
@@ -162,22 +157,22 @@ public class Contact implements ListItem, Blockable {
 	}
 
 	public boolean match(Context context, String needle) {
-		if (needle == null || needle.isEmpty()) {
+		if (TextUtils.isEmpty(needle)) {
 			return true;
 		}
 		needle = needle.toLowerCase(Locale.US).trim();
 		String[] parts = needle.split("\\s+");
 		if (parts.length > 1) {
-			for(int i = 0; i < parts.length; ++i) {
-				if (!match(context, parts[i])) {
+			for (String part : parts) {
+				if (!match(context, part)) {
 					return false;
 				}
 			}
 			return true;
 		} else {
 			return jid.toString().contains(needle) ||
-				getDisplayName().toLowerCase(Locale.US).contains(needle) ||
-				matchInTag(context, needle);
+					getDisplayName().toLowerCase(Locale.US).contains(needle) ||
+					matchInTag(context, needle);
 		}
 	}
 
@@ -197,7 +192,7 @@ public class Contact implements ListItem, Blockable {
 			values.put(ACCOUNT, accountUuid);
 			values.put(SYSTEMNAME, systemName);
 			values.put(SERVERNAME, serverName);
-			values.put(JID, jid.toPreppedString());
+			values.put(JID, jid.toString());
 			values.put(OPTIONS, subscription);
 			values.put(SYSTEMACCOUNT, systemAccount);
 			values.put(PHOTOURI, photoUri);
@@ -286,8 +281,8 @@ public class Contact implements ListItem, Blockable {
 		this.systemAccount = account;
 	}
 
-	public List<String> getGroups() {
-		ArrayList<String> groups = new ArrayList<String>();
+	private List<String> getGroups() {
+		ArrayList<String> groups = new ArrayList<>();
 		for (int i = 0; i < this.groups.length(); ++i) {
 			try {
 				groups.add(this.groups.getString(i));
@@ -295,46 +290,6 @@ public class Contact implements ListItem, Blockable {
 			}
 		}
 		return groups;
-	}
-
-	public ArrayList<String> getOtrFingerprints() {
-		synchronized (this.keys) {
-			final ArrayList<String> fingerprints = new ArrayList<String>();
-			try {
-				if (this.keys.has("otr_fingerprints")) {
-					final JSONArray prints = this.keys.getJSONArray("otr_fingerprints");
-					for (int i = 0; i < prints.length(); ++i) {
-						final String print = prints.isNull(i) ? null : prints.getString(i);
-						if (print != null && !print.isEmpty()) {
-							fingerprints.add(prints.getString(i).toLowerCase(Locale.US));
-						}
-					}
-				}
-			} catch (final JSONException ignored) {
-
-			}
-			return fingerprints;
-		}
-	}
-	public boolean addOtrFingerprint(String print) {
-		synchronized (this.keys) {
-			if (getOtrFingerprints().contains(print)) {
-				return false;
-			}
-			try {
-				JSONArray fingerprints;
-				if (!this.keys.has("otr_fingerprints")) {
-					fingerprints = new JSONArray();
-				} else {
-					fingerprints = this.keys.getJSONArray("otr_fingerprints");
-				}
-				fingerprints.put(print);
-				this.keys.put("otr_fingerprints", fingerprints);
-				return true;
-			} catch (final JSONException ignored) {
-				return false;
-			}
-		}
 	}
 
 	public long getPgpKeyId() {
@@ -374,8 +329,8 @@ public class Contact implements ListItem, Blockable {
 
 	public boolean showInRoster() {
 		return (this.getOption(Contact.Options.IN_ROSTER) && (!this
-					.getOption(Contact.Options.DIRTY_DELETE)))
-			|| (this.getOption(Contact.Options.DIRTY_PUSH));
+				.getOption(Contact.Options.DIRTY_DELETE)))
+				|| (this.getOption(Contact.Options.DIRTY_PUSH));
 	}
 
 	public void parseSubscriptionFromElement(Element item) {
@@ -439,13 +394,13 @@ public class Contact implements ListItem, Blockable {
 	}
 
 	@Override
-	public int compareTo(final ListItem another) {
+	public int compareTo(@NonNull final ListItem another) {
 		return this.getDisplayName().compareToIgnoreCase(
 				another.getDisplayName());
 	}
 
-	public Jid getServer() {
-		return getJid().toDomainJid();
+	public String getServer() {
+		return getJid().getDomain();
 	}
 
 	public boolean setAvatar(Avatar avatar) {
@@ -464,30 +419,6 @@ public class Contact implements ListItem, Blockable {
 		return avatar == null ? null : avatar.getFilename();
 	}
 
-	public boolean deleteOtrFingerprint(String fingerprint) {
-		synchronized (this.keys) {
-			boolean success = false;
-			try {
-				if (this.keys.has("otr_fingerprints")) {
-					JSONArray newPrints = new JSONArray();
-					JSONArray oldPrints = this.keys
-							.getJSONArray("otr_fingerprints");
-					for (int i = 0; i < oldPrints.length(); ++i) {
-						if (!oldPrints.getString(i).equals(fingerprint)) {
-							newPrints.put(oldPrints.getString(i));
-						} else {
-							success = true;
-						}
-					}
-					this.keys.put("otr_fingerprints", newPrints);
-				}
-				return success;
-			} catch (JSONException e) {
-				return false;
-			}
-		}
-	}
-
 	public boolean mutualPresenceSubscription() {
 		return getOption(Options.FROM) && getOption(Options.TO);
 	}
@@ -499,20 +430,20 @@ public class Contact implements ListItem, Blockable {
 
 	@Override
 	public boolean isDomainBlocked() {
-		return getAccount().isBlocked(this.getJid().toDomainJid());
+		return getAccount().isBlocked(Jid.ofDomain(this.getJid().getDomain()));
 	}
 
 	@Override
 	public Jid getBlockedJid() {
 		if (isDomainBlocked()) {
-			return getJid().toDomainJid();
+			return Jid.ofDomain(getJid().getDomain());
 		} else {
 			return getJid();
 		}
 	}
 
 	public boolean isSelf() {
-		return account.getJid().toBareJid().equals(getJid().toBareJid());
+		return account.getJid().asBareJid().equals(getJid().asBareJid());
 	}
 
 	public void setCommonName(String cn) {

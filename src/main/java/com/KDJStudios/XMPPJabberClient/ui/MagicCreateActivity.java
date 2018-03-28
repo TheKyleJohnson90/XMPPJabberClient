@@ -16,8 +16,7 @@ import java.security.SecureRandom;
 import com.KDJStudios.XMPPJabberClient.Config;
 import com.KDJStudios.XMPPJabberClient.R;
 import com.KDJStudios.XMPPJabberClient.entities.Account;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.InvalidJidException;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class MagicCreateActivity extends XmppActivity implements TextWatcher {
 
@@ -54,19 +53,21 @@ public class MagicCreateActivity extends XmppActivity implements TextWatcher {
 		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.magic_create);
+		setSupportActionBar(findViewById(R.id.toolbar));
+		configureActionBar(getSupportActionBar());
 		mFullJidDisplay = findViewById(R.id.full_jid);
 		mUsername = findViewById(R.id.username);
 		mRandom = new SecureRandom();
 		Button next = findViewById(R.id.create_account);
 		next.setOnClickListener(v -> {
-			String username = mUsername.getText().toString();
-			if (username.contains("@") || username.length() < 3) {
-				mUsername.setError(getString(R.string.invalid_username));
-				mUsername.requestFocus();
-			} else {
-				mUsername.setError(null);
-				try {
-					Jid jid = Jid.fromParts(username.toLowerCase(), Config.MAGIC_CREATE_DOMAIN, null);
+			try {
+				String username = mUsername.getText().toString();
+				Jid jid = Jid.of(username.toLowerCase(), Config.MAGIC_CREATE_DOMAIN, null);
+				if (!jid.getEscapedLocal().equals(jid.getLocal())|| username.length() < 3) {
+					mUsername.setError(getString(R.string.invalid_username));
+					mUsername.requestFocus();
+				} else {
+					mUsername.setError(null);
 					Account account = xmppConnectionService.findAccountByJid(jid);
 					if (account == null) {
 						account = new Account(jid, createPassword());
@@ -76,16 +77,16 @@ public class MagicCreateActivity extends XmppActivity implements TextWatcher {
 						xmppConnectionService.createAccount(account);
 					}
 					Intent intent = new Intent(MagicCreateActivity.this, EditAccountActivity.class);
-					intent.putExtra("jid", account.getJid().toBareJid().toString());
+					intent.putExtra("jid", account.getJid().asBareJid().toString());
 					intent.putExtra("init", true);
 					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 					Toast.makeText(MagicCreateActivity.this, R.string.secure_password_generated, Toast.LENGTH_SHORT).show();
 					WelcomeActivity.addInviteUri(intent, getIntent());
 					startActivity(intent);
-				} catch (InvalidJidException e) {
-					mUsername.setError(getString(R.string.invalid_username));
-					mUsername.requestFocus();
 				}
+			} catch (IllegalArgumentException e) {
+				mUsername.setError(getString(R.string.invalid_username));
+				mUsername.requestFocus();
 			}
 		});
 		mUsername.addTextChangedListener(this);
@@ -114,9 +115,9 @@ public class MagicCreateActivity extends XmppActivity implements TextWatcher {
 		if (s.toString().trim().length() > 0) {
 			try {
 				mFullJidDisplay.setVisibility(View.VISIBLE);
-				Jid jid = Jid.fromParts(s.toString().toLowerCase(), Config.MAGIC_CREATE_DOMAIN, null);
-				mFullJidDisplay.setText(getString(R.string.your_full_jid_will_be, jid.toString()));
-			} catch (InvalidJidException e) {
+				Jid jid = Jid.of(s.toString().toLowerCase(), Config.MAGIC_CREATE_DOMAIN, null);
+				mFullJidDisplay.setText(getString(R.string.your_full_jid_will_be, jid.toEscapedString()));
+			} catch (IllegalArgumentException e) {
 				mFullJidDisplay.setVisibility(View.INVISIBLE);
 			}
 

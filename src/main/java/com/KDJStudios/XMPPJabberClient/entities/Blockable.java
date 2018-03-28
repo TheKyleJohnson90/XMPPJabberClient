@@ -1,6 +1,6 @@
 package com.KDJStudios.XMPPJabberClient.entities;
 
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public interface Blockable {
 	boolean isBlocked();

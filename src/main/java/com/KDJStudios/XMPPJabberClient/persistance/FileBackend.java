@@ -26,7 +26,6 @@ import android.util.Base64;
 import android.util.Base64OutputStream;
 import android.util.Log;
 import android.util.LruCache;
-import android.webkit.MimeTypeMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -311,10 +310,10 @@ public class FileBackend {
 		}
 	}
 
-	public void copyFileToPrivateStorage(Message message, Uri uri) throws FileCopyException {
-		String mime = MimeUtils.guessMimeTypeFromUri(mXmppConnectionService, uri);
+	public void copyFileToPrivateStorage(Message message, Uri uri, String type) throws FileCopyException {
+		String mime = type != null ? type : MimeUtils.guessMimeTypeFromUri(mXmppConnectionService, uri);
 		Log.d(Config.LOGTAG, "copy " + uri.toString() + " to private storage (mime=" + mime + ")");
-		String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
+		String extension = MimeUtils.guessExtensionFromMimeType(mime);
 		if (extension == null) {
 			extension = getExtensionFromUri(uri);
 		}

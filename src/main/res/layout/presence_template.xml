@@ -3,13 +3,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="?android:attr/activatedBackgroundIndicator"
-                android:paddingTop="8dp"
-                android:paddingLeft="8dp"
-                android:paddingBottom="8dp"
+                android:padding="12dp"
                 android:id="@+id/presence_template">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:orientation="vertical"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
@@ -21,8 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/presence_status_message"
-        android:textColor="?attr/color_text_primary"
-        android:textSize="?attr/TextSizeBody"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
     <TextView
         android:id="@+id/status"
         android:layout_width="wrap_content"
@@ -32,8 +30,7 @@
         android:paddingRight="4dp"
         android:paddingTop="1dp"
         android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="?attr/TextSizeInfo"
+        android:textAppearance="@style/TextAppearance.XMPPJabberClient.Tag"
         android:layout_marginTop="4dp"/>
     </LinearLayout>
     <ImageButton
@@ -43,7 +40,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="?android:selectableItemBackground"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/image_button_padding"
         android:alpha="?attr/icon_alpha"
         android:src="?attr/icon_remove"/>

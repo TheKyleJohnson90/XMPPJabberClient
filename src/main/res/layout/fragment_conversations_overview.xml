@@ -1,48 +1,25 @@
-<android.support.v4.widget.SlidingPaneLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content_view_spl"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_marginRight="@dimen/swipe_handle_size"
-        android:layout_height="match_parent"
+    <FrameLayout
         android:background="?attr/color_background_primary"
-        android:orientation="vertical" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
 
         <de.timroes.android.listview.EnhancedListView
             android:id="@+id/list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="?attr/color_background_primary"
-            android:divider="@color/black12"
-            android:dividerHeight="1dp" />
-    </LinearLayout>
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"/>
 
-    <LinearLayout
-        android:id="@+id/selected_conversation"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?attr/color_background_secondary"
-            android:layout_marginTop="4dp">
-
-            <com.google.android.gms.ads.AdView
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/adViewConversationOverview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentTop="true"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/admobStaticUnitId">
-            </com.google.android.gms.ads.AdView>
-        </RelativeLayout>
-    </LinearLayout>
-
-</android.support.v4.widget.SlidingPaneLayout>
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_chat_white_24dp"/>
+    </FrameLayout>
+</layout>

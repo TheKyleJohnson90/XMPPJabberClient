@@ -1,11 +1,12 @@
 package com.KDJStudios.XMPPJabberClient.ui.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Locale;
 
 public class KnownHostsAdapter extends ArrayAdapter<String> {
@@ -45,10 +46,9 @@ public class KnownHostsAdapter extends ArrayAdapter<String> {
 		}
 
 		@Override
-		protected void publishResults(CharSequence constraint,
-				FilterResults results) {
+		protected void publishResults(CharSequence constraint, FilterResults results) {
 			ArrayList filteredList = (ArrayList) results.values;
-			if (results != null && results.count > 0) {
+			if (results.count > 0) {
 				clear();
 				for (Object c : filteredList) {
 					add((String) c);
@@ -58,12 +58,23 @@ public class KnownHostsAdapter extends ArrayAdapter<String> {
 		}
 	};
 
-	public KnownHostsAdapter(Context context, int viewResourceId, List<String> mKnownHosts) {
-		super(context, viewResourceId, new ArrayList<String>());
+	public KnownHostsAdapter(Context context, int viewResourceId, Collection<String> mKnownHosts) {
+		super(context, viewResourceId, new ArrayList<>());
 		domains = new ArrayList<>(mKnownHosts);
 	}
 
+	public KnownHostsAdapter(Context context, int viewResourceId) {
+		super(context, viewResourceId, new ArrayList<>());
+		domains = new ArrayList<>();
+	}
+
+	public void refresh(Collection<String> knownHosts) {
+		domains = new ArrayList<>(knownHosts);
+		notifyDataSetChanged();
+	}
+
 	@Override
+	@NonNull
 	public Filter getFilter() {
 		return domainFilter;
 	}

@@ -2,7 +2,7 @@ package com.KDJStudios.XMPPJabberClient.xmpp.stanzas;
 
 import com.KDJStudios.XMPPJabberClient.entities.Account;
 import com.KDJStudios.XMPPJabberClient.xml.Element;
-import com.KDJStudios.XMPPJabberClient.xmpp.jid.Jid;
+import rocks.xmpp.addr.Jid;
 
 public class AbstractStanza extends Element {
 
@@ -20,31 +20,31 @@ public class AbstractStanza extends Element {
 
 	public void setTo(final Jid to) {
 		if (to != null) {
-			setAttribute("to", to.toString());
+			setAttribute("to", to.toEscapedString());
 		}
 	}
 
 	public void setFrom(final Jid from) {
 		if (from != null) {
-			setAttribute("from", from.toString());
+			setAttribute("from", from.toEscapedString());
 		}
 	}
 
 	public boolean fromServer(final Account account) {
 		return getFrom() == null
-			|| getFrom().equals(account.getServer())
-			|| getFrom().equals(account.getJid().toBareJid())
+			|| getFrom().equals(Jid.of(account.getServer()))
+			|| getFrom().equals(account.getJid().asBareJid())
 			|| getFrom().equals(account.getJid());
 	}
 
 	public boolean toServer(final Account account) {
 		return getTo() == null
-			|| getTo().equals(account.getServer())
-			|| getTo().equals(account.getJid().toBareJid())
+			|| getTo().equals(Jid.of(account.getServer()))
+			|| getTo().equals(account.getJid().asBareJid())
 			|| getTo().equals(account.getJid());
 	}
 
 	public boolean fromAccount(final Account account) {
-		return getFrom() != null && getFrom().toBareJid().equals(account.getJid().toBareJid());
+		return getFrom() != null && getFrom().asBareJid().equals(account.getJid().asBareJid());
 	}
 }

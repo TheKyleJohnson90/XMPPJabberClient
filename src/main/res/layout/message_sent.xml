@@ -15,7 +15,6 @@
         android:layout_height="48dp"
         android:scaleType="fitXY"
         android:paddingBottom="3dp"
-        android:src="@drawable/ic_profile"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -55,8 +54,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:text="@string/sending"
-                    android:textColor="?attr/color_text_secondary"
-                    android:textSize="?attr/TextSizeInfo" />
+                    android:textAppearance="@style/TextAppearance.XMPPJabberClient.Caption"/>
 
                 <ImageView
                     android:id="@+id/security_indicator"

@@ -2,7 +2,11 @@ package com.KDJStudios.XMPPJabberClient;
 
 import android.graphics.Bitmap;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.KDJStudios.XMPPJabberClient.xmpp.chatstate.ChatState;
+import rocks.xmpp.addr.Jid;
 
 public final class Config {
 
@@ -22,10 +26,6 @@ public final class Config {
 		return (ENCRYPTION_MASK & OPENPGP) != 0;
 	}
 
-	public static boolean supportOtr() {
-		return (ENCRYPTION_MASK & OTR) != 0;
-	}
-
 	public static boolean supportOmemo() {
 		return (ENCRYPTION_MASK & OMEMO) != 0;
 	}
@@ -36,12 +36,14 @@ public final class Config {
 
 	public static final String LOGTAG = "conversations";
 
-	public static final String BUG_REPORTS = "bugs@conversations.im";
+	public static final Jid BUG_REPORTS = Jid.of("bugs@im.kdjstudios.com");
 
 
 	public static final String DOMAIN_LOCK = null; //only allow account creation for this domain
 	public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
 	public static final boolean DISALLOW_REGISTRATION_IN_UI = false; //hide the register checkbox
+
+	public static final boolean USE_RANDOM_RESOURCE_ON_EVERY_BIND = false;
 
 	public static final boolean ALLOW_NON_TLS_CONNECTIONS = false; //very dangerous. you should have a good reason to set this to true
 	public static final boolean FORCE_ORBOT = false; // always use TOR
@@ -145,6 +147,15 @@ public final class Config {
 		"_DES_",
 		"_MD5",
 	};
+
+	public static class OMEMO_EXCEPTIONS {
+		//if the own account matches one of the following domains OMEMO won’t be turned on automatically
+		public static final List<String> ACCOUNT_DOMAINS = Collections.singletonList("s.ms");
+
+		//if the contacts domain matches one of the following domains OMEMO won’t be turned on automatically
+		//can be used for well known, widely used gateways
+		public static final List<String> CONTACT_DOMAINS = Collections.singletonList("cheogram.com");
+	}
 
 	private Config() {
 	}
