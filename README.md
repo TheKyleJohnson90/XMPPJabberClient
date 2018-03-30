@@ -11,6 +11,10 @@
         <img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png"
              alt="Amazon App Store">
     </a>
+    <a href="http://apps.opera.com/badge.php?a=c&v=dark&did=230348&pid=953974" target="_blank">
+        <img src="https://publishers.apps.opera.com/html/img/badges/oms_badge_dark.png" width="200" height="65" 
+             alt="Opera Mobile Store"  title="Opera Mobile Store" />
+    </a>
 </p>
 
 # ABOUT XMPP Jabber Client
