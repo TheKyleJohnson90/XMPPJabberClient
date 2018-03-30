@@ -15,6 +15,10 @@
         <img src="https://publishers.apps.opera.com/html/img/badges/oms_badge_dark.png" width="200" height="65" 
              alt="Opera Mobile Store"  title="Opera Mobile Store" />
     </a>
+    <a href="http://slideme.org/application/xmppjabberclient" target="_blank">
+        <img src="http://s.slideme.org/files/Available_on_the_SlideME_Market_blkbg_clr311x96h.png" width="200" height="65" 
+             alt="Opera Mobile Store"  title="SlideMe Store" />
+    </a>
 </p>
 
 # ABOUT XMPP Jabber Client
