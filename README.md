@@ -4,11 +4,11 @@
 
 <p align="center">
     <a href="https://play.google.com/store/apps/details?id=com.KDJStudios.XMPPJabberClient">
-       <img src="https://conversations.im/images/en-play-badge.png"
+       <img src="https://conversations.im/images/en-play-badge.png" width="200" height="65"
             alt="Google Play">
             </a>
     <a href="http://a.co/854fmmu">
-        <img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png"
+        <img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png" width="200" height="65"
              alt="Amazon App Store">
     </a>
     <a href="http://apps.opera.com/badge.php?a=c&v=dark&did=230348&pid=953974" target="_blank">
