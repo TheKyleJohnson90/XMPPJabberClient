@@ -71,6 +71,7 @@ import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService.XmppConnec
 import com.KDJStudios.XMPPJabberClient.ui.util.MenuDoubleTabUtil;
 import com.KDJStudios.XMPPJabberClient.ui.util.PresenceSelector;
 import com.KDJStudios.XMPPJabberClient.utils.ExceptionHelper;
+import com.KDJStudios.XMPPJabberClient.utils.ThemeHelper;
 import com.KDJStudios.XMPPJabberClient.xmpp.OnKeyStatusUpdated;
 import com.KDJStudios.XMPPJabberClient.xmpp.OnUpdateBlocklist;
 import rocks.xmpp.addr.Jid;
@@ -430,7 +431,7 @@ public abstract class XmppActivity extends AppCompatActivity {
 	}
 
 	public boolean isDarkTheme() {
-		return this.mTheme == R.style.XMPPJabberClientTheme_Dark;
+		return ThemeHelper.isDark(mTheme);
 	}
 
 	public int getThemeResource(int r_attr_name, int r_drawable_def) {
@@ -845,13 +846,7 @@ public abstract class XmppActivity extends AppCompatActivity {
 	}
 
 	protected int findTheme() {
-		Boolean dark = getPreferences().getString(SettingsActivity.THEME, getResources().getString(R.string.theme)).equals("dark");
-
-		if (dark) {
-			return R.style.XMPPJabberClientTheme_Dark;
-		} else {
-			return R.style.XMPPJabberClientTheme;
-		}
+		return ThemeHelper.find(this);
 	}
 
 	@Override

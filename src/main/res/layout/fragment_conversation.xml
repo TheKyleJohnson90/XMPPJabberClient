@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         xmlns:tools="http://schemas.android.com/tools"
@@ -23,6 +24,31 @@
             tools:listitem="@layout/message_sent">
         </ListView>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/scroll_to_bottom_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/messages_view"
+            android:alpha="0.85"
+            app:backgroundTint="?attr/color_background_primary"
+            android:src="?attr/icon_scroll_down"
+            app:fabSize="mini"
+            android:visibility="gone"
+            app:useCompatPadding="true"/>
+
+        <com.KDJStudios.XMPPJabberClient.ui.widget.UnreadCountCustomView
+            android:id="@+id/unread_count_custom_view"
+            android:layout_width="?attr/IconSize"
+            android:layout_height="?attr/IconSize"
+            android:layout_alignTop="@+id/scroll_to_bottom_button"
+            android:layout_alignEnd="@+id/scroll_to_bottom_button"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:elevation="8dp"
+            android:visibility="gone"
+            app:backgroundColor="?attr/unread_count" />
+
         <RelativeLayout
             android:id="@+id/textsend"
             android:layout_width="fill_parent"
@@ -39,6 +65,7 @@
                 android:layout_toLeftOf="@+id/textSendButton"
                 android:background="?attr/color_background_primary"
                 android:ems="10"
+                style="@style/Widget.Conversations.EditText"
                 android:imeOptions="flagNoExtractUi|actionSend"
                 android:inputType="textShortMessage|textMultiLine|textCapSentences"
                 android:maxLines="8"
@@ -83,7 +110,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/snackbar_action"
                 android:paddingLeft="24dp"
-                android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1.OnDark"/>
+                android:textAppearance="@style/TextAppearance.Conversations.Body1.OnDark"/>
 
             <TextView
                 android:id="@+id/snackbar_action"
@@ -96,7 +123,7 @@
                 android:paddingRight="24dp"
                 android:paddingTop="16dp"
                 android:textAllCaps="true"
-                android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1.OnDark"
+                android:textAppearance="@style/TextAppearance.Conversations.Body1.OnDark"
                 android:textStyle="bold"/>
         </RelativeLayout>
 

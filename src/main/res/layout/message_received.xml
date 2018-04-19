@@ -53,12 +53,12 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:layout_marginRight="4sp"
-                    android:textAppearance="@style/TextAppearance.XMPPJabberClient.Caption.OnDark.Bold"/>
+                    android:textAppearance="@style/TextAppearance.Conversations.Caption.OnDark.Bold"/>
 
                 <ImageView
                     android:id="@+id/security_indicator"
-                    android:layout_width="?attr/TextSizeInfo"
-                    android:layout_height="?attr/TextSizeInfo"
+                    android:layout_width="?attr/TextSizeCaption"
+                    android:layout_height="?attr/TextSizeCaption"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="4sp"
                     android:alpha="0.70"
@@ -67,8 +67,8 @@
 
                 <ImageView
                     android:id="@+id/edit_indicator"
-                    android:layout_width="?attr/TextSizeInfo"
-                    android:layout_height="?attr/TextSizeInfo"
+                    android:layout_width="?attr/TextSizeCaption"
+                    android:layout_height="?attr/TextSizeCaption"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="4sp"
                     android:alpha="0.70"
@@ -82,7 +82,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:text="@string/sending"
-                    android:textAppearance="@style/TextAppearance.XMPPJabberClient.Caption"/>
+                    android:textAppearance="@style/TextAppearance.Conversations.Caption"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

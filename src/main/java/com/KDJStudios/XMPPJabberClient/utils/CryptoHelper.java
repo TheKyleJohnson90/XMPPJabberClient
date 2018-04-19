@@ -34,7 +34,6 @@ import com.KDJStudios.XMPPJabberClient.http.AesGcmURLStreamHandler;
 import rocks.xmpp.addr.Jid;
 
 public final class CryptoHelper {
-	public static final String FILETRANSFER = "?FILETRANSFERv1:";
 	private final static char[] hexArray = "0123456789abcdef".toCharArray();
 
 	public static final Pattern UUID_PATTERN = Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}");
@@ -240,6 +239,7 @@ public final class CryptoHelper {
 			case Message.ENCRYPTION_OTR:
 				return R.string.encryption_choice_otr;
 			case Message.ENCRYPTION_AXOLOTL:
+			case Message.ENCRYPTION_AXOLOTL_NOT_FOR_THIS_DEVICE:
 				return R.string.encryption_choice_omemo;
 			case Message.ENCRYPTION_NONE:
 				return R.string.encryption_choice_unencrypted;

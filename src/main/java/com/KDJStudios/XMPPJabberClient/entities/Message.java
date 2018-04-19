@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.SpannableStringBuilder;
 
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -42,6 +43,7 @@ public class Message extends AbstractEntity {
 	public static final int ENCRYPTION_DECRYPTED = 3;
 	public static final int ENCRYPTION_DECRYPTION_FAILED = 4;
 	public static final int ENCRYPTION_AXOLOTL = 5;
+	public static final int ENCRYPTION_AXOLOTL_NOT_FOR_THIS_DEVICE = 6;
 
 	public static final int TYPE_TEXT = 0;
 	public static final int TYPE_IMAGE = 1;
@@ -101,6 +103,7 @@ public class Message extends AbstractEntity {
 	private Boolean treatAsDownloadable = null;
 	private FileParams fileParams = null;
 	private List<MucOptions.User> counterparts;
+	private WeakReference<MucOptions.User> user;
 
 	private Message(Conversation conversation) {
 		this.conversation = conversation;
@@ -310,6 +313,16 @@ public class Message extends AbstractEntity {
 		this.isEmojisOnly = null;
 		this.treatAsDownloadable = null;
 		this.fileParams = null;
+	}
+
+	public void setMucUser(MucOptions.User user) {
+		this.user = new WeakReference<>(user);
+	}
+
+	public boolean sameMucUser(Message otherMessage) {
+		final MucOptions.User thisUser = this.user == null ? null : this.user.get();
+		final MucOptions.User otherUser = otherMessage.user == null ? null : otherMessage.user.get();
+		return thisUser != null && thisUser == otherUser;
 	}
 
 	public String getErrorMessage() {
@@ -641,7 +654,7 @@ public class Message extends AbstractEntity {
 
 	public boolean trusted() {
 		Contact contact = this.getContact();
-		return status > STATUS_RECEIVED || (contact != null && (contact.mutualPresenceSubscription() || contact.isSelf()));
+		return status > STATUS_RECEIVED || (contact != null && (contact.showInRoster() || contact.isSelf()));
 	}
 
 	public boolean fixCounterpart() {
@@ -868,6 +881,9 @@ public class Message extends AbstractEntity {
 	private static int getCleanedEncryption(int encryption) {
 		if (encryption == ENCRYPTION_DECRYPTED || encryption == ENCRYPTION_DECRYPTION_FAILED) {
 			return ENCRYPTION_PGP;
+		}
+		if (encryption == ENCRYPTION_AXOLOTL_NOT_FOR_THIS_DEVICE) {
+			return ENCRYPTION_AXOLOTL;
 		}
 		return encryption;
 	}

@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:longClickable="true"
-                android:textAppearance="@style/TextAppearance.XMPPJabberClient.Fingerprint"/>
+                android:textAppearance="@style/TextAppearance.Conversations.Fingerprint"/>
 
             <TextView
                 android:id="@+id/key_type"
@@ -30,7 +30,7 @@
                 android:clickable="true"
                 android:longClickable="true"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+                android:textAppearance="@style/TextAppearance.Conversations.Caption"/>
         </LinearLayout>
 
         <LinearLayout

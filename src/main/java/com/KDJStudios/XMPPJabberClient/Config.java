@@ -34,7 +34,7 @@ public final class Config {
 		return (ENCRYPTION_MASK & (ENCRYPTION_MASK - 1)) != 0;
 	}
 
-	public static final String LOGTAG = "conversations";
+	public static final String LOGTAG = "xmppjabberclient";
 
 	public static final Jid BUG_REPORTS = Jid.of("bugs@im.kdjstudios.com");
 

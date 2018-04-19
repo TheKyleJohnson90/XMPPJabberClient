@@ -54,6 +54,10 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 	private static final String ATTRIBUTE_NEXT_MESSAGE_TIMESTAMP = "next_message_timestamp";
 	private static final String ATTRIBUTE_CRYPTO_TARGETS = "crypto_targets";
 	private static final String ATTRIBUTE_NEXT_ENCRYPTION = "next_encryption";
+	public static final String ATTRIBUTE_ALLOW_PM = "allow_pm";
+	public static final String ATTRIBUTE_MEMBERS_ONLY = "members_only";
+	public static final String ATTRIBUTE_MODERATED = "moderated";
+	public static final String ATTRIBUTE_NON_ANONYMOUS = "non_anonymous";
 	protected final ArrayList<Message> messages = new ArrayList<>();
 	public AtomicBoolean messagesLoaded = new AtomicBoolean(true);
 	protected Account account = null;
@@ -437,7 +441,7 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 		return (this.messages.size() == 0) || this.messages.get(this.messages.size() - 1).isRead();
 	}
 
-	public List<Message> markRead() {
+	public List<Message> markRead(String upToUuid) {
 		final List<Message> unread = new ArrayList<>();
 		synchronized (this.messages) {
 			for (Message message : this.messages) {
@@ -445,22 +449,23 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 					message.markRead();
 					unread.add(message);
 				}
+				if (message.getUuid().equals(upToUuid)) {
+					return unread;
+				}
 			}
 		}
 		return unread;
 	}
 
-	public Message getLatestMarkableMessage(boolean isPrivateAndNonAnonymousMuc) {
-		synchronized (this.messages) {
-			for (int i = this.messages.size() - 1; i >= 0; --i) {
-				final Message message = this.messages.get(i);
+	public static Message getLatestMarkableMessage(final List<Message> messages, boolean isPrivateAndNonAnonymousMuc) {
+			for (int i = messages.size() - 1; i >= 0; --i) {
+				final Message message = messages.get(i);
 				if (message.getStatus() <= Message.STATUS_RECEIVED
 						&& (message.markable || isPrivateAndNonAnonymousMuc)
 						&& message.getType() != Message.TYPE_PRIVATE) {
-					return message.isRead() ? null : message;
+					return message;
 				}
 			}
-		}
 		return null;
 	}
 
@@ -477,7 +482,7 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 		}
 	}
 
-	public CharSequence getName() {
+	public @NonNull CharSequence getName() {
 		if (getMode() == MODE_MULTI) {
 			final String subject = getMucOptions().getSubject();
 			final Bookmark bookmark = getBookmark();
@@ -491,7 +496,7 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 				if (printableValue(generatedName)) {
 					return generatedName;
 				} else {
-					return getJid().getLocal();
+					return contactJid.getLocal() != null ? contactJid.getLocal() : contactJid;
 				}
 			}
 		} else if (isWithStranger()) {
@@ -723,6 +728,12 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 		return mode == MODE_SINGLE || getBooleanAttribute(ATTRIBUTE_ALWAYS_NOTIFY, Config.ALWAYS_NOTIFY_BY_DEFAULT || isPrivateAndNonAnonymous());
 	}
 
+	public boolean setAttribute(String key, boolean value) {
+		boolean prev = getBooleanAttribute(key,false);
+		setAttribute(key,Boolean.toString(value));
+		return prev != value;
+	}
+
 	private boolean setAttribute(String key, long value) {
 		return setAttribute(key, Long.toString(value));
 	}
@@ -809,7 +820,7 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 		}
 	}
 
-	private boolean getBooleanAttribute(String key, boolean defaultValue) {
+	public boolean getBooleanAttribute(String key, boolean defaultValue) {
 		String value = this.getAttribute(key);
 		if (value == null) {
 			return defaultValue;
@@ -911,6 +922,25 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 				&& !getJid().equals(Jid.ofDomain(account.getJid().getDomain()))
 				&& !getContact().showInRoster()
 				&& sentMessagesCount() == 0;
+	}
+
+	public int getReceivedMessagesCountSinceUuid(String uuid) {
+		if (uuid == null) {
+			return  0;
+		}
+		int count = 0;
+		synchronized (this.messages) {
+			for (int i = messages.size() - 1; i >= 0; i--) {
+				final Message message = messages.get(i);
+				if (uuid.equals(message.getUuid())) {
+					return count;
+				}
+				if (message.getStatus() <= Message.STATUS_RECEIVED) {
+					++count;
+				}
+			}
+		}
+		return 0;
 	}
 
 	public interface OnMessageFound {

@@ -15,6 +15,7 @@ import java.util.UUID;
 import com.KDJStudios.XMPPJabberClient.Config;
 import com.KDJStudios.XMPPJabberClient.R;
 import com.KDJStudios.XMPPJabberClient.crypto.axolotl.AxolotlService;
+import com.KDJStudios.XMPPJabberClient.crypto.axolotl.NotEncryptedForThisDeviceException;
 import com.KDJStudios.XMPPJabberClient.crypto.axolotl.XmppAxolotlMessage;
 import com.KDJStudios.XMPPJabberClient.entities.Account;
 import com.KDJStudios.XMPPJabberClient.entities.Bookmark;
@@ -113,7 +114,12 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 			return null;
 		}
 		if (xmppAxolotlMessage.hasPayload()) {
-			final XmppAxolotlMessage.XmppAxolotlPlaintextMessage plaintextMessage = service.processReceivingPayloadMessage(xmppAxolotlMessage, postpone);
+			final XmppAxolotlMessage.XmppAxolotlPlaintextMessage plaintextMessage;
+			try {
+				plaintextMessage = service.processReceivingPayloadMessage(xmppAxolotlMessage, postpone);
+			} catch (NotEncryptedForThisDeviceException e) {
+				return new Message(conversation, "", Message.ENCRYPTION_AXOLOTL_NOT_FOR_THIS_DEVICE, status);
+			}
 			if (plaintextMessage != null) {
 				Message finishedMessage = new Message(conversation, plaintextMessage.getPlaintext(), Message.ENCRYPTION_AXOLOTL, status);
 				finishedMessage.setFingerprint(plaintextMessage.getFingerprint());
@@ -309,7 +315,7 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 		}
 
 		if ((body != null || pgpEncrypted != null || (axolotlEncrypted != null && axolotlEncrypted.hasChild("payload")) || oobUrl != null) && !isMucStatusMessage) {
-			final boolean conversationIsProbablyMuc = isTypeGroupChat || mucUserElement != null || account.getXmppConnection().getMucServers().contains(counterpart.getDomain());
+			final boolean conversationIsProbablyMuc = isTypeGroupChat || mucUserElement != null || account.getXmppConnection().getMucServersWithholdAccount().contains(counterpart.getDomain());
 			final Conversation conversation = mXmppConnectionService.findOrCreateConversation(account, counterpart.asBareJid(), conversationIsProbablyMuc, false, query, false);
 			final boolean conversationMultiMode = conversation.getMode() == Conversation.MODE_MULTI;
 
@@ -423,6 +429,7 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 			}
 			message.markable = packet.hasChild("markable", "urn:xmpp:chat-markers:0");
 			if (conversationMultiMode) {
+				message.setMucUser(conversation.getMucOptions().findUserByFullJid(counterpart));
 				final Jid fallback = conversation.getMucOptions().getTrueCounterpart(counterpart);
 				Jid trueCounterpart;
 				if (message.getEncryption() == Message.ENCRYPTION_AXOLOTL) {
@@ -454,8 +461,9 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 							|| replacedMessage.getFingerprint().equals(message.getFingerprint());
 					final boolean trueCountersMatch = replacedMessage.getTrueCounterpart() != null
 							&& replacedMessage.getTrueCounterpart().equals(message.getTrueCounterpart());
+					final boolean mucUserMatches = query == null && replacedMessage.sameMucUser(message); //can not be checked when using mam
 					final boolean duplicate = conversation.hasDuplicateMessage(message);
-					if (fingerprintsMatch && (trueCountersMatch || !conversationMultiMode) && !duplicate) {
+					if (fingerprintsMatch && (trueCountersMatch || !conversationMultiMode || mucUserMatches) && !duplicate) {
 						Log.d(Config.LOGTAG, "replaced message '" + replacedMessage.getBody() + "' with '" + message.getBody() + "'");
 						synchronized (replacedMessage) {
 							final String uuid = replacedMessage.getUuid();
@@ -544,6 +552,8 @@ public class MessageParser extends AbstractParser implements OnMessagePacketRece
 
 			if (message.getEncryption() == Message.ENCRYPTION_PGP) {
 				notify = conversation.getAccount().getPgpDecryptionService().decrypt(message, notify);
+			} else if (message.getEncryption() == Message.ENCRYPTION_AXOLOTL_NOT_FOR_THIS_DEVICE) {
+				notify = false;
 			}
 
 			if (query == null) {

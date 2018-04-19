@@ -31,7 +31,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/XMPPJabberClientTheme"
+        android:theme="@style/ConversationsTheme"
         android:appCategory="social"
         tools:replace="android:label"
         tools:targetApi="o">
@@ -69,7 +69,7 @@
         <activity
             android:name="com.KDJStudios.XMPPJabberClient.ui.ScanActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/XMPPJabberClientTheme.FullScreen"
+            android:theme="@style/ConversationsTheme.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="com.KDJStudios.XMPPJabberClient.ui.UriHandlerActivity"
@@ -106,6 +106,9 @@
             android:name="com.KDJStudios.XMPPJabberClient.ui.StartConversationActivity"
             android:label="@string/title_activity_start_conversation"
             android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.KDJStudios.XMPPJabberClient.ui.WelcomeActivity"
@@ -229,7 +232,12 @@
             android:exported="false"
             android:grantUriPermissions="true"/>
 
-
+        <activity android:name="com.KDJStudios.XMPPJabberClient.ui.ShortcutActivity"
+            android:label="@string/contact">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

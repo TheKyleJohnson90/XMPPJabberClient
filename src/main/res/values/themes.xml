@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="XMPPJabberClientTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="ConversationsTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary500</item>
         <item name="colorPrimaryDark">@color/primary700</item>
         <item name="colorAccent">@color/accent</item>
@@ -11,10 +11,17 @@
         <item name="color_background_secondary">@color/grey200</item>
         <item name="color_warning">@color/red_a700</item>
 
+        <item name="EmojiColor">@color/black</item>
+
         <item name="windowActionModeOverlay">true</item>
         <item name="android:actionModeBackground">@color/accent</item>
 
-        <item name="TextSizeInfo">12sp</item>
+        <item name="TextSizeCaption">12sp</item>
+        <item name="TextSizeBody1">14sp</item>
+        <item name="TextSizeBody2">14sp</item>
+        <item name="TextSizeSubhead">16sp</item>
+        <item name="TextSizeTitle">20sp</item>
+        <item name="TextSizeInput">16sp</item>
         <item name="TextSeparation">5sp</item>
         <item name="IconSize">18sp</item>
 
@@ -70,6 +77,7 @@
         <item type="reference" name="icon_import_export">@drawable/ic_import_export_white_24dp</item>
         <item type="reference" name="icon_share">@drawable/ic_share_white_24dp</item>
         <item type="reference" name="icon_scan_qr_code">@drawable/ic_qr_code_scan_white_24dp</item>
+        <item type="reference" name="icon_scroll_down">@drawable/ic_scroll_to_end_black</item>
 
         <item type="reference" name="icon_notifications">@drawable/ic_notifications_black_24dp</item>
         <item type="reference" name="icon_notifications_off">@drawable/ic_notifications_off_black_24dp</item>
@@ -78,7 +86,7 @@
         <item type="reference" name="icon_enable_undecided_device">@drawable/ic_new_releases_black_24dp</item>
     </style>
 
-    <style name="XMPPJabberClientTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+    <style name="ConversationsTheme.Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/primary800</item>
         <item name="colorPrimaryDark">@color/primary900</item>
         <item name="colorAccent">@color/accent</item>
@@ -88,10 +96,17 @@
         <item name="color_background_secondary">@color/grey900</item>
         <item name="color_warning">@color/red_a100</item>
 
+        <item name="EmojiColor">@color/white</item>
+
         <item name="windowActionModeOverlay">true</item>
         <item name="android:actionModeBackground">@color/accent</item>
 
-        <item name="TextSizeInfo">12sp</item>
+        <item name="TextSizeCaption">12sp</item>
+        <item name="TextSizeBody1">14sp</item>
+        <item name="TextSizeBody2">14sp</item>
+        <item name="TextSizeSubhead">16sp</item>
+        <item name="TextSizeTitle">20sp</item>
+        <item name="TextSizeInput">16sp</item>
         <item name="TextSeparation">5sp</item>
         <item name="IconSize">18sp</item>
 
@@ -147,6 +162,7 @@
         <item type="reference" name="icon_import_export">@drawable/ic_import_export_white_24dp</item>
         <item type="reference" name="icon_share">@drawable/ic_share_white_24dp</item>
         <item type="reference" name="icon_scan_qr_code">@drawable/ic_qr_code_scan_white_24dp</item>
+        <item type="reference" name="icon_scroll_down">@drawable/ic_scroll_to_end_white</item>
 
         <item type="reference" name="icon_notifications">@drawable/ic_notifications_white_24dp</item>
         <item type="reference" name="icon_notifications_off">@drawable/ic_notifications_off_white_24dp</item>
@@ -155,7 +171,51 @@
         <item type="reference" name="icon_enable_undecided_device">@drawable/ic_new_releases_white_24dp</item>
     </style>
 
-    <style name="XMPPJabberClientTheme.FullScreen" parent="@style/Theme.AppCompat.Light">
+    <style name="ConversationsTheme.Medium" parent="ConversationsTheme">
+        <item name="TextSizeCaption">14sp</item>
+        <item name="TextSizeBody1">16sp</item>
+        <item name="TextSizeBody2">16sp</item>
+        <item name="TextSizeSubhead">18sp</item>
+        <item name="TextSizeTitle">22sp</item>
+        <item name="TextSizeInput">18sp</item>
+        <item name="TextSeparation">6sp</item>
+        <item name="IconSize">20sp</item>
+    </style>
+
+    <style name="ConversationsTheme.Dark.Medium" parent="ConversationsTheme.Dark">
+        <item name="TextSizeCaption">14sp</item>
+        <item name="TextSizeBody1">16sp</item>
+        <item name="TextSizeBody2">16sp</item>
+        <item name="TextSizeSubhead">18sp</item>
+        <item name="TextSizeTitle">22sp</item>
+        <item name="TextSizeInput">18sp</item>
+        <item name="TextSeparation">6sp</item>
+        <item name="IconSize">20sp</item>
+    </style>
+
+    <style name="ConversationsTheme.Dark.Large" parent="ConversationsTheme.Dark">
+        <item name="TextSizeCaption">16sp</item>
+        <item name="TextSizeBody1">18sp</item>
+        <item name="TextSizeBody2">18sp</item>
+        <item name="TextSizeSubhead">20sp</item>
+        <item name="TextSizeTitle">24sp</item>
+        <item name="TextSizeInput">20sp</item>
+        <item name="TextSeparation">7sp</item>
+        <item name="IconSize">22sp</item>
+    </style>
+
+    <style name="ConversationsTheme.Large" parent="ConversationsTheme">
+        <item name="TextSizeCaption">16sp</item>
+        <item name="TextSizeBody1">18sp</item>
+        <item name="TextSizeBody2">18sp</item>
+        <item name="TextSizeSubhead">20sp</item>
+        <item name="TextSizeTitle">24sp</item>
+        <item name="TextSizeInput">20sp</item>
+        <item name="TextSeparation">7sp</item>
+        <item name="IconSize">22sp</item>
+    </style>
+
+    <style name="ConversationsTheme.FullScreen" parent="@style/Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primary500</item>
         <item name="colorPrimaryDark">@color/primary700</item>
         <item name="android:windowNoTitle">true</item>

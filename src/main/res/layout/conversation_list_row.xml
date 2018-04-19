@@ -4,13 +4,7 @@
              android:layout_height="wrap_content"
              android:descendantFocusability="blocksDescendants">
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/conversations_overview_background"/>
-
     <FrameLayout
-        android:id="@+id/swipeable_item"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="?attr/color_background_primary">
@@ -46,7 +40,7 @@
                     android:paddingRight="4dp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                    android:textAppearance="@style/TextAppearance.Conversations.Subhead" />
 
                 <RelativeLayout
                     android:id="@+id/conversation_lastwrapper"
@@ -65,7 +59,7 @@
                         android:layout_alignParentLeft="true"
                         android:text="@string/me"
                         android:layout_marginRight="?attr/TextSeparation"
-                        android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1.Secondary"
+                        android:textAppearance="@style/TextAppearance.Conversations.Body1.Secondary"
                         android:visibility="visible"/>
 
                     <LinearLayout android:layout_width="match_parent"
@@ -81,7 +75,7 @@
                             android:layout_width="?attr/IconSize"
                             android:layout_height="?attr/IconSize"
                             android:layout_marginRight="?attr/TextSeparation"/>
-                      
+
                         <TextView
                             android:id="@+id/conversation_lastmsg"
                             android:layout_width="match_parent"
@@ -91,7 +85,7 @@
                             android:scrollHorizontally="false"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                            android:textAppearance="@style/TextAppearance.Conversations.Body1"/>
                     </LinearLayout>
                     <ImageView
                         android:visibility="visible"
@@ -126,7 +120,7 @@
                     android:layout_alignBaseline="@+id/conversation_name"
                     android:layout_alignParentRight="true"
                     android:gravity="right"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+                    android:textAppearance="@style/TextAppearance.Conversations.Caption"/>
             </RelativeLayout>
         </RelativeLayout>
     </FrameLayout>

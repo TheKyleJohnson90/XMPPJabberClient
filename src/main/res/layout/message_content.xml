@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:longClickable="true"
-        android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1"/>
+        android:textAppearance="@style/TextAppearance.Conversations.Body1"/>
 
     <Button
         android:id="@+id/download_button"
@@ -51,7 +51,7 @@
             android:layout_alignParentRight="true"
             android:paddingBottom="16dp"
             android:paddingRight="16dp"
-            android:textAppearance="@style/TextAppearance.XMPPJabberClient.Caption"/>
+            android:textAppearance="@style/TextAppearance.Conversations.Caption"/>
 
         <SeekBar
             android:id="@+id/progress"

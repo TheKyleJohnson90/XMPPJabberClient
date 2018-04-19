@@ -130,8 +130,8 @@ public abstract class OmemoActivity extends XmppActivity {
 		binding.tglTrust.setChecked(status.isTrusted());
 
 		if (status.isActive()) {
-			binding.key.setTextAppearance(this,R.style.TextAppearance_XMPPJabberClient_Fingerprint);
-			binding.keyType.setTextAppearance(this,R.style.TextAppearance_XMPPJabberClient_Caption);
+			binding.key.setTextAppearance(this,R.style.TextAppearance_Conversations_Fingerprint);
+			binding.keyType.setTextAppearance(this,R.style.TextAppearance_Conversations_Caption);
 			if (status.isVerified()) {
 				binding.verifiedFingerprint.setVisibility(View.VISIBLE);
 				binding.verifiedFingerprint.setAlpha(1.0f);
@@ -157,8 +157,8 @@ public abstract class OmemoActivity extends XmppActivity {
 				toast = v -> hideToast();
 			}
 		} else {
-			binding.key.setTextAppearance(this,R.style.TextAppearance_XMPPJabberClient_Fingerprint_Disabled);
-			binding.keyType.setTextAppearance(this,R.style.TextAppearance_XMPPJabberClient_Caption_Disabled);
+			binding.key.setTextAppearance(this,R.style.TextAppearance_Conversations_Fingerprint_Disabled);
+			binding.keyType.setTextAppearance(this,R.style.TextAppearance_Conversations_Caption_Disabled);
 			toast = v -> replaceToast(getString(R.string.this_device_is_no_longer_in_use), false);
 			if (status.isVerified()) {
 				binding.tglTrust.setVisibility(View.GONE);
@@ -181,7 +181,7 @@ public abstract class OmemoActivity extends XmppActivity {
 			binding.keyType.setVisibility(View.GONE);
 		}
 		if (highlight) {
-			binding.keyType.setTextAppearance(this,R.style.TextAppearance_XMPPJabberClient_Caption_Highlight);
+			binding.keyType.setTextAppearance(this,R.style.TextAppearance_Conversations_Caption_Highlight);
 			binding.keyType.setText(getString(x509 ? R.string.omemo_fingerprint_x509_selected_message : R.string.omemo_fingerprint_selected_message));
 		} else {
 			binding.keyType.setText(getString(x509 ? R.string.omemo_fingerprint_x509 : R.string.omemo_fingerprint));

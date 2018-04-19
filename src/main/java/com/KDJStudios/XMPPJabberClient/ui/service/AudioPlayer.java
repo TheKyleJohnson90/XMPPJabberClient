@@ -64,9 +64,9 @@ public class AudioPlayer implements View.OnClickListener, MediaPlayer.OnCompleti
 
 	private boolean init(ViewHolder viewHolder, Message message) {
 		if (viewHolder.darkBackground) {
-			viewHolder.runtime.setTextAppearance(this.messageAdapter.getContext(), R.style.TextAppearance_XMPPJabberClient_Caption_OnDark);
+			viewHolder.runtime.setTextAppearance(this.messageAdapter.getContext(), R.style.TextAppearance_Conversations_Caption_OnDark);
 		} else {
-			viewHolder.runtime.setTextAppearance(this.messageAdapter.getContext(), R.style.TextAppearance_XMPPJabberClient_Caption);
+			viewHolder.runtime.setTextAppearance(this.messageAdapter.getContext(), R.style.TextAppearance_Conversations_Caption);
 		}
 		viewHolder.progress.setOnSeekBarChangeListener(this);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

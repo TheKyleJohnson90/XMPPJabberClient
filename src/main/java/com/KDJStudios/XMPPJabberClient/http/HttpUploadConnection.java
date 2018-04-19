@@ -27,6 +27,7 @@ import com.KDJStudios.XMPPJabberClient.persistance.FileBackend;
 import com.KDJStudios.XMPPJabberClient.services.AbstractConnectionManager;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
 import com.KDJStudios.XMPPJabberClient.utils.CryptoHelper;
+import com.KDJStudios.XMPPJabberClient.utils.WakeLockHelper;
 import com.KDJStudios.XMPPJabberClient.xml.Namespace;
 import com.KDJStudios.XMPPJabberClient.xml.Element;
 import com.KDJStudios.XMPPJabberClient.xmpp.stanzas.IqPacket;
@@ -237,9 +238,7 @@ public class HttpUploadConnection implements Transferable {
 			if (connection != null) {
 				connection.disconnect();
 			}
-			if (wakeLock.isHeld()) {
-				wakeLock.release();
-			}
+			WakeLockHelper.release(wakeLock);
 		}
 	}
 }

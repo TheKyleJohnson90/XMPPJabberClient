@@ -27,10 +27,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.KDJStudios.XMPPJabberClient.ui.interfaces;
+package com.KDJStudios.XMPPJabberClient.utils;
+
+
+import java.util.List;
 
 import com.KDJStudios.XMPPJabberClient.entities.Conversation;
 
-public interface OnConversationRead {
-	void onConversationRead(Conversation conversation, String upToUuid);
+public class QuickLoader {
+
+	private static String CONVERSATION_UUID = null;
+	private static Object LOCK = new Object();
+
+	public static void set(final String uuid) {
+		synchronized (LOCK) {
+			CONVERSATION_UUID = uuid;
+		}
+	}
+
+	public static Conversation get(List<Conversation> haystack) {
+		synchronized (LOCK) {
+			if (CONVERSATION_UUID == null) {
+				return null;
+			}
+			for (Conversation conversation : haystack) {
+				if (conversation.getUuid().equals(CONVERSATION_UUID)) {
+					return conversation;
+				}
+			}
+		}
+		return null;
+	}
+
 }

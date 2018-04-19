@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import com.KDJStudios.XMPPJabberClient.Config;
 import com.KDJStudios.XMPPJabberClient.R;
 import com.KDJStudios.XMPPJabberClient.persistance.DatabaseBackend;
 import com.KDJStudios.XMPPJabberClient.utils.XmppUri;
@@ -84,7 +85,12 @@ public class UriHandlerActivity extends AppCompatActivity {
 		final XmppUri xmppUri = new XmppUri(uri);
 		final List<Jid> accounts = DatabaseBackend.getInstance(this).getAccountJids(); //TODO only look at enabled accounts
 
-		if (accounts.size() == 0) {
+		if (!xmppUri.isJidValid()) {
+			Toast.makeText(this, R.string.invalid_jid, Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		if (accounts.size() == 0 && Config.MAGIC_CREATE_DOMAIN != null) {
 			intent = new Intent(getApplicationContext(), WelcomeActivity.class);
 			WelcomeActivity.addInviteUri(intent, xmppUri);
 			startActivity(intent);
@@ -111,15 +117,12 @@ public class UriHandlerActivity extends AppCompatActivity {
 			intent.putExtra("jid", xmppUri.getJid().asBareJid().toString());
 			intent.setData(uri);
 			intent.putExtra("scanned", scanned);
-		} else if (xmppUri.isJidValid()) {
+		} else {
 			intent = new Intent(getApplicationContext(), StartConversationActivity.class);
 			intent.setAction(Intent.ACTION_VIEW);
 			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			intent.putExtra("scanned", scanned);
 			intent.setData(uri);
-		} else {
-			Toast.makeText(this, R.string.invalid_jid, Toast.LENGTH_SHORT).show();
-			return;
 		}
 
 		startActivity(intent);

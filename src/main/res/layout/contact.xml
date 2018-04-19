@@ -29,14 +29,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+                android:textAppearance="@style/TextAppearance.Conversations.Subhead"/>
 
             <TextView
                 android:id="@+id/contact_jid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1.Secondary"/>
+                android:textAppearance="@style/TextAppearance.Conversations.Body1.Secondary"/>
 
             <com.wefika.flowlayout.FlowLayout
                 android:id="@+id/tags"
@@ -50,7 +50,7 @@
                 android:id="@+id/key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.XMPPJabberClient.Fingerprint"
+                android:textAppearance="@style/TextAppearance.Conversations.Fingerprint"
                 android:visibility="gone"/>
         </LinearLayout>
 

@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1.Secondary"
+            android:textAppearance="@style/TextAppearance.Conversations.Body1.Secondary"
             android:id="@+id/message_body" />
     </LinearLayout>
 

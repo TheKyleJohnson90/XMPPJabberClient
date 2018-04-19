@@ -26,6 +26,7 @@ import com.KDJStudios.XMPPJabberClient.services.AbstractConnectionManager;
 import com.KDJStudios.XMPPJabberClient.services.XmppConnectionService;
 import com.KDJStudios.XMPPJabberClient.utils.CryptoHelper;
 import com.KDJStudios.XMPPJabberClient.utils.FileWriterException;
+import com.KDJStudios.XMPPJabberClient.utils.WakeLockHelper;
 
 public class HttpDownloadConnection implements Transferable {
 
@@ -365,7 +366,7 @@ public class HttpDownloadConnection implements Transferable {
 				if (connection != null) {
 					connection.disconnect();
 				}
-				wakeLock.release();
+				WakeLockHelper.release(wakeLock);
 			}
 		}
 

@@ -312,7 +312,7 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
 			xmppConnectionService.deleteAccount(mAccount);
 		}
 
-		if (xmppConnectionService.getAccounts().size() == 0) {
+		if (xmppConnectionService.getAccounts().size() == 0 && Config.MAGIC_CREATE_DOMAIN != null) {
 			Intent intent = new Intent(EditAccountActivity.this, WelcomeActivity.class);
 			WelcomeActivity.addInviteUri(intent, getIntent());
 			startActivity(intent);
@@ -1040,7 +1040,7 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
 				this.mPgpFingerprint.setText(OpenPgpUtils.convertKeyIdToHex(pgpKeyId));
 				this.mPgpFingerprint.setOnClickListener(openPgp);
 				if ("pgp".equals(messageFingerprint)) {
-					this.getmPgpFingerprintDesc.setTextAppearance(this, R.style.TextAppearance_XMPPJabberClient_Caption_Highlight);
+					this.getmPgpFingerprintDesc.setTextAppearance(this, R.style.TextAppearance_Conversations_Caption_Highlight);
 				}
 				this.getmPgpFingerprintDesc.setOnClickListener(openPgp);
 				this.mPgpDeleteFingerprintButton.setOnClickListener(delete);
@@ -1051,10 +1051,10 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
 			if (ownAxolotlFingerprint != null && Config.supportOmemo()) {
 				this.mAxolotlFingerprintBox.setVisibility(View.VISIBLE);
 				if (ownAxolotlFingerprint.equals(messageFingerprint)) {
-					this.mOwnFingerprintDesc.setTextAppearance(this, R.style.TextAppearance_XMPPJabberClient_Caption_Highlight);
+					this.mOwnFingerprintDesc.setTextAppearance(this, R.style.TextAppearance_Conversations_Caption_Highlight);
 					this.mOwnFingerprintDesc.setText(R.string.omemo_fingerprint_selected_message);
 				} else {
-					this.mOwnFingerprintDesc.setTextAppearance(this, R.style.TextAppearance_XMPPJabberClient_Caption);
+					this.mOwnFingerprintDesc.setTextAppearance(this, R.style.TextAppearance_Conversations_Caption);
 					this.mOwnFingerprintDesc.setText(R.string.omemo_fingerprint);
 				}
 				this.mAxolotlFingerprint.setText(CryptoHelper.prettifyFingerprint(ownAxolotlFingerprint.substring(2)));

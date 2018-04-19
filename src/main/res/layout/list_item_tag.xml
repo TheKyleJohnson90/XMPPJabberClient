@@ -9,5 +9,5 @@
           android:paddingRight="4dp"
           android:paddingTop="1dp"
           android:textAllCaps="true"
-          android:textAppearance="@style/TextAppearance.XMPPJabberClient.Tag"
+          android:textAppearance="@style/TextAppearance.Conversations.Tag"
     />

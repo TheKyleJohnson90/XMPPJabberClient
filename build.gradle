@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.0'
     }
 }
 
@@ -19,9 +19,6 @@ repositories {
         url 'https://maven.google.com'
     }
     maven {
-        url "https://jitpack.io"
-    }
-    maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
 }
@@ -32,12 +29,11 @@ configurations {
 }
 
 ext {
-    supportLibVersion = '27.1.0'
+    supportLibVersion = '27.1.1'
 }
 
 dependencies {
-    implementation project(':libs:EnhancedListView')
-    playstoreImplementation 'com.google.android.gms:play-services-gcm:11.8.0'
+    playstoreImplementation 'com.google.android.gms:play-services-gcm:12.0.1'
     implementation 'org.sufficientlysecure:openpgp-api:10.0'
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
     implementation "com.android.support:support-v13:$supportLibVersion"
@@ -57,8 +53,8 @@ dependencies {
     implementation 'net.ypresto.androidtranscoder:android-transcoder:0.2.0'
     implementation 'rocks.xmpp:xmpp-addr:0.8.0-SNAPSHOT'
 	//ADMOB
-    implementation 'com.google.android.gms:play-services-ads:11.8.0'
-    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.google.android.gms:play-services-ads:12.0.1'
+    implementation 'com.android.support:multidex:1.0.3'
 }
 
 ext {
@@ -68,20 +64,18 @@ ext {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
 
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 14
-        versionName "0.1.12"
+		versionCode 16
+        versionName "0.2.1"
         archivesBaseName += "-$versionName"
         applicationId "com.KDJStudios.XMPPJabberClient"
         resValue "string", "applicationId", applicationId
         resValue "string", "app_name", "XMPPJabberClient"
         //ADMOB
         multiDexEnabled true
-
     }
 
     dataBinding {
@@ -92,8 +86,6 @@ android {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
         preDexLibraries = preDexEnabled && !travisBuild
         jumboMode true
-		//ADMOB
-        javaMaxHeapSize "2g"
     }
 
     compileOptions {

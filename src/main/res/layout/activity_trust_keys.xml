@@ -46,25 +46,25 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/error_trustkeys_title"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textAppearance="@style/TextAppearance.Conversations.Title"
                             android:layout_marginBottom="8sp"/>
 
                         <TextView
                             android:id="@+id/key_error_message"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+                            android:textAppearance="@style/TextAppearance.Conversations.Subhead"/>
                         <TextView
                             android:id="@+id/key_error_general"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1"/>
+                            android:textAppearance="@style/TextAppearance.Conversations.Body1"/>
                         <TextView
                             android:layout_marginTop="8sp"
                             android:id="@+id/key_error_hint_mutual"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1.Secondary"
+                            android:textAppearance="@style/TextAppearance.Conversations.Body1.Secondary"
                             android:text="@string/error_trustkey_hint_mutual"/>
                     </LinearLayout>
                     <LinearLayout
@@ -109,7 +109,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/list_padding"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+                            android:textAppearance="@style/TextAppearance.Conversations.Title"/>
 
                         <LinearLayout
                             android:id="@+id/own_keys_details"

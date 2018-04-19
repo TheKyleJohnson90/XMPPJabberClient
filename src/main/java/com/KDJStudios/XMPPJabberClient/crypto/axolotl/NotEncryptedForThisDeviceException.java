@@ -27,10 +27,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.KDJStudios.XMPPJabberClient.ui.interfaces;
+package com.KDJStudios.XMPPJabberClient.crypto.axolotl;
 
-import com.KDJStudios.XMPPJabberClient.entities.Conversation;
 
-public interface OnConversationRead {
-	void onConversationRead(Conversation conversation, String upToUuid);
+public class NotEncryptedForThisDeviceException extends CryptoFailedException {
+	public NotEncryptedForThisDeviceException() {
+		super("Message was not encrypted for this device");
+	}
 }

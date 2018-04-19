@@ -40,6 +40,6 @@
         android:layout_toEndOf="@+id/message_photo"
         android:layout_toRightOf="@+id/message_photo"
         android:text="@string/contact_has_read_up_to_this_point"
-        android:textAppearance="@style/TextAppearance.XMPPJabberClient.Status"/>
+        android:textAppearance="@style/TextAppearance.Conversations.Status"/>
 
 </RelativeLayout>

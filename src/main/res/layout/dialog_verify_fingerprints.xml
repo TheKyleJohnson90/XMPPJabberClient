@@ -12,7 +12,7 @@
         android:id="@+id/warning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.XMPPJabberClient.Body1"/>
+        android:textAppearance="@style/TextAppearance.Conversations.Body1"/>
     <CheckBox
         android:layout_marginTop="8dp"
         android:id="@+id/trusted_source"
