@@ -4,20 +4,12 @@
 
 <p align="center">
     <a href="https://play.google.com/store/apps/details?id=com.KDJStudios.XMPPJabberClient">
-       <img src="https://conversations.im/images/en-play-badge.png" width="200" height="65"
+       <img src="https://conversations.im/images/en-play-badge.png"
             alt="Google Play">
             </a>
     <a href="http://a.co/854fmmu">
-        <img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png" width="200" height="65"
+        <img src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png"
              alt="Amazon App Store">
-    </a>
-    <a href="http://apps.opera.com/badge.php?a=c&v=dark&did=230348&pid=953974" target="_blank">
-        <img src="https://publishers.apps.opera.com/html/img/badges/oms_badge_dark.png" width="200" height="65" 
-             alt="Opera Mobile Store"  title="Opera Mobile Store" />
-    </a>
-    <a href="http://slideme.org/application/xmppjabberclient" target="_blank">
-        <img src="http://s.slideme.org/files/Available_on_the_SlideME_Market_blkbg_clr311x96h.png" width="200" height="65" 
-             alt="Opera Mobile Store"  title="SlideMe Store" />
     </a>
 </p>
 
